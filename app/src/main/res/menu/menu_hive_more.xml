@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_card_rate"
+        android:title="@string/menu_rate" />
+    <item
+        android:id="@+id/menu_card_edit"
+        android:title="@string/action_edit" />
+    <item
+        android:id="@+id/menu_card_delete"
+        android:title="@string/action_delete" />
+</menu>

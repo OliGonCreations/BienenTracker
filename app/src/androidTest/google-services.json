@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "664581075615",
+    "project_id": "bienen-tracker"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664581075615:android:5ebe413601742a6f",
+        "android_client_info": {
+          "package_name": "com.oligon.bienentracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqStwfWYUr30XGFFMYqE67QVpDsbyApaE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-42449872-6"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

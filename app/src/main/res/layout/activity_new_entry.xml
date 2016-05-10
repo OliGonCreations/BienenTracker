@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryGreen"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        </android.support.design.widget.AppBarLayout>
+
+        <include layout="@layout/content_new_entry" />
+
+        <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/menu_add_entity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            fab:menu_colorNormal="@color/colorPrimaryGreen"
+            fab:menu_colorPressed="@color/colorAccentGreen"
+            fab:menu_labels_ellipsize="end"
+            fab:menu_labels_position="left"
+            fab:menu_labels_singleLine="true">
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/menu_add_food"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_flower"
+                fab:fab_colorNormal="@color/colorPrimaryGreen"
+                fab:fab_colorPressed="@color/colorAccentGreen"
+                fab:fab_label="@string/menu_add_food"
+                fab:fab_size="mini" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/menu_add_treatment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_flower"
+                fab:fab_colorNormal="@color/colorPrimaryGreen"
+                fab:fab_colorPressed="@color/colorAccentGreen"
+                fab:fab_label="@string/menu_add_treatment"
+                fab:fab_size="mini" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/menu_add_harvest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_flower"
+                fab:fab_colorNormal="@color/colorPrimaryGreen"
+                fab:fab_colorPressed="@color/colorAccentGreen"
+                fab:fab_label="@string/menu_add_harvest"
+                fab:fab_size="mini" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/menu_add_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_flower"
+                fab:fab_colorNormal="@color/colorPrimaryGreen"
+                fab:fab_colorPressed="@color/colorAccentGreen"
+                fab:fab_label="@string/menu_add_common"
+                fab:fab_size="mini" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/menu_add_inspection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_flower"
+                fab:fab_colorNormal="@color/colorPrimaryGreen"
+                fab:fab_colorPressed="@color/colorAccentGreen"
+                fab:fab_label="@string/menu_add_inspection"
+                fab:fab_size="mini" />
+        </com.github.clans.fab.FloatingActionMenu>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/snackbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/common_activity"
+        android:textSize="22sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/colorPrimaryGreen" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp">
+
+                <com.oligon.bienentracker.util.InstantAutoCompleteTextView
+                    android:id="@+id/et_common_other"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_common_other"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@string/common_drone"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btnMDrone"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/minus" />
+
+                <TextView
+                    android:id="@+id/tvDrone"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/zero" />
+
+                <Button
+                    android:id="@+id/btnPDrone"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="@string/plus" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@string/common_brood"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btnMBrood"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/minus" />
+
+                <TextView
+                    android:id="@+id/tvBrood"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/zero" />
+
+                <Button
+                    android:id="@+id/btnPBrood"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="@string/plus" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@string/common_empty"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btnMEmpty"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/minus" />
+
+                <TextView
+                    android:id="@+id/tvEmpty"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/zero" />
+
+                <Button
+                    android:id="@+id/btnPEmpty"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/plus" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@string/common_food"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btnMFood"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/minus" />
+
+                <TextView
+                    android:id="@+id/tvFood"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/zero" />
+
+                <Button
+                    android:id="@+id/btnPFood"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/plus" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@string/common_middle"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btnMMiddle"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/minus" />
+
+                <TextView
+                    android:id="@+id/tvMiddle"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/zero" />
+
+                <Button
+                    android:id="@+id/btnPMiddle"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/plus" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorGrey" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@string/common_honey"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btnMHoney"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/minus" />
+
+                <TextView
+                    android:id="@+id/tvHoney"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/zero" />
+
+                <Button
+                    android:id="@+id/btnPHoney"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/plus" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@string/common_stock"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btnMStock"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/minus" />
+
+                <TextView
+                    android:id="@+id/tvStock"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/zero" />
+
+                <Button
+                    android:id="@+id/btnPStock"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/plus" />
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorGrey" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@string/common_escape"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btnMEscape"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/minus" />
+
+                <TextView
+                    android:id="@+id/tvEscape"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/zero" />
+
+                <Button
+                    android:id="@+id/btnPEscape"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/plus" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@string/common_fence"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btnMFence"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/minus" />
+
+                <TextView
+                    android:id="@+id/tvFence"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/zero" />
+
+                <Button
+                    android:id="@+id/btnPFence"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/plus" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@string/common_diaper"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btnMDiaper"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/minus" />
+
+                <TextView
+                    android:id="@+id/tvDiaper"
+                    android:layout_width="32dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/zero" />
+
+                <Button
+                    android:id="@+id/btnPDiaper"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/plus" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

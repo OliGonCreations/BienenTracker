@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/filter_date"
+        android:textSize="22sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/title"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/colorPrimary" />
+
+    <TextView
+        android:id="@+id/filter_date_from"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/title"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:text="@string/filter_date_from"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/filter_date_from_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/filter_date_from"
+        android:layout_alignTop="@+id/filter_date_from"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@+id/filter_date_from"
+        android:gravity="center_vertical"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        tools:text="16. März 2014" />
+
+
+    <TextView
+        android:id="@+id/filter_date_till"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/filter_date_from"
+        android:layout_marginStart="16dp"
+        android:gravity="center_vertical"
+        android:text="@string/filter_date_till"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/filter_date_till_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/filter_date_till"
+        android:layout_alignTop="@+id/filter_date_till"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@+id/filter_date_till"
+        android:gravity="center_vertical"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        tools:text="16. März 2014" />
+
+
+</RelativeLayout>

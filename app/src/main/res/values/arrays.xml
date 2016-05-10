@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="drugs" translatable="false">
+        <item>Ameisensäure 60% ad us.vet.</item>
+        <item>Milchsäure 15% ad us.vet.</item>
+        <item>Oxalsäure 3,5% ad us.vet.</item>
+        <item>Oxuvar</item>
+        <item>Apiguard</item>
+        <item>ApiLife VAR</item>
+        <item>Thymovar</item>
+        <item>Perizin</item>
+        <item>Bayvarol</item>
+    </string-array>
+    <string-array name="food" translatable="false">
+        <item>Futtersirup</item>
+        <item>Futterteig</item>
+        <item>Zuckerwasser (3:2)</item>
+        <item>Königinnenfutterteig</item>
+    </string-array>
+
+    <string-array name="activities" translatable="false">
+        <item>Drohnenrahmen</item>
+        <item>Brutrahmen</item>
+        <item>Leerrahmen</item>
+        <item>Futterrahmen</item>
+        <item>Mittelwandrahmen</item>
+        <item>Honigraum</item>
+        <item>Zarge</item>
+        <item>Bienenflucht</item>
+        <item>Absperrgitter</item>
+        <item>Windel</item>
+    </string-array>
+
+    <string-array name="inspections" translatable="false">
+        <item>Weiselzellen</item>
+        <item>Königin</item>
+        <item>Brut</item>
+        <item>Stifte</item>
+        <item>Varroabefall [Milben/Tag]</item>
+        <item>Gewicht [kg]</item>
+        <item />
+    </string-array>
+
+    <string-array name="weather_conditions" translatable="false">
+        <item>Tornado</item>
+        <item>Tropensturm</item>
+        <item>Orkan</item>
+        <item>Schwere Gewitter</item>
+        <item>Gewitter</item>
+        <item>Schneeregen</item>
+        <item>Regen und Graupel</item>
+        <item>Schnee und Graupel</item>
+        <item>Gefrierender Nieselregen</item>
+        <item>Nieselregen</item>
+        <item>Gefrierender Regen</item>
+        <item>Schauer</item>
+        <item>Schauer</item>
+        <item>Schneetreiben</item>
+        <item>Leichte Schneeschauer</item>
+        <item>Schneegestöber</item>
+        <item>Schnee</item>
+        <item>Hagel</item>
+        <item>Schneeregen</item>
+        <item>Staubig</item>
+        <item>Nebel</item>
+        <item>Dunst</item>
+        <item>Smog</item>
+        <item>Stürmisch</item>
+        <item>Windig</item>
+        <item>Kalt</item>
+        <item>Bewölkt</item>
+        <item>Meist bewölkt</item>
+        <item>Meist bewölkt</item>
+        <item>Teils bewölkt</item>
+        <item>Teils bewölkt</item>
+        <item>Klar</item>
+        <item>Sonnig</item>
+        <item>Heiter</item>
+        <item>Heiter</item>
+        <item>Hagelregen</item>
+        <item>Heiß</item>
+        <item>Leichtes Gewitter</item>
+        <item>Vereinzelt Gewitter</item>
+        <item>Vereinzelt Gewitter</item>
+        <item>Vereinzelt Schauer</item>
+        <item>Schneesturm</item>
+        <item>Vereinzelt Schneeschauern</item>
+        <item>Schneesturm</item>
+        <item>Teils bewölkt</item>
+        <item>Gewitterschauer</item>
+        <item>Schneeschauer</item>
+        <item>Leichte Gewitterschauer</item>
+    </string-array>
+    <array name="weather_icons">
+        <item>@drawable/ic_weather_wind</item>
+        <item>@drawable/ic_weather_wind</item>
+        <item>@drawable/ic_weather_wind</item>
+        <item>@drawable/ic_weather_lightning</item>
+        <item>@drawable/ic_weather_lightning</item>
+        <item>@drawable/ic_weather_snow</item>
+        <item>@drawable/ic_weather_drizzle</item>
+        <item>@drawable/ic_weather_snow</item>
+        <item>@drawable/ic_weather_drizzle</item>
+        <item>@drawable/ic_weather_drizzle</item>
+        <item>@drawable/ic_weather_drizzle</item>
+        <item>@drawable/ic_weather_drizzle</item>
+        <item>@drawable/ic_weather_drizzle</item>
+        <item>@drawable/ic_weather_snow</item>
+        <item>@drawable/ic_weather_snow</item>
+        <item>@drawable/ic_weather_snow</item>
+        <item>@drawable/ic_weather_snow</item>
+        <item>@drawable/ic_weather_hail</item>
+        <item>@drawable/ic_weather_snow</item>
+        <item>@drawable/ic_weather_fog</item>
+        <item>@drawable/ic_weather_fog</item>
+        <item>@drawable/ic_weather_fog</item>
+        <item>@drawable/ic_weather_fog</item>
+        <item>@drawable/ic_weather_wind</item>
+        <item>@drawable/ic_weather_wind</item>
+        <item>@drawable/ic_weather_cloud</item>
+        <item>@drawable/ic_weather_cloud</item>
+        <item>@drawable/ic_weather_cloud_sun</item>
+        <item>@drawable/ic_weather_cloud_sun</item>
+        <item>@drawable/ic_weather_cloud_sun</item>
+        <item>@drawable/ic_weather_cloud_sun</item>
+        <item>@drawable/ic_weather_sun</item>
+        <item>@drawable/ic_weather_sun</item>
+        <item>@drawable/ic_weather_sun</item>
+        <item>@drawable/ic_weather_sun</item>
+        <item>@drawable/ic_weather_hail</item>
+        <item>@drawable/ic_weather_sun</item>
+        <item>@drawable/ic_weather_lightning</item>
+        <item>@drawable/ic_weather_lightning</item>
+        <item>@drawable/ic_weather_lightning</item>
+        <item>@drawable/ic_weather_rain</item>
+        <item>@drawable/ic_weather_snow</item>
+        <item>@drawable/ic_weather_cloud_sun</item>
+        <item>@drawable/ic_weather_lightning</item>
+        <item>@drawable/ic_weather_snow</item>
+        <item>@drawable/ic_weather_lightning</item>
+    </array>
+
+    <string-array name="weather_conditions_reduced" translatable="false">
+        <item>Sonnig</item>
+        <item>Bewölkt</item>
+        <item>Meist bewölkt</item>
+        <item>Teils bewölkt</item>
+        <item>Regen</item>
+        <item>Vereinzelt Regen</item>
+        <item>Nieselregen</item>
+        <item>Schnee</item>
+        <item>Stürmisch</item>
+        <item>Gewitter</item>
+        <item>Leichtes Gewitter</item>
+        <item>Nebel</item>
+    </string-array>
+    <integer-array name="weather_reduced_codes">
+        <item>32</item>
+        <item>26</item>
+        <item>28</item>
+        <item>30</item>
+        <item>11</item>
+        <item>11</item>
+        <item>9</item>
+        <item>16</item>
+        <item>23</item>
+        <item>4</item>
+        <item>37</item>
+        <item>20</item>
+    </integer-array>
+
+    <string-array name="weather_conditions_open" translatable="false">
+        <item>Gewitter mit leichtem Regen</item>
+        <item>Gewitter mit Regen</item>
+        <item>Gewitter mit starkem Regen</item>
+        <item>Leichte Gewitter</item>
+        <item>Gewitter</item>
+        <item>Schwere Gewitter</item>
+        <item>Einige Gewitter</item>
+        <item>Gewitter mit leichtem Nieselregen</item>
+        <item>Gewitter mit Nieselregen</item>
+        <item>Gewitter mit starkem Nieselregen</item>
+        <item>Leichtes Nieseln</item>
+        <item>Nieseln</item>
+        <item>Starkes Nieseln</item>
+        <item>Leichter Nieselregen</item>
+        <item>Nieselregen</item>
+        <item>Starker Nieselregen</item>
+        <item>Nieselschauer</item>
+        <item>Leichter Regen</item>
+        <item>Mäßiger Regen</item>
+        <item>Sehr starkter Regen</item>
+        <item>Starkregen</item>
+        <item>Eisregen</item>
+        <item>Leichte Regenschauer</item>
+        <item>Regenschauer</item>
+        <item>Heftige Regenschauer</item>
+        <item>Mäßiger Schnee</item>
+        <item>Schnee</item>
+        <item>heftiger Schneefall</item>
+        <item>Graupel</item>
+        <item>Schneeschauer</item>
+        <item>Trüb</item>
+        <item>Rauch</item>
+        <item>Dunst</item>
+        <item>Sand / Staubsturm</item>
+        <item>Nebel</item>
+        <item>Tornado</item>
+        <item>Klarer Himmel</item>
+        <item>Ein paar Wolken</item>
+        <item>Überwiegend bewölkt</item>
+        <item>Überwiegend bewölkt</item>
+        <item>Wolkenbedeckt</item>
+        <item>Tornado</item>
+        <item>Tropensturm</item>
+        <item>Hurrikan</item>
+        <item>Kalt</item>
+        <item>Heiß</item>
+        <item>Windig</item>
+        <item>Hagel</item>
+        <item>Windstille</item>
+        <item>Leichte Brise</item>
+        <item>Milde Brise</item>
+        <item>Mäßige Brise</item>
+        <item>Frische Brise</item>
+        <item>Starke Brise</item>
+        <item>Hochwind</item>
+        <item>Sturm</item>
+        <item>Schwerer Sturm</item>
+        <item>Gewitter</item>
+        <item>Heftiges Gewitter</item>
+        <item>Orkan</item>
+    </string-array>
+
+    <!-- Donations -->
+    <string-array name="donations_ids" translatable="false">
+        <item>donation_chocolate</item>
+        <item>donation_beer</item>
+        <item>donation_meal</item>
+        <item>donation_bigger_meal</item>
+    </string-array>
+    <string-array name="prefs_rating_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="prefs_rating_entries">
+        <item>Sanftmut</item>
+        <item>Schwarmneigung</item>
+        <item>Wabenfestigkeit</item>
+    </string-array>
+
+</resources>

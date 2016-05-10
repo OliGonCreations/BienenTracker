@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="prefs_rating_entries">
+        <item>Sanftmut</item>
+        <item>Schwarmneigung</item>
+        <item>Wabenfestigkeit</item>
+    </string-array>
+</resources>

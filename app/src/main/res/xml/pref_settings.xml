@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/prefs_cat_general">
+        <ListPreference
+            android:key="pref_list_rating_view"
+            android:entries="@array/prefs_rating_entries"
+            android:entryValues="@array/prefs_rating_values"
+            android:title="@string/prefs_general_rating_view"
+            android:defaultValue="0"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/prefs_cat_content">
+        <com.oligon.bienentracker.util.ContentPreference
+            android:key="pref_list_food"
+            android:persistent="true"
+            android:title="@string/prefs_content_food" />
+        <com.oligon.bienentracker.util.ContentPreference
+            android:key="pref_list_treatment"
+            android:persistent="true"
+            android:title="@string/prefs_content_treatment" />
+        <com.oligon.bienentracker.util.ContentPreference
+            android:key="pref_list_activities"
+            android:persistent="true"
+            android:title="@string/prefs_content_activities" />
+    </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="@string/prefs_cat_user">
+        <EditTextPreference
+            android:key="pref_user_name"
+            android:summary="@string/prefs_user_summary"
+            android:title="@string/prefs_user_name" />
+        <EditTextPreference
+            android:key="pref_user_id"
+            android:summary="@string/prefs_user_summary"
+            android:title="@string/prefs_user_id" />
+        <EditTextPreference
+            android:hint="@string/export_address_hint"
+            android:inputType="textEmailAddress"
+            android:key="pref_user_mail"
+            android:summary="@string/prefs_user_mail_summary"
+            android:title="@string/prefs_user_mail" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/prefs_cat_export">
+        <Preference
+            android:key="pref_export_excel"
+            android:summary="@string/prefs_export_xls_summary"
+            android:title="@string/prefs_export_xls_title" />
+        <Preference
+            android:key="pref_export_backup"
+            android:summary="@string/prefs_export_backup_summary"
+            android:title="@string/prefs_export_backup_title" />
+        <!--<Preference
+            android:key="pref_export_restore"
+            android:summary="@string/prefs_export_restore_summary"
+            android:title="@string/prefs_export_restore_title"
+            />-->
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/prefs_premium_title">
+        <Preference
+            android:key="pref_premium_purchase"
+            android:summary="@string/prefs_premium_purchase_summary"
+            android:title="@string/prefs_premium_purchase_title" />
+        <Preference
+            android:key="pref_premium_donate"
+            android:summary="@string/prefs_premium_donate"
+            android:title="@string/prefs_premium_donate_title" />
+    </PreferenceCategory>
+</PreferenceScreen>

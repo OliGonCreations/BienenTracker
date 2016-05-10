@@ -1,0 +1,7 @@
+<resources>
+    <declare-styleable name="Circle">
+        <attr name="circleColor" format="color" />
+        <attr name="label" format="string" />
+        <attr name="textSize" format="dimension" />
+    </declare-styleable>
+</resources>

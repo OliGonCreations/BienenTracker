@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".NewEntryActivity">
+    <item
+        android:id="@+id/action_add_hive"
+        android:icon="@drawable/ic_add_hive"
+        android:title="@string/action_add_hive"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_sort_hives"
+        android:title="@string/action_sort_hives"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="101"
+        android:title="@string/action_about"
+        app:showAsAction="never" />
+</menu>

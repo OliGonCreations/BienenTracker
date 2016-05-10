@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ff9800</color>
+    <color name="colorPrimaryDark">#FFe65100</color>
+    <color name="colorAccent">#FF6D00</color>
+
+    <color name="colorPrimaryGreen">#4CAF50</color>
+    <color name="colorPrimaryGreenDark">#1B5E20</color>
+    <color name="colorAccentGreen">#00C853</color>
+
+    <color name="colorGrey">#929292</color>
+
+    <color name="colorAlertRed">#D50000</color>
+
+    <!-- plattes -->
+    <color name="beeBlue">#3F51B5</color>
+    <color name="beeWhite">#E0E0E0</color>
+    <color name="beeYellow">#FFC107</color>
+    <color name="beeRed">#F44336</color>
+    <color name="beeGreen">#4CAF50</color>
+</resources>
