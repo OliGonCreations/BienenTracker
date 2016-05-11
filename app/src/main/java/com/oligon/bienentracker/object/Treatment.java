@@ -1,9 +1,10 @@
 package com.oligon.bienentracker.object;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 
 
-public class Treatment {
+public class Treatment implements Serializable {
 
     private double mWeight;
     private String mTreatment, mUnit = "ml";

@@ -1,8 +1,9 @@
 package com.oligon.bienentracker.object;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 
-public class Food {
+public class Food implements Serializable{
 
     private String mFood;
     private double mAmount;

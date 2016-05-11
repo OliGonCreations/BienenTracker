@@ -291,9 +291,6 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
                 l = lm.getLastKnownLocation(providers.get(i));
                 if (l != null) break;
             }
-            if (l == null) {
-
-            }
 
             Double[] gps = new Double[2];
             if (l != null) {
@@ -499,16 +496,19 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
         switch (res) {
             case R.id.menu_add_food:
                 args.putSerializable("type", ActivityType.FOOD);
+                args.putSerializable("food", mLogEntry.getFood());
                 dialog.setArguments(args);
                 dialog.show(getSupportFragmentManager(), "ActionFood");
                 break;
             case R.id.menu_add_treatment:
                 args.putSerializable("type", ActivityType.TREATMENT);
+                args.putSerializable("treatment", mLogEntry.getTreatment());
                 dialog.setArguments(args);
                 dialog.show(getSupportFragmentManager(), "ActionTreatment");
                 break;
             case R.id.menu_add_harvest:
                 args.putSerializable("type", ActivityType.HARVEST);
+                args.putSerializable("harvest", mLogEntry.getHarvest());
                 dialog.setArguments(args);
                 dialog.show(getSupportFragmentManager(), "ActionTreatment");
                 break;
@@ -519,7 +519,10 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
                 d.show(getSupportFragmentManager(), "CommonDialog");
                 break;
             case R.id.menu_add_inspection:
-                new InspectionDialogFragment().show(getSupportFragmentManager(), "InspectionDialog");
+                args.putSerializable("inspection", mLogEntry.getInspection());
+                InspectionDialogFragment i = new InspectionDialogFragment();
+                i.setArguments(args);
+                i.show(getSupportFragmentManager(), "InspectionDialog");
                 break;
             case R.id.weather_temp_edit:
                 isWeatherEditing = true;
@@ -556,6 +559,7 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
             mType.setOnItemSelectedListener(this);
             mUnit.setOnItemSelectedListener(this);
 
+            String unitSelected = "", typeSelected = "", amount = "", harvestText = "";
 
             Bundle args = getArguments();
             if (args != null && !args.isEmpty()) {
@@ -571,11 +575,16 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
                         actionText = res.getString(R.string.action_food);
                         titleText = res.getString(R.string.action_food_title);
                         amountText = res.getString(R.string.action_amount);
-
                         set = sp.getStringSet("pref_list_food", new HashSet<String>());
                         content.addAll(set);
                         list.add("l");
                         list.add("kg");
+                        Food food = (Food) args.getSerializable("food");
+                        if (food != null) {
+                            unitSelected = food.getUnit();
+                            typeSelected = food.getFood();
+                            amount = String.valueOf(food.getAmount());
+                        }
                         break;
                     case TREATMENT:
                         actionText = res.getString(R.string.action_treatment);
@@ -586,6 +595,12 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
                         list.add("ml");
                         list.add("min");
                         list.add("h");
+                        Treatment treatment = (Treatment) args.getSerializable("treatment");
+                        if (treatment != null) {
+                            unitSelected = treatment.getUnit();
+                            typeSelected = treatment.getTreatment();
+                            amount = String.valueOf(treatment.getWeight());
+                        }
                         break;
                     case HARVEST:
                         actionText = res.getString(R.string.action_harvest);
@@ -594,12 +609,21 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
                         mType.setVisibility(View.INVISIBLE);
                         etHarvest.setVisibility(View.VISIBLE);
                         list.add("kg");
+                        Harvest harvest = (Harvest) args.getSerializable("harvest");
+                        if (harvest != null) {
+                            unitSelected = "kg";
+                            harvestText = String.valueOf(harvest.getCombCount());
+                            amount = String.valueOf(harvest.getWeight());
+                        }
                         break;
                 }
 
                 mAction.setText(actionText);
                 mTypeTitle.setText(titleText);
                 mAmount.setText(amountText);
+
+                etAmount.setText(amount);
+                etHarvest.setText(harvestText);
 
 
                 Collections.sort(content);
@@ -611,8 +635,8 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
                 aUnit.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 mType.setAdapter(aType);
                 mUnit.setAdapter(aUnit);
-                mType.setSelection(0);
-                mUnit.setSelection(0);
+                mType.setSelection(content.indexOf(typeSelected));
+                mUnit.setSelection(list.indexOf(unitSelected));
             }
 
 
@@ -711,6 +735,22 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
             mVarroa = (EditText) view.findViewById(R.id.inspection_varroa);
             mWeight = (EditText) view.findViewById(R.id.inspection_weight);
             mNote = (EditText) view.findViewById(R.id.inspection_note);
+
+            Bundle args = getArguments();
+            if (args != null && !args.isEmpty()) {
+                Inspection inspection = (Inspection) args.getSerializable("inspection");
+                if (inspection != null) {
+                    mQueenless.setChecked(inspection.hasQueenless());
+                    mQueen.setChecked(inspection.hasQueen());
+                    mBrood.setChecked(inspection.hasBrood());
+                    mPins.setChecked(inspection.hasPins());
+                    if (inspection.getVarroa() != 0)
+                        mVarroa.setText(String.valueOf(inspection.getVarroa()));
+                    if (inspection.getWeight() != 0)
+                        mWeight.setText(String.valueOf(inspection.getWeight()));
+                    mNote.setText(inspection.getNote());
+                }
+            }
 
             builder.setView(view)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {

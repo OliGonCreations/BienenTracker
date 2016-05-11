@@ -1,6 +1,8 @@
 package com.oligon.bienentracker.object;
 
-public class Inspection {
+import java.io.Serializable;
+
+public class Inspection implements Serializable {
 
     private boolean mQueenless, mQueen, mBrood, mPins;
     private float mVarroa = 0, mWeight = 0;

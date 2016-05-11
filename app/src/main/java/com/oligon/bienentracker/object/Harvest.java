@@ -1,8 +1,10 @@
 package com.oligon.bienentracker.object;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 
-public class Harvest {
+public class Harvest implements Serializable {
+
     public static Unit intToUnit(int i) {
         if (i == 0) return Unit.KG;
         else if (i == 1) return Unit.G;
