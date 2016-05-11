@@ -15,10 +15,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.oligon.bienentracker.LogActivity;
-import com.oligon.bienentracker.NewEntryActivity;
+import com.oligon.bienentracker.ui.activities.LogActivity;
+import com.oligon.bienentracker.ui.activities.NewEntryActivity;
 import com.oligon.bienentracker.R;
-import com.oligon.bienentracker.util.object.LogEntry;
+import com.oligon.bienentracker.object.LogEntry;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

@@ -21,7 +21,7 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <!--<meta-data android:name="com.google.android.backup.api_key" android:value="AEdPqrEAAAAIGBXy0DQSf73-9EznpHUDHzpxlkN2g9Ywuna4MQ" />-->
         <activity
-            android:name=".HomeActivity"
+            android:name=".ui.activities.HomeActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,9 +30,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewEntryActivity"
+            android:name=".ui.activities.NewEntryActivity"
             android:label="@string/title_activity_new"
-            android:parentActivityName=".HomeActivity"
+            android:parentActivityName=".ui.activities.HomeActivity"
             android:theme="@style/AppTheme.Green"
             android:configChanges="orientation">
             <intent-filter>
@@ -42,9 +42,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LogActivity"
+            android:name=".ui.activities.LogActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".HomeActivity">
+            android:parentActivityName=".ui.activities.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,20 +53,20 @@
 
         </activity>
         <activity
-            android:name=".AboutActivity"
+            android:name=".ui.activities.AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName=".HomeActivity">
+            android:parentActivityName=".ui.activities.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.oligon.bienentracker.HomeActivity" />
+                android:value=".ui.activities.HomeActivity" />
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".ui.activities.SettingsActivity"
             android:label="@string/action_settings"
-            android:parentActivityName=".HomeActivity">
+            android:parentActivityName=".ui.activities.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.oligon.bienentracker.HomeActivity" />
+                android:value=".ui.activities.HomeActivity" />
         </activity>
     </application>
 

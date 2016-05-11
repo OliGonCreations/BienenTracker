@@ -1,4 +1,4 @@
-package com.oligon.bienentracker;
+package com.oligon.bienentracker.ui.activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,10 +18,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.oligon.bienentracker.ui.fragments.HiveDialogFragment;
+import com.oligon.bienentracker.ui.fragments.HiveSortDialogFragment;
+import com.oligon.bienentracker.R;
+import com.oligon.bienentracker.ui.fragments.RateHiveDialogFragment;
 import com.oligon.bienentracker.util.HiveDB;
 import com.oligon.bienentracker.util.adapter.HiveListAdapter;
-import com.oligon.bienentracker.util.object.Hive;
-import com.oligon.bienentracker.util.object.LogEntry;
+import com.oligon.bienentracker.object.Hive;
+import com.oligon.bienentracker.object.LogEntry;
 
 import java.util.ArrayList;
 import java.util.Arrays;

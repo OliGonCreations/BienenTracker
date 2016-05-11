@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oligon.bienentracker.R;
-import com.oligon.bienentracker.SettingsActivity;
+import com.oligon.bienentracker.ui.activities.SettingsActivity;
 import com.oligon.bienentracker.util.HiveDB;
 
 import java.io.File;

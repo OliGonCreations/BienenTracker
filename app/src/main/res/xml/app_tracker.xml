@@ -7,9 +7,9 @@
     <string name="ga_trackingId">UA-42449872-6</string>
     <string name="ga_sampleFrequency">100.0</string>
 
-    <screenName name="com.oligon.bienentracker.HomeActivity">Home Screen</screenName>
-    <screenName name="com.oligon.bienentracker.NewEntryActivity">New Entry Screen</screenName>
-    <screenName name="com.oligon.bienentracker.LogActivity">Log Entry Screen</screenName>
-    <screenName name="com.oligon.bienentracker.SettingsActivity">Settings Screen</screenName>
-    <screenName name="com.oligon.bienentracker.AboutActivity">About Screen</screenName>
+    <screenName name="com.oligon.bienentracker.ui.activities.HomeActivity">Home Screen</screenName>
+    <screenName name="com.oligon.bienentracker.ui.activities.NewEntryActivity">New Entry Screen</screenName>
+    <screenName name="com.oligon.bienentracker.ui.activities.LogActivity">Log Entry Screen</screenName>
+    <screenName name="com.oligon.bienentracker.ui.activities.SettingsActivity">Settings Screen</screenName>
+    <screenName name="com.oligon.bienentracker.ui.activities.AboutActivity">About Screen</screenName>
 </resources>

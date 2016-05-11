@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.oligon.bienentracker.BeeApplication;
-import com.oligon.bienentracker.NewEntryActivity;
+import com.oligon.bienentracker.ui.activities.NewEntryActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;

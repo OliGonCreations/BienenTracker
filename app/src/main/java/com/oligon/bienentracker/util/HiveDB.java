@@ -9,17 +9,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.oligon.bienentracker.BeeApplication;
 import com.oligon.bienentracker.R;
-import com.oligon.bienentracker.util.object.Activities;
-import com.oligon.bienentracker.util.object.Food;
-import com.oligon.bienentracker.util.object.Harvest;
-import com.oligon.bienentracker.util.object.Hive;
-import com.oligon.bienentracker.util.object.Inspection;
-import com.oligon.bienentracker.util.object.LogEntry;
-import com.oligon.bienentracker.util.object.Treatment;
+import com.oligon.bienentracker.object.Activities;
+import com.oligon.bienentracker.object.Food;
+import com.oligon.bienentracker.object.Harvest;
+import com.oligon.bienentracker.object.Hive;
+import com.oligon.bienentracker.object.Inspection;
+import com.oligon.bienentracker.object.LogEntry;
+import com.oligon.bienentracker.object.Treatment;
 
 import java.io.File;
 import java.io.IOException;

@@ -14,10 +14,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.oligon.bienentracker.NewEntryActivity;
+import com.oligon.bienentracker.ui.activities.NewEntryActivity;
 import com.oligon.bienentracker.R;
 import com.oligon.bienentracker.util.InstantAutoCompleteTextView;
-import com.oligon.bienentracker.util.object.Activities;
+import com.oligon.bienentracker.object.Activities;
 
 import java.util.ArrayList;
 import java.util.HashSet;

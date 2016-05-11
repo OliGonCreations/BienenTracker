@@ -1,4 +1,4 @@
-package com.oligon.bienentracker;
+package com.oligon.bienentracker.ui.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -20,7 +20,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.oligon.bienentracker.util.object.Hive;
+import com.oligon.bienentracker.BeeApplication;
+import com.oligon.bienentracker.R;
+import com.oligon.bienentracker.ui.activities.HomeActivity;
+import com.oligon.bienentracker.object.Hive;
 
 public class HiveDialogFragment extends DialogFragment {
 

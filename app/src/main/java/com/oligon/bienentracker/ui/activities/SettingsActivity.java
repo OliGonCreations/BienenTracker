@@ -1,4 +1,4 @@
-package com.oligon.bienentracker;
+package com.oligon.bienentracker.ui.activities;
 
 
 import android.Manifest;
@@ -47,6 +47,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
+import com.oligon.bienentracker.BeeApplication;
+import com.oligon.bienentracker.R;
 import com.oligon.bienentracker.util.AppCompatPreferenceActivity;
 import com.oligon.bienentracker.util.HiveDB;
 import com.oligon.bienentracker.util.adapter.RestoreListAdapter;

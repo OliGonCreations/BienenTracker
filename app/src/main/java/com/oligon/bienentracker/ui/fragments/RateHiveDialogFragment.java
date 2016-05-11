@@ -1,4 +1,4 @@
-package com.oligon.bienentracker;
+package com.oligon.bienentracker.ui.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -13,8 +13,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RatingBar;
 
+import com.oligon.bienentracker.BeeApplication;
+import com.oligon.bienentracker.R;
 import com.oligon.bienentracker.util.HiveDB;
-import com.oligon.bienentracker.util.object.Hive;
+import com.oligon.bienentracker.object.Hive;
 
 
 public class RateHiveDialogFragment extends DialogFragment implements RatingBar.OnRatingBarChangeListener {

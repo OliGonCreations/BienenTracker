@@ -33,6 +33,18 @@
                 android:src="@drawable/ic_more"
                 android:tint="@color/colorPrimary" />
 
+            <ImageButton
+                android:id="@+id/card_reminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/card_options"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@null"
+                android:padding="8dp"
+                android:src="@drawable/ic_notifications_none"
+                android:tint="@color/colorGrey"
+                android:scaleType="centerInside"/>
+
             <ImageView
                 android:id="@+id/card_expand"
                 android:layout_width="wrap_content"
@@ -66,8 +78,8 @@
                 android:layout_marginTop="4dp"
                 android:layout_toEndOf="@+id/card_hive_img"
                 android:textSize="18sp"
-                android:transitionName="hivetitle"
                 android:textStyle="bold"
+                android:transitionName="hivetitle"
                 tools:ignore="RelativeOverlap"
                 tools:targetApi="lollipop" />
 
@@ -123,12 +135,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/card_hive_location"
-                android:layout_toStartOf="@+id/card_hive_rating"
                 android:layout_below="@+id/card_hive_location"
-                tools:text="Schwarmneigung"
+                android:layout_toStartOf="@+id/card_hive_rating"
+                android:ellipsize="end"
                 android:gravity="top"
                 android:singleLine="true"
-                android:ellipsize="end"/>
+                tools:text="Schwarmneigung" />
 
 
             <RatingBar

@@ -16,8 +16,8 @@ import android.widget.TextView;
 
 import com.oligon.bienentracker.R;
 import com.oligon.bienentracker.util.Circle;
-import com.oligon.bienentracker.util.object.Hive;
-import com.oligon.bienentracker.util.object.LogEntry;
+import com.oligon.bienentracker.object.Hive;
+import com.oligon.bienentracker.object.LogEntry;
 
 import java.text.SimpleDateFormat;
 import java.util.List;

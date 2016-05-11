@@ -1,4 +1,4 @@
-package com.oligon.bienentracker;
+package com.oligon.bienentracker.ui.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -20,11 +20,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.oligon.bienentracker.BeeApplication;
+import com.oligon.bienentracker.R;
+import com.oligon.bienentracker.ui.activities.HomeActivity;
 import com.oligon.bienentracker.util.adapter.ItemTouchHelperAdapter;
 import com.oligon.bienentracker.util.adapter.ItemTouchHelperViewHolder;
 import com.oligon.bienentracker.util.adapter.OnStartDragListener;
 import com.oligon.bienentracker.util.adapter.SimpleItemTouchHelperCallback;
-import com.oligon.bienentracker.util.object.Hive;
+import com.oligon.bienentracker.object.Hive;
 
 import java.util.ArrayList;
 import java.util.Collections;

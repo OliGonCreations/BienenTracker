@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin_small"
     android:paddingRight="@dimen/activity_horizontal_margin_small"
     android:paddingTop="@dimen/activity_vertical_margin_small"
-    tools:context="com.oligon.bienentracker.HomeActivity">
+    tools:context=".ui.activities.HomeActivity">
 
     <include
         android:id="@+id/toolbar_view"

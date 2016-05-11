@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".NewEntryActivity">
+    tools:context=".ui.activities.NewEntryActivity">
     <item
         android:id="@+id/action_add_hive"
         android:icon="@drawable/ic_add_hive"

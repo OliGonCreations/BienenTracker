@@ -1,4 +1,4 @@
-package com.oligon.bienentracker;
+package com.oligon.bienentracker.ui.activities;
 
 
 import android.annotation.TargetApi;
@@ -15,6 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.oligon.bienentracker.BuildConfig;
+import com.oligon.bienentracker.R;
 import com.oligon.bienentracker.util.AppCompatPreferenceActivity;
 
 public class AboutActivity extends AppCompatPreferenceActivity {

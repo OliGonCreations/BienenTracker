@@ -1,4 +1,4 @@
-package com.oligon.bienentracker.util.object;
+package com.oligon.bienentracker.object;
 
 import java.io.Serializable;
 

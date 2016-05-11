@@ -1,4 +1,4 @@
-package com.oligon.bienentracker;
+package com.oligon.bienentracker.ui.activities;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -24,9 +24,11 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
-import com.oligon.bienentracker.util.object.Hive;
+import com.oligon.bienentracker.ui.fragments.HiveDialogFragment;
+import com.oligon.bienentracker.R;
+import com.oligon.bienentracker.object.Hive;
 import com.oligon.bienentracker.util.HiveDB;
-import com.oligon.bienentracker.util.object.LogEntry;
+import com.oligon.bienentracker.object.LogEntry;
 import com.oligon.bienentracker.util.adapter.LogListAdapter;
 
 import java.text.SimpleDateFormat;
