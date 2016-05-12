@@ -68,6 +68,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activities.HomeActivity" />
         </activity>
+        <receiver android:name=".NotificationReceiver" />
     </application>
 
 </manifest>

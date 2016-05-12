@@ -1,4 +1,4 @@
-package com.oligon.bienentracker.ui.fragments;
+package com.oligon.bienentracker.ui.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

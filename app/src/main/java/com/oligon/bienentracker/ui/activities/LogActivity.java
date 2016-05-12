@@ -24,7 +24,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
-import com.oligon.bienentracker.ui.fragments.HiveDialogFragment;
+import com.oligon.bienentracker.ui.dialogs.HiveDialogFragment;
 import com.oligon.bienentracker.R;
 import com.oligon.bienentracker.object.Hive;
 import com.oligon.bienentracker.util.HiveDB;

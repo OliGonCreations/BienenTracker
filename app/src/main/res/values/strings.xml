@@ -152,5 +152,7 @@
     <string name="c" translatable="false">°C</string>
     <string name="common_honey">Honeyroom</string>
     <string name="common_brood">Brood frame</string>
+    <string name="dialog_title_reminder">Erinnerung</string>
+    <string name="hint_reminder_title">Titel</string>
 
 </resources>

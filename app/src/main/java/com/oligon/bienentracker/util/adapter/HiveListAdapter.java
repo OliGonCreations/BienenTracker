@@ -123,6 +123,8 @@ public class HiveListAdapter extends RecyclerView.Adapter<HiveListAdapter.HiveVi
         void onAddLogClick(final Hive hive, View title);
 
         void onMoreLogClick(final Hive hive);
+
+        void onAddReminderClick(final Hive hive);
     }
 
     public class HiveViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -137,7 +139,7 @@ public class HiveListAdapter extends RecyclerView.Adapter<HiveListAdapter.HiveVi
         public TextView hive_name, hive_year, hive_location, hive_rating_text;
         public ImageView hive_img, card_expand;
         public Circle hive_circle;
-        public ImageButton card_options;
+        public ImageButton card_options, card_reminder;
         public Button card_hive_add, card_hive_more;
 
         public RatingBar hive_rating;
@@ -159,10 +161,12 @@ public class HiveListAdapter extends RecyclerView.Adapter<HiveListAdapter.HiveVi
             hive_rating = (RatingBar) v.findViewById(R.id.card_hive_rating);
 
             card_options = (ImageButton) v.findViewById(R.id.card_options);
+            card_reminder = (ImageButton) v.findViewById(R.id.card_reminder);
             card_expand = (ImageView) v.findViewById(R.id.card_expand);
             card_hive_add = (Button) v.findViewById(R.id.card_hive_add);
             card_hive_more = (Button) v.findViewById(R.id.card_hive_more);
             card_options.setOnClickListener(this);
+            card_reminder.setOnClickListener(this);
             card_hive_add.setOnClickListener(this);
             card_hive_more.setOnClickListener(this);
 
@@ -189,6 +193,9 @@ public class HiveListAdapter extends RecyclerView.Adapter<HiveListAdapter.HiveVi
             switch (v.getId()) {
                 case R.id.card_options:
                     mListener.onClick(v, item);
+                    break;
+                case R.id.card_reminder:
+                    mListener.onAddReminderClick(item);
                     break;
                 case R.id.card_hive_add:
                     mListener.onAddLogClick(item, hive_name);
