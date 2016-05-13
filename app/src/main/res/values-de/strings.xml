@@ -141,4 +141,7 @@
     <string name="rating_swarm">Schwarmneigung</string>
     <string name="common_brood">Brutrahmen</string>
     <string name="common_honey">Honigraum</string>
+    <string name="hint_reminder_description">Beschreibung</string>
+    <string name="dialog_title_reminder">Erinnerung</string>
+    <string name="prefs_content_reminders">Erinnerungen</string>
 </resources>

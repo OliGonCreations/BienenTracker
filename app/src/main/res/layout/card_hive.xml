@@ -41,7 +41,7 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@null"
                 android:padding="8dp"
-                android:src="@drawable/ic_notifications_none"
+                android:src="@drawable/ic_reminder_off"
                 android:tint="@color/colorGrey"
                 android:scaleType="centerInside"/>
 

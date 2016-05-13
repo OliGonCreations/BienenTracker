@@ -70,6 +70,12 @@ public class HiveListAdapter extends RecyclerView.Adapter<HiveListAdapter.HiveVi
         int ratingView = Integer.parseInt(mPrefs.getString("pref_list_rating_view", "0"));
         holder.hive_rating_text.setText(ratings[ratingView]);
         holder.hive_rating.setRating(hive.getRating(Hive.Rating.values()[ratingView]));
+
+        if (hive.hasReminder())
+            holder.card_reminder.setImageResource(R.drawable.ic_reminder);
+        else
+            holder.card_reminder.setImageResource(R.drawable.ic_reminder_off);
+
         holder.item = hive;
 
         if (entry != null) {

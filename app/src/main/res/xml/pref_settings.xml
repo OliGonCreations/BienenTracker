@@ -3,11 +3,11 @@
 
     <PreferenceCategory android:title="@string/prefs_cat_general">
         <ListPreference
-            android:key="pref_list_rating_view"
+            android:defaultValue="0"
             android:entries="@array/prefs_rating_entries"
             android:entryValues="@array/prefs_rating_values"
-            android:title="@string/prefs_general_rating_view"
-            android:defaultValue="0"/>
+            android:key="pref_list_rating_view"
+            android:title="@string/prefs_general_rating_view" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/prefs_cat_content">
@@ -23,6 +23,10 @@
             android:key="pref_list_activities"
             android:persistent="true"
             android:title="@string/prefs_content_activities" />
+        <com.oligon.bienentracker.util.ContentPreference
+            android:key="pref_list_reminders"
+            android:persistent="true"
+            android:title="@string/prefs_content_reminders" />
     </PreferenceCategory>
 
 
