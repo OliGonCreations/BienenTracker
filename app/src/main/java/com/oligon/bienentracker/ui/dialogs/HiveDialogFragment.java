@@ -22,8 +22,9 @@ import android.widget.TextView;
 
 import com.oligon.bienentracker.BeeApplication;
 import com.oligon.bienentracker.R;
-import com.oligon.bienentracker.ui.activities.HomeActivity;
 import com.oligon.bienentracker.object.Hive;
+import com.oligon.bienentracker.ui.activities.HomeActivity;
+import com.oligon.bienentracker.util.OnDialogFinishedListener;
 
 public class HiveDialogFragment extends DialogFragment {
 
@@ -35,10 +36,6 @@ public class HiveDialogFragment extends DialogFragment {
     private OnDialogFinishedListener mListener;
 
     public HiveDialogFragment() {
-    }
-
-    public interface OnDialogFinishedListener {
-        void onDialogFinished();
     }
 
     @Override

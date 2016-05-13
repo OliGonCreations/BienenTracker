@@ -153,6 +153,8 @@
     <string name="common_honey">Honeyroom</string>
     <string name="common_brood">Brood frame</string>
     <string name="dialog_title_reminder">Erinnerung</string>
-    <string name="hint_reminder_title">Titel</string>
+    <string name="hint_reminder_description">Description</string>
+    <string name="time_format" translatable="false">HH:mm</string>
+    <string name="prefs_content_reminders">Reminders</string>
 
 </resources>

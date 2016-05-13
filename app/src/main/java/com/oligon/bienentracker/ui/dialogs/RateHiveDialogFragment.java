@@ -15,8 +15,9 @@ import android.widget.RatingBar;
 
 import com.oligon.bienentracker.BeeApplication;
 import com.oligon.bienentracker.R;
-import com.oligon.bienentracker.util.HiveDB;
 import com.oligon.bienentracker.object.Hive;
+import com.oligon.bienentracker.util.HiveDB;
+import com.oligon.bienentracker.util.OnDialogFinishedListener;
 
 
 public class RateHiveDialogFragment extends DialogFragment implements RatingBar.OnRatingBarChangeListener {
@@ -26,10 +27,6 @@ public class RateHiveDialogFragment extends DialogFragment implements RatingBar.
     private OnDialogFinishedListener mListener;
 
     public RateHiveDialogFragment() {
-    }
-
-    public interface OnDialogFinishedListener {
-        void onDialogFinished();
     }
 
     @Override

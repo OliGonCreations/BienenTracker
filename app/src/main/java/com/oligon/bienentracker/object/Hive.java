@@ -19,6 +19,7 @@ public class Hive implements Serializable {
     private int mYear = 0;
     private boolean isOffspring = false;
     private Map<Rating, Float> mRatings = new HashMap<>();
+    private Reminder mReminder = null;
 
     public Hive(int mId) {
         this.mId = mId;
@@ -96,5 +97,17 @@ public class Hive implements Serializable {
         if (mRatings.containsKey(rating))
             return mRatings.get(rating);
         return 0;
+    }
+
+    public void setReminder(Reminder reminder) {
+        this.mReminder = reminder;
+    }
+
+    public Reminder getReminder() {
+        return mReminder;
+    }
+
+    public boolean hasReminder() {
+        return mReminder != null && mReminder.getTime().getTime() != 0;
     }
 }

@@ -18,6 +18,7 @@ import com.oligon.bienentracker.object.Harvest;
 import com.oligon.bienentracker.object.Hive;
 import com.oligon.bienentracker.object.Inspection;
 import com.oligon.bienentracker.object.LogEntry;
+import com.oligon.bienentracker.object.Reminder;
 import com.oligon.bienentracker.object.Treatment;
 
 import java.io.File;
@@ -52,7 +53,7 @@ public class HiveDB extends SQLiteOpenHelper {
     public static HiveDB instance;
 
     // TODO: Update VersionNumber
-    private final static int DB_VERSION = 4;
+    private final static int DB_VERSION = 5;
     public final static String DB_NAME = "Hive.db";
 
     private final static String LOG_ID = "id";
@@ -95,6 +96,9 @@ public class HiveDB extends SQLiteOpenHelper {
     private final static String HIVE_STRENGTH = "strength";
     private final static String HIVE_GROUP = "hivegroup";
 
+    private final static String HIVE_REMINDER_TIME = "reminderTime";
+    private final static String HIVE_REMINDER_DESCRIPTION = "reminderDescription";
+
 
     private final static String DB_CREATE_LOG = "CREATE TABLE " + LOG_TABLE_NAME + "("
             + LOG_ID + " INTEGER PRIMARY KEY, " + LOG_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP, "
@@ -119,7 +123,8 @@ public class HiveDB extends SQLiteOpenHelper {
             + HIVE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + HIVE_NAME + " TEXT, " + HIVE_POSITION + " TEXT, "
             + HIVE_YEAR + " INTEGER, " + HIVE_MARKER + " TEXT, " + HIVE_OFFSPRING + " INTEGER,"
             + HIVE_INFO + " TEXT," + HIVE_SORTER + " INTEGER, " + HIVE_GENTLE + " REAL, "
-            + HIVE_ESCAPE + " REAL, " + HIVE_STRENGTH + " REAL)";
+            + HIVE_ESCAPE + " REAL, " + HIVE_STRENGTH + " REAL," + HIVE_REMINDER_TIME + " TEXT, "
+            + HIVE_REMINDER_DESCRIPTION + " TEXT)";
 
     private final static String ALTER_SORTER = "ALTER TABLE " + HIVE_TABLE_NAME + " ADD COLUMN "
             + HIVE_SORTER + " INTEGER";
@@ -132,6 +137,11 @@ public class HiveDB extends SQLiteOpenHelper {
             + HIVE_STRENGTH + " REAL";
     private final static String ALTER_GROUP = "ALTER TABLE " + HIVE_TABLE_NAME + " ADD COLUMN "
             + HIVE_GROUP + " TEXT";
+
+    private final static String ALTER_REMINDER_TIME = "ALTER TABLE " + HIVE_TABLE_NAME + " ADD COLUMN "
+            + HIVE_REMINDER_TIME + " TEXT";
+    private final static String ALTER_REMINDER_DESCR = "ALTER TABLE " + HIVE_TABLE_NAME + " ADD COLUMN "
+            + HIVE_REMINDER_DESCRIPTION + " TEXT";
 
     private final static String ALTER_ACT_HONEY_ROOM = "ALTER TABLE " + LOG_TABLE_NAME + " ADD COLUMN "
             + LOG_HONEY_ROOM + " INTEGER";
@@ -199,6 +209,10 @@ public class HiveDB extends SQLiteOpenHelper {
             db.execSQL(ALTER_ACT_OTHER);
             transferActivities(db);
         }
+        if (oldVersion < 5) { // Update to Version 5
+            db.execSQL(ALTER_REMINDER_TIME);
+            db.execSQL(ALTER_REMINDER_DESCR);
+        }
     }
 
     private void transferActivities(SQLiteDatabase db) {
@@ -242,6 +256,8 @@ public class HiveDB extends SQLiteOpenHelper {
         values.put(HIVE_ESCAPE, hive.getRating(Hive.Rating.ESCAPE));
         values.put(HIVE_STRENGTH, hive.getRating(Hive.Rating.STRENGTH));
 
+        values.put(HIVE_REMINDER_TIME, "");
+
         db.insert(HIVE_TABLE_NAME, null, values);
         db.close();
     }
@@ -280,6 +296,24 @@ public class HiveDB extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void updateHiveReminder(int id, Reminder reminder) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(HIVE_REMINDER_TIME, getDateTime(reminder.getTime()));
+        values.put(HIVE_REMINDER_DESCRIPTION, reminder.getDescription());
+        db.update(HIVE_TABLE_NAME, values, HIVE_ID + " = ?", new String[]{Integer.toString(id)});
+        db.close();
+    }
+
+    public void removeHiveReminder(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(HIVE_REMINDER_TIME, "");
+        values.put(HIVE_REMINDER_DESCRIPTION, "");
+        db.update(HIVE_TABLE_NAME, values, HIVE_ID + " = ?", new String[]{Integer.toString(id)});
+        db.close();
+    }
+
     public ArrayList<Hive> getAllHives() {
         ArrayList<Hive> hives = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -305,6 +339,16 @@ public class HiveDB extends SQLiteOpenHelper {
             hive.setRating(Hive.Rating.ESCAPE, res.getFloat(res.getColumnIndex(HIVE_ESCAPE)));
             hive.setRating(Hive.Rating.STRENGTH, res.getFloat(res.getColumnIndex(HIVE_STRENGTH)));
 
+            Reminder reminder = new Reminder();
+            String s = res.getString(res.getColumnIndex(HIVE_REMINDER_TIME));
+            if (s != null && !s.isEmpty()) {
+                reminder.setTime(getDateFromString(s));
+            } else {
+                reminder.setTime(new Date(0));
+            }
+            reminder.setDescription(res.getString(res.getColumnIndex(HIVE_REMINDER_DESCRIPTION)));
+            hive.setReminder(reminder);
+
             hives.add(hive);
             res.moveToNext();
         }
@@ -328,6 +372,16 @@ public class HiveDB extends SQLiteOpenHelper {
             hive.setRating(Hive.Rating.GENTLENESS, res.getFloat(res.getColumnIndex(HIVE_GENTLE)));
             hive.setRating(Hive.Rating.ESCAPE, res.getFloat(res.getColumnIndex(HIVE_ESCAPE)));
             hive.setRating(Hive.Rating.STRENGTH, res.getFloat(res.getColumnIndex(HIVE_STRENGTH)));
+
+            Reminder reminder = new Reminder();
+            String s = res.getString(res.getColumnIndex(HIVE_REMINDER_TIME));
+            if (s != null && !s.isEmpty()) {
+                reminder.setTime(getDateFromString(s));
+            } else {
+                reminder.setTime(new Date(0));
+            }
+            reminder.setDescription(res.getString(res.getColumnIndex(HIVE_REMINDER_DESCRIPTION)));
+            hive.setReminder(reminder);
 
             res.close();
             db.close();

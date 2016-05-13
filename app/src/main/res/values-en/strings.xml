@@ -141,4 +141,7 @@
     <string name="rating_swarm">Comb-solidity</string>
     <string name="common_brood">Brood frame</string>
     <string name="common_honey">Honeyroom</string>
+    <string name="hint_reminder_description">Description</string>
+    <string name="dialog_title_reminder">Reminder</string>
+    <string name="prefs_content_reminders">Reminders</string>
 </resources>

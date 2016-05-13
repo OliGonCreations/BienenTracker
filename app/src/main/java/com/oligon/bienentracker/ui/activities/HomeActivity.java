@@ -18,15 +18,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.oligon.bienentracker.ui.dialogs.HiveDialogFragment;
-import com.oligon.bienentracker.ui.dialogs.HiveSortDialogFragment;
 import com.oligon.bienentracker.R;
-import com.oligon.bienentracker.ui.dialogs.RateHiveDialogFragment;
-import com.oligon.bienentracker.ui.dialogs.ReminderDialog;
-import com.oligon.bienentracker.util.HiveDB;
-import com.oligon.bienentracker.util.adapter.HiveListAdapter;
 import com.oligon.bienentracker.object.Hive;
 import com.oligon.bienentracker.object.LogEntry;
+import com.oligon.bienentracker.ui.dialogs.HiveDialogFragment;
+import com.oligon.bienentracker.ui.dialogs.HiveSortDialogFragment;
+import com.oligon.bienentracker.ui.dialogs.RateHiveDialogFragment;
+import com.oligon.bienentracker.ui.dialogs.ReminderDialogFragment;
+import com.oligon.bienentracker.util.HiveDB;
+import com.oligon.bienentracker.util.OnDialogFinishedListener;
+import com.oligon.bienentracker.util.adapter.HiveListAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,8 +35,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class HomeActivity extends AppCompatActivity implements View.OnClickListener, HiveDialogFragment.OnDialogFinishedListener,
-        HiveSortDialogFragment.OnDialogFinishedListener, RateHiveDialogFragment.OnDialogFinishedListener, HiveListAdapter.LogClickListener {
+public class HomeActivity extends AppCompatActivity implements View.OnClickListener, OnDialogFinishedListener,
+        HiveListAdapter.LogClickListener {
 
     private static Context context;
     private static RecyclerView list;
@@ -230,10 +231,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onAddReminderClick(Hive hive) {
-        ReminderDialog reminder = new ReminderDialog();
+        ReminderDialogFragment reminder = new ReminderDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("hive", hive);
         reminder.setArguments(bundle);
-        reminder.show(fm, "ReminderDialog");
+        reminder.show(fm, "ReminderDialogFragment");
     }
 }

@@ -22,12 +22,13 @@ import android.widget.TextView;
 
 import com.oligon.bienentracker.BeeApplication;
 import com.oligon.bienentracker.R;
+import com.oligon.bienentracker.object.Hive;
 import com.oligon.bienentracker.ui.activities.HomeActivity;
+import com.oligon.bienentracker.util.OnDialogFinishedListener;
 import com.oligon.bienentracker.util.adapter.ItemTouchHelperAdapter;
 import com.oligon.bienentracker.util.adapter.ItemTouchHelperViewHolder;
 import com.oligon.bienentracker.util.adapter.OnStartDragListener;
 import com.oligon.bienentracker.util.adapter.SimpleItemTouchHelperCallback;
-import com.oligon.bienentracker.object.Hive;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,10 +46,6 @@ public class HiveSortDialogFragment extends DialogFragment implements OnStartDra
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         mItemTouchHelper.startDrag(viewHolder);
-    }
-
-    public interface OnDialogFinishedListener {
-        void onDialogFinished();
     }
 
     @Override
