@@ -30,6 +30,7 @@
             android:id="@+id/et_hive_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textCapSentences"
             android:hint="@string/hint_hive_name"
             android:singleLine="true"
             android:nextFocusForward="@+id/et_hive_position"
