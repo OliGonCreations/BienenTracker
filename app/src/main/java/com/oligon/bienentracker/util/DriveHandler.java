@@ -53,7 +53,7 @@ public class DriveHandler {
         return mApiClient.isConnected();
     }
 
-    public void deleteDrive() {
+    /*public void deleteDrive() {
         if (!isConnected()) return;
         Drive.DriveApi.getAppFolder(mApiClient)
                 .listChildren(mApiClient)
@@ -70,7 +70,7 @@ public class DriveHandler {
                         }
                     }
                 });
-    }
+    }*/
 
     public void addDBChangeListener() {
         Query query = new Query.Builder()
@@ -81,7 +81,7 @@ public class DriveHandler {
         Drive.DriveApi.query(mApiClient, query)
                 .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
                     @Override
-                    public void onResult(DriveApi.MetadataBufferResult result) {
+                    public void onResult(@NonNull DriveApi.MetadataBufferResult result) {
                         if (!result.getStatus().isSuccess()) {
                             Log.d(BeeApplication.TAG, "Cannot create file in the root.");
                         } else {
@@ -108,7 +108,7 @@ public class DriveHandler {
         Drive.DriveApi.query(mApiClient, query)
                 .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
                     @Override
-                    public void onResult(DriveApi.MetadataBufferResult result) {
+                    public void onResult(@NonNull DriveApi.MetadataBufferResult result) {
                         if (!result.getStatus().isSuccess()) {
                             Log.d(BeeApplication.TAG, "Cannot create file in the root.");
                         } else {
@@ -138,7 +138,7 @@ public class DriveHandler {
         Drive.DriveApi.query(mApiClient, query)
                 .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
                     @Override
-                    public void onResult(DriveApi.MetadataBufferResult result) {
+                    public void onResult(@NonNull DriveApi.MetadataBufferResult result) {
                         if (!result.getStatus().isSuccess()) {
                             Log.d(BeeApplication.TAG, "Cannot create file in the root.");
                         } else {
@@ -169,7 +169,7 @@ public class DriveHandler {
 
         final ResultCallback<DriveApi.DriveIdResult> idCallback = new ResultCallback<DriveApi.DriveIdResult>() {
             @Override
-            public void onResult(DriveApi.DriveIdResult result) {
+            public void onResult(@NonNull DriveApi.DriveIdResult result) {
                 if (!result.getStatus().isSuccess()) {
                     Log.d(BeeApplication.TAG, "Cannot find DriveId. Are you authorized to view this file?");
                     return;
@@ -185,7 +185,7 @@ public class DriveHandler {
     final private ResultCallback<DriveApi.DriveContentsResult> driveContentsCallback =
             new ResultCallback<DriveApi.DriveContentsResult>() {
                 @Override
-                public void onResult(DriveApi.DriveContentsResult result) {
+                public void onResult(@NonNull DriveApi.DriveContentsResult result) {
                     if (!result.getStatus().isSuccess()) {
                         Log.d(BeeApplication.TAG, "Error while trying to create new file contents");
                         return;
@@ -204,7 +204,7 @@ public class DriveHandler {
     final private ResultCallback<DriveFolder.DriveFileResult> fileCallback = new
             ResultCallback<DriveFolder.DriveFileResult>() {
                 @Override
-                public void onResult(DriveFolder.DriveFileResult result) {
+                public void onResult(@NonNull DriveFolder.DriveFileResult result) {
                     if (!result.getStatus().isSuccess()) {
                         Log.d(BeeApplication.TAG, "Error while trying to create the file");
                         return;
