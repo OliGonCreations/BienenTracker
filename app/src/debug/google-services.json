@@ -8,10 +8,23 @@
       "client_info": {
         "mobilesdk_app_id": "1:664581075615:android:5ebe413601742a6f",
         "android_client_info": {
-          "package_name": "com.oligon.bienentracker.debug"
+          "package_name": "com.oligon.bienentracker"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "664581075615-k891o1l298ajne3sethltp2msvrn0as6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.oligon.bienentracker",
+            "certificate_hash": "BE80BF9F3134AA9180E8A4F55AAC3646E0EDADA8"
+          }
+        },
+        {
+          "client_id": "664581075615-68gsqdbelvv4nm6hh4dj1lldmm21vnlj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCqStwfWYUr30XGFFMYqE67QVpDsbyApaE"
@@ -23,6 +36,45 @@
           "analytics_property": {
             "tracking_id": "UA-42449872-6"
           }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664581075615:android:762ecd5ba1a9b03e",
+        "android_client_info": {
+          "package_name": "com.oligon.bienentracker.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664581075615-igecaavakr04rrvuadpadn28r3f9pj96.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.oligon.bienentracker.debug",
+            "certificate_hash": "995432EADA8F1EBFDB3CD805186C92DFAECD0184"
+          }
+        },
+        {
+          "client_id": "664581075615-68gsqdbelvv4nm6hh4dj1lldmm21vnlj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqStwfWYUr30XGFFMYqE67QVpDsbyApaE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
         },
         "appinvite_service": {
           "status": 1,

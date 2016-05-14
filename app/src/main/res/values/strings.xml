@@ -157,4 +157,17 @@
     <string name="time_format" translatable="false">HH:mm</string>
     <string name="prefs_content_reminders">Reminders</string>
 
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_statistics">Statistiken</string>
+    <string name="nav_all">Alle Völker</string>
+    <string name="nav_groups">Gruppen</string>
+    <string name="prefs_content_groups">Groups</string>
+    <string name="no_group">No group</string>
+    <string name="prefs_general_logout_title">Ausloggen</string>
+    <string name="nav_no_groups">in den Einstellungen hinzufügen</string>
+    <string name="action_logout">Logout</string>
+    <string name="header_login">Login</string>
+    <string name="header_premium">Premium-Version notwendig</string>
+
 </resources>

@@ -52,8 +52,7 @@ public class HiveDB extends SQLiteOpenHelper {
     private static Context mContext;
     public static HiveDB instance;
 
-    // TODO: Update VersionNumber
-    private final static int DB_VERSION = 5;
+    private final static int DB_VERSION = 6;
     public final static String DB_NAME = "Hive.db";
 
     private final static String LOG_ID = "id";
@@ -124,7 +123,7 @@ public class HiveDB extends SQLiteOpenHelper {
             + HIVE_YEAR + " INTEGER, " + HIVE_MARKER + " TEXT, " + HIVE_OFFSPRING + " INTEGER,"
             + HIVE_INFO + " TEXT," + HIVE_SORTER + " INTEGER, " + HIVE_GENTLE + " REAL, "
             + HIVE_ESCAPE + " REAL, " + HIVE_STRENGTH + " REAL," + HIVE_REMINDER_TIME + " TEXT, "
-            + HIVE_REMINDER_DESCRIPTION + " TEXT)";
+            + HIVE_REMINDER_DESCRIPTION + " TEXT," + HIVE_GROUP + " TEXT)";
 
     private final static String ALTER_SORTER = "ALTER TABLE " + HIVE_TABLE_NAME + " ADD COLUMN "
             + HIVE_SORTER + " INTEGER";
@@ -195,7 +194,6 @@ public class HiveDB extends SQLiteOpenHelper {
             db.execSQL(ALTER_STRENGTH);
         }
         if (oldVersion < 4) { // Update to Version 4
-            //db.execSQL(ALTER_GROUP);
             db.execSQL(ALTER_ACT_DRONE);
             db.execSQL(ALTER_ACT_BROOD);
             db.execSQL(ALTER_ACT_EMPTY);
@@ -212,6 +210,9 @@ public class HiveDB extends SQLiteOpenHelper {
         if (oldVersion < 5) { // Update to Version 5
             db.execSQL(ALTER_REMINDER_TIME);
             db.execSQL(ALTER_REMINDER_DESCR);
+        }
+        if (oldVersion < 6) { // Update to Version 6
+            db.execSQL(ALTER_GROUP);
         }
     }
 
@@ -251,6 +252,7 @@ public class HiveDB extends SQLiteOpenHelper {
         values.put(HIVE_MARKER, hive.getMarker());
         values.put(HIVE_OFFSPRING, hive.isOffspring() ? 1 : 0);
         values.put(HIVE_INFO, hive.getInfo());
+        values.put(HIVE_GROUP, hive.getGroup());
 
         values.put(HIVE_GENTLE, hive.getRating(Hive.Rating.GENTLENESS));
         values.put(HIVE_ESCAPE, hive.getRating(Hive.Rating.ESCAPE));
@@ -271,6 +273,7 @@ public class HiveDB extends SQLiteOpenHelper {
         values.put(HIVE_MARKER, hive.getMarker());
         values.put(HIVE_OFFSPRING, hive.isOffspring() ? 1 : 0);
         values.put(HIVE_INFO, hive.getInfo());
+        values.put(HIVE_GROUP, hive.getGroup());
 
         values.put(HIVE_GENTLE, hive.getRating(Hive.Rating.GENTLENESS));
         values.put(HIVE_ESCAPE, hive.getRating(Hive.Rating.ESCAPE));
@@ -334,6 +337,52 @@ public class HiveDB extends SQLiteOpenHelper {
             hive.setMarker(res.getString(res.getColumnIndex(HIVE_MARKER)));
             hive.setType(res.getInt(res.getColumnIndex(HIVE_OFFSPRING)) == 1);
             hive.setInfo(res.getString(res.getColumnIndex(HIVE_INFO)));
+            hive.setGroup(res.getString(res.getColumnIndex(HIVE_GROUP)));
+
+            hive.setRating(Hive.Rating.GENTLENESS, res.getFloat(res.getColumnIndex(HIVE_GENTLE)));
+            hive.setRating(Hive.Rating.ESCAPE, res.getFloat(res.getColumnIndex(HIVE_ESCAPE)));
+            hive.setRating(Hive.Rating.STRENGTH, res.getFloat(res.getColumnIndex(HIVE_STRENGTH)));
+
+            Reminder reminder = new Reminder();
+            String s = res.getString(res.getColumnIndex(HIVE_REMINDER_TIME));
+            if (s != null && !s.isEmpty()) {
+                reminder.setTime(getDateFromString(s));
+            } else {
+                reminder.setTime(new Date(0));
+            }
+            reminder.setDescription(res.getString(res.getColumnIndex(HIVE_REMINDER_DESCRIPTION)));
+            hive.setReminder(reminder);
+
+            hives.add(hive);
+            res.moveToNext();
+        }
+        res.close();
+        db.close();
+        return hives;
+    }
+
+    public ArrayList<Hive> getAllHivesByGroup(String group) {
+        ArrayList<Hive> hives = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res;
+        try {
+            res = db.rawQuery("SELECT * FROM " + HIVE_TABLE_NAME + " WHERE " + HIVE_GROUP + " = '" + group
+                    + "' ORDER BY " + HIVE_SORTER, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return hives;
+        }
+        res.moveToFirst();
+
+        while (!res.isAfterLast()) {
+            Hive hive = new Hive(res.getInt(res.getColumnIndex(HIVE_ID)));
+            hive.setName(res.getString(res.getColumnIndex(HIVE_NAME)));
+            hive.setLocation(res.getString(res.getColumnIndex(HIVE_POSITION)));
+            hive.setYear(res.getInt(res.getColumnIndex(HIVE_YEAR)));
+            hive.setMarker(res.getString(res.getColumnIndex(HIVE_MARKER)));
+            hive.setType(res.getInt(res.getColumnIndex(HIVE_OFFSPRING)) == 1);
+            hive.setInfo(res.getString(res.getColumnIndex(HIVE_INFO)));
+            hive.setGroup(res.getString(res.getColumnIndex(HIVE_GROUP)));
 
             hive.setRating(Hive.Rating.GENTLENESS, res.getFloat(res.getColumnIndex(HIVE_GENTLE)));
             hive.setRating(Hive.Rating.ESCAPE, res.getFloat(res.getColumnIndex(HIVE_ESCAPE)));
@@ -368,6 +417,7 @@ public class HiveDB extends SQLiteOpenHelper {
             hive.setMarker(res.getString(res.getColumnIndex(HIVE_MARKER)));
             hive.setType(res.getInt(res.getColumnIndex(HIVE_OFFSPRING)) == 1);
             hive.setInfo(res.getString(res.getColumnIndex(HIVE_INFO)));
+            hive.setGroup(res.getString(res.getColumnIndex(HIVE_GROUP)));
 
             hive.setRating(Hive.Rating.GENTLENESS, res.getFloat(res.getColumnIndex(HIVE_GENTLE)));
             hive.setRating(Hive.Rating.ESCAPE, res.getFloat(res.getColumnIndex(HIVE_ESCAPE)));
@@ -527,19 +577,6 @@ public class HiveDB extends SQLiteOpenHelper {
         return "";
     }
 
-    /*private String parseActivites(Activities a) {
-        if (a != null) {
-            StringBuilder string = new StringBuilder();
-            for (int i : a.getActivities()) {
-                string.append(i);
-                string.append(';');
-            }
-            string.append(a.getOther());
-            return string.toString();
-        }
-        return "";
-    }*/
-
     private String parseInspection(Inspection i) {
         if (i != null)
             return String.valueOf(i.hasQueenless()) +
@@ -590,20 +627,6 @@ public class HiveDB extends SQLiteOpenHelper {
         }
         return null;
     }
-
-    /*private Activities getActivities(String s) {
-        if (!s.isEmpty()) {
-            int[] array = new int[8];
-            String[] split = s.split(";");
-            for (int i = 0; i < array.length; i++)
-                array[i] = Integer.valueOf(split[i]);
-            Activities act = new Activities(array);
-            if (split.length > array.length)
-                act.setOther(split[8]);
-            return act;
-        }
-        return null;
-    }*/
 
     private Activities getActivities(Cursor c) {
         Activities act = new Activities();

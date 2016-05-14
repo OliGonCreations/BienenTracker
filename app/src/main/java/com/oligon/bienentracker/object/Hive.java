@@ -15,7 +15,7 @@ public class Hive implements Serializable {
 
     private int mId = -1;
     private int mPosition = -1;
-    private String mName = "", mLocation = "", mMarker = "", mInfo = "";
+    private String mName = "", mLocation = "", mMarker = "", mInfo = "", mGroup = "";
     private int mYear = 0;
     private boolean isOffspring = false;
     private Map<Rating, Float> mRatings = new HashMap<>();
@@ -79,6 +79,14 @@ public class Hive implements Serializable {
 
     public void setInfo(String _info) {
         this.mInfo = _info;
+    }
+
+    public String getGroup() {
+        return mGroup;
+    }
+
+    public void setGroup(String group) {
+        this.mGroup = group;
     }
 
     public boolean isOffspring() {

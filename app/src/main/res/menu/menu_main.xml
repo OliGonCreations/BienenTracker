@@ -9,16 +9,7 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_sort_hives"
+        android:icon="@drawable/ic_sort"
         android:title="@string/action_sort_hives"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_about"
-        android:orderInCategory="101"
-        android:title="@string/action_about"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 </menu>

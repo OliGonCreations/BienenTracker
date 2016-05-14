@@ -144,4 +144,13 @@
     <string name="hint_reminder_description">Beschreibung</string>
     <string name="dialog_title_reminder">Erinnerung</string>
     <string name="prefs_content_reminders">Erinnerungen</string>
+    <string name="action_statistics">Statistiken</string>
+    <string name="nav_all">Alle Völker</string>
+    <string name="navigation_drawer_close">Menü schließen</string>
+    <string name="nav_groups">Gruppen</string>
+    <string name="navigation_drawer_open">Menü öffnen</string>
+    <string name="no_group">Keine Gruppe</string>
+    <string name="prefs_content_groups">Gruppen</string>
+    <string name="nav_no_groups">in den Einstellungen hinzufügen</string>
+    <string name="action_logout">Logout</string>
 </resources>

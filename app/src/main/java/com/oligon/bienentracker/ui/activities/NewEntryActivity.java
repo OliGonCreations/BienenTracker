@@ -53,15 +53,16 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.oligon.bienentracker.BeeApplication;
 import com.oligon.bienentracker.R;
-import com.oligon.bienentracker.ui.dialogs.CommonDialogFragment;
-import com.oligon.bienentracker.util.Circle;
-import com.oligon.bienentracker.util.HiveDB;
 import com.oligon.bienentracker.object.Food;
 import com.oligon.bienentracker.object.Harvest;
 import com.oligon.bienentracker.object.Hive;
 import com.oligon.bienentracker.object.Inspection;
 import com.oligon.bienentracker.object.LogEntry;
 import com.oligon.bienentracker.object.Treatment;
+import com.oligon.bienentracker.ui.dialogs.CommonDialogFragment;
+import com.oligon.bienentracker.util.Circle;
+import com.oligon.bienentracker.util.DriveHandler;
+import com.oligon.bienentracker.util.HiveDB;
 import com.oligon.bienentracker.weather.WeatherTask;
 
 import java.text.SimpleDateFormat;
@@ -244,6 +245,8 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
         switch (item.getItemId()) {
             case R.id.menu_done:
                 db.addLog(mLogEntry);
+                if (BeeApplication.getApiClient(this).isConnected())
+                    DriveHandler.getInstance(this).createDBFile();
                 this.finish();
                 BeeApplication.getInstance().trackEvent("Log", "Add", "Log Entry added");
                 return true;

@@ -13,7 +13,7 @@
         android:layout_marginStart="8dp"
         android:layout_toStartOf="@+id/content_preference_button"
         android:imeOptions="actionDone"
-        android:inputType="text"/>
+        android:inputType="textCapSentences" />
 
     <Button
         android:id="@+id/content_preference_button"
@@ -27,18 +27,6 @@
         android:layout_marginEnd="4dp"
         android:textColor="@color/colorAccent"
         android:contentDescription="@string/content_list_add"/>
-
-    <!--<ImageButton
-        android:id="@+id/content_preference_button"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_send"
-        android:tint="@color/colorAccent"
-        android:contentDescription="@string/content_list_add"/>-->
 
     <ListView
         android:id="@+id/content_preference_list"

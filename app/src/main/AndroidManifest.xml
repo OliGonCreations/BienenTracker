@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
@@ -19,10 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <!--<meta-data android:name="com.google.android.backup.api_key" android:value="AEdPqrEAAAAIGBXy0DQSf73-9EznpHUDHzpxlkN2g9Ywuna4MQ" />-->
+
+        <!-- <meta-data android:name="com.google.android.backup.api_key" android:value="AEdPqrEAAAAIGBXy0DQSf73-9EznpHUDHzpxlkN2g9Ywuna4MQ" /> -->
         <activity
             android:name=".ui.activities.HomeActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,10 +32,10 @@
         </activity>
         <activity
             android:name=".ui.activities.NewEntryActivity"
+            android:configChanges="orientation"
             android:label="@string/title_activity_new"
             android:parentActivityName=".ui.activities.HomeActivity"
-            android:theme="@style/AppTheme.Green"
-            android:configChanges="orientation">
+            android:theme="@style/AppTheme.Green">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,7 +51,6 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".ui.activities.AboutActivity"
@@ -68,7 +68,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activities.HomeActivity" />
         </activity>
+
         <receiver android:name=".NotificationReceiver" />
+
+        <service
+            android:name=".util.DriveService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.drive.events.HANDLE_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

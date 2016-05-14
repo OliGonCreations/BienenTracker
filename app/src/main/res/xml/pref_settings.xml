@@ -8,6 +8,10 @@
             android:entryValues="@array/prefs_rating_values"
             android:key="pref_list_rating_view"
             android:title="@string/prefs_general_rating_view" />
+        <com.oligon.bienentracker.util.ContentPreference
+            android:key="pref_list_groups"
+            android:persistent="true"
+            android:title="@string/prefs_content_groups" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/prefs_cat_content">

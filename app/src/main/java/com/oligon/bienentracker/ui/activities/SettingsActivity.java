@@ -207,7 +207,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             backup.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-
                     showBackupDialog();
                     return true;
                 }

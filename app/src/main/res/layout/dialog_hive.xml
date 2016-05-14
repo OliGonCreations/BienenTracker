@@ -2,128 +2,148 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
-
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:padding="8dp"
         android:text="@string/dialog_title_hive"
         android:textSize="22sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:background="@color/colorPrimary" />
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/label_hive_name"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp">
+        android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/et_hive_name"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapSentences"
-            android:hint="@string/hint_hive_name"
-            android:singleLine="true"
-            android:nextFocusForward="@+id/et_hive_position"
-            android:imeOptions="actionNext"/>
-    </android.support.design.widget.TextInputLayout>
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp">
-
-        <EditText
-            android:id="@+id/et_hive_position"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_hive_position"
-            android:singleLine="true"
-            android:nextFocusForward="@+id/et_hive_year"
-            android:imeOptions="actionNext"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hive_queen"
-        android:textStyle="bold"
-        android:layout_marginBottom="4dp" />
-
-    <LinearLayout
-        android:baselineAligned="false"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="8dp">
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/label_hive_year"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <EditText
-                android:id="@+id/et_hive_year"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/label_hive_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:hint="@string/hint_hive_year"
-                android:inputType="numberDecimal"
-                android:singleLine="true"
-                android:nextFocusForward="@+id/et_hive_marker"
-                android:imeOptions="actionNext"/>
-        </android.support.design.widget.TextInputLayout>
+                android:layout_marginBottom="8dp">
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/et_hive_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_hive_name"
+                    android:imeOptions="actionNext"
+                    android:inputType="textCapSentences"
+                    android:nextFocusForward="@+id/et_hive_position"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
 
-            <EditText
-                android:id="@+id/et_hive_marker"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:hint="@string/hint_hive_marker"
-                android:inputType="numberDecimal"
-                android:maxLength="2"
-                android:singleLine="true"
-                android:nextFocusForward="@+id/et_hive_info"
-                android:imeOptions="actionNext"/>
-        </android.support.design.widget.TextInputLayout>
-    </LinearLayout>
+                android:layout_marginBottom="8dp">
 
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/et_hive_position"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_hive_position"
+                    android:imeOptions="actionNext"
+                    android:inputType="textCapSentences"
+                    android:nextFocusForward="@+id/et_hive_year"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
 
-    <CheckBox
-        android:id="@+id/hive_offspring"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp"
-        android:text="@string/hive_offspring" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="@string/hive_queen"
+                android:textStyle="bold" />
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_hive_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_hive_info"
-            android:inputType="textAutoCorrect"
-            android:singleLine="false"
-            android:imeOptions="actionDone" />
-    </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/label_hive_year"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_hive_year"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:hint="@string/hint_hive_year"
+                        android:imeOptions="actionNext"
+                        android:inputType="numberDecimal"
+                        android:nextFocusForward="@+id/et_hive_marker"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_hive_marker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:hint="@string/hint_hive_marker"
+                        android:imeOptions="actionNext"
+                        android:inputType="numberDecimal"
+                        android:maxLength="2"
+                        android:nextFocusForward="@+id/et_hive_info"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <Spinner
+                android:id="@+id/hive_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp" />
+
+            <CheckBox
+                android:id="@+id/hive_offspring"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/hive_offspring" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/et_hive_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_hive_info"
+                    android:imeOptions="actionDone"
+                    android:inputType="textAutoCorrect|textCapSentences"
+                    android:singleLine="false" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>

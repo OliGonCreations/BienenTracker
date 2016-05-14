@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
@@ -15,9 +17,12 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.oligon.bienentracker.BeeApplication;
@@ -26,11 +31,18 @@ import com.oligon.bienentracker.object.Hive;
 import com.oligon.bienentracker.ui.activities.HomeActivity;
 import com.oligon.bienentracker.util.OnDialogFinishedListener;
 
-public class HiveDialogFragment extends DialogFragment {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class HiveDialogFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
 
     private TextInputLayout labelName, labelYear;
     private EditText etName, etPosition, etYear, etMarker, etInfo;
     private CheckBox cbOffspring;
+    private Spinner spGroup;
     private int hiveId = -1;
 
     private OnDialogFinishedListener mListener;
@@ -49,6 +61,7 @@ public class HiveDialogFragment extends DialogFragment {
         mListener = null;
         super.onDetach();
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -69,8 +82,21 @@ public class HiveDialogFragment extends DialogFragment {
         etMarker = (EditText) view.findViewById(R.id.et_hive_marker);
         etInfo = (EditText) view.findViewById(R.id.et_hive_info);
         cbOffspring = (CheckBox) view.findViewById(R.id.hive_offspring);
+        spGroup = (Spinner) view.findViewById(R.id.hive_group);
         labelName = (TextInputLayout) view.findViewById(R.id.label_hive_name);
         labelYear = (TextInputLayout) view.findViewById(R.id.label_hive_year);
+
+        spGroup.setOnItemSelectedListener(this);
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Set<String> set = sp.getStringSet("pref_list_groups", new HashSet<String>());
+
+        List<String> content = new ArrayList<>(set);
+        Collections.sort(content);
+        content.add(0, getString(R.string.no_group));
+        ArrayAdapter adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, content);
+        spGroup.setAdapter(adapter);
 
         builder.setView(view)
                 .setPositiveButton(android.R.string.ok, null)
@@ -87,6 +113,7 @@ public class HiveDialogFragment extends DialogFragment {
             etInfo.setText(args.getString("info"), TextView.BufferType.EDITABLE);
             etMarker.setText(args.getString("marker"), TextView.BufferType.EDITABLE);
             cbOffspring.setChecked(args.getBoolean("offspring"));
+            spGroup.setSelection(content.indexOf(args.getString("group")));
             hiveId = args.getInt("id");
         }
 
@@ -120,6 +147,8 @@ public class HiveDialogFragment extends DialogFragment {
                     hive.setMarker(etMarker.getText().toString());
                     hive.setInfo(etInfo.getText().toString());
                     hive.setType(cbOffspring.isChecked());
+                    if (spGroup.getSelectedItemPosition() != 0)
+                        hive.setGroup(String.valueOf(spGroup.getSelectedItem()));
 
                     if (hiveId != -1)
                         HomeActivity.db.editHive(hive);
@@ -127,7 +156,6 @@ public class HiveDialogFragment extends DialogFragment {
                         HomeActivity.db.addHive(hive);
                     }
                     mListener.onDialogFinished();
-
                     d.dismiss();
                 }
             });
@@ -169,6 +197,16 @@ public class HiveDialogFragment extends DialogFragment {
             if (imm != null)
                 imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     private class NameTextWatcher implements TextWatcher {

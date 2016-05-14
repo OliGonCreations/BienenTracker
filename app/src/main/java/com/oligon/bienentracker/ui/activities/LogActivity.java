@@ -114,6 +114,7 @@ public class LogActivity extends AppCompatActivity implements OnDialogFinishedLi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_edit_hive:
+                // TODO: redo
                 HiveDialogFragment dialog = new HiveDialogFragment();
                 Bundle args = new Bundle();
                 args.putInt("id", mHive.getId());
@@ -123,6 +124,7 @@ public class LogActivity extends AppCompatActivity implements OnDialogFinishedLi
                 args.putString("marker", mHive.getMarker());
                 args.putBoolean("offspring", mHive.isOffspring());
                 args.putString("info", mHive.getInfo());
+                args.putString("group", mHive.getGroup());
                 dialog.setArguments(args);
                 dialog.show(getSupportFragmentManager(), "AddHive");
                 return true;

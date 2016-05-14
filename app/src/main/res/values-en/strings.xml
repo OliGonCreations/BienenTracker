@@ -144,4 +144,13 @@
     <string name="hint_reminder_description">Description</string>
     <string name="dialog_title_reminder">Reminder</string>
     <string name="prefs_content_reminders">Reminders</string>
+    <string name="action_statistics">Statistics</string>
+    <string name="nav_all">All Hives</string>
+    <string name="nav_groups">Groups</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="no_group">No group</string>
+    <string name="prefs_content_groups">Groups</string>
+    <string name="nav_no_groups">edit in settings</string>
+    <string name="action_logout">Logout</string>
 </resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_all"
+            android:checked="true"
+            android:orderInCategory="0"
+            android:title="@string/nav_all" />
+        <item
+            android:id="@+id/nav_groups_title"
+            android:orderInCategory="0"
+            android:title="@string/nav_groups">
+            <menu android:id="@+id/nav_groups" />
+        </item>
+    </group>
+    <group
+        android:id="@+id/menu_others"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_stats"
+            android:enabled="true"
+            android:icon="@drawable/ic_stats"
+            android:orderInCategory="2"
+            android:title="@string/action_statistics" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings"
+            android:orderInCategory="2"
+            android:title="@string/action_settings" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_about"
+            android:orderInCategory="2"
+            android:title="@string/action_about" />
+    </group>
+
+</menu>
