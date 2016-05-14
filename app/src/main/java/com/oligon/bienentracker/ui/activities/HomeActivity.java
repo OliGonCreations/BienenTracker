@@ -82,7 +82,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public static HiveDB db;
 
     private DrawerLayout drawer;
-    private NavigationView navigationView;
+    private static NavigationView navigationView;
     private Toolbar toolbar;
 
     private ProgressDialog mProgressDialog;
@@ -145,7 +145,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         mGroups = navigationView.getMenu().findItem(R.id.nav_groups_title);
-        updateGroups();
 
         sp = PreferenceManager.getDefaultSharedPreferences(this);
         PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.pref_settings, false);
@@ -220,6 +219,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        updateGroups();
         if (sp.getBoolean("database_old", false)) {
             DriveHandler.getInstance(this).getDBFromDrive();
         }
@@ -273,6 +273,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         for (String s : groups) {
             subMenu.add(0, 1234, Menu.NONE, s).setCheckable(true);
         }
+        navigationView.invalidate();
     }
 
     @Override
@@ -306,6 +307,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onDialogFinished() {
+        updateGroups();
         updateList();
         if (BeeApplication.getApiClient(this).isConnected())
             DriveHandler.getInstance(this).createDBFile();
