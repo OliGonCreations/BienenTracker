@@ -236,7 +236,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("nav_item", selectedItem);
-        outState.putString("toolbar_title", selectedGroup);
+        outState.putString("toolbar_title", toolbar.getTitle().toString());
         outState.putBoolean("is_home", isHome);
     }
 
