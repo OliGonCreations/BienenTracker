@@ -191,6 +191,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
         if (!isHome) {
             goHome();
+            updateList();
         }
     }
 
@@ -220,6 +221,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         updateGroups();
+        updateList();
         if (sp.getBoolean("database_old", false)) {
             DriveHandler.getInstance(this).getDBFromDrive();
         }
@@ -244,7 +246,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         isHome = true;
         toolbar.setTitle(getString(R.string.nav_all));
         navigationView.setCheckedItem(R.id.nav_all);
-        updateList();
     }
 
     private static void updateList() {
@@ -417,6 +418,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         switch (item.getItemId()) {
             case R.id.nav_all:
                 goHome();
+                updateList();
                 break;
             case R.id.nav_stats:
                 Toast.makeText(HomeActivity.this, "Bald verfügbar", Toast.LENGTH_SHORT).show();

@@ -90,10 +90,10 @@ public class DriveHandler {
                                     Log.d(BeeApplication.TAG, "File exists");
                                     FILE_ID = m.getDriveId().getResourceId();
                                     m.getDriveId().asDriveFile().addChangeSubscription(mApiClient);
-                                    //.addChangeListener(mApiClient, changeListener);
                                     break;
                                 }
                             }
+                            result.release();
                         }
                     }
                 });
@@ -123,6 +123,7 @@ public class DriveHandler {
                             if (file != null) {
                                 new FetchDBAsyncTask().execute(file);
                             }
+                            result.release();
                         }
                     }
                 });
@@ -158,6 +159,7 @@ public class DriveHandler {
                                 copyDBToDrive();
                             }
                         }
+                        result.release();
                     }
                 });
     }
@@ -238,6 +240,9 @@ public class DriveHandler {
                 while ((length = fis.read(buffer)) > 0) {
                     outputStream.write(buffer, 0, length);
                 }
+                outputStream.flush();
+                outputStream.close();
+                fis.close();
                 com.google.android.gms.common.api.Status status =
                         driveContents.commit(mApiClient, null).await();
                 return status.getStatus().isSuccess();
