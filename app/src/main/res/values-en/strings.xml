@@ -153,4 +153,6 @@
     <string name="prefs_content_groups">Groups</string>
     <string name="nav_no_groups">edit in settings</string>
     <string name="action_logout">Logout</string>
+    <string name="header_login">Login</string>
+    <string name="header_premium">Premium necessary</string>
 </resources>

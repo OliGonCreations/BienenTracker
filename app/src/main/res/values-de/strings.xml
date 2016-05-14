@@ -153,4 +153,6 @@
     <string name="prefs_content_groups">Gruppen</string>
     <string name="nav_no_groups">in den Einstellungen hinzufügen</string>
     <string name="action_logout">Logout</string>
+    <string name="header_login">Login</string>
+    <string name="header_premium">Premium-Version notwendig</string>
 </resources>
