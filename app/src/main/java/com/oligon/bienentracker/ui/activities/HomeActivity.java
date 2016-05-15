@@ -69,7 +69,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     public static boolean dbChanged = false;
     private static boolean isHome = true;
-    private static String selectedGroup;
+    private static String selectedGroup, toolbarTitle;
     private static int selectedItem;
 
     protected static Context context;
@@ -172,7 +172,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         if (savedInstanceState != null) {
             selectedItem = savedInstanceState.getInt("nav_item");
-            selectItem(savedInstanceState.getString("toolbar_title"));
+            toolbarTitle = savedInstanceState.getString("toolbar_title");
             isHome = savedInstanceState.getBoolean("is_home");
         } else goHome();
     }
@@ -202,11 +202,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 GoogleSignInResult result = opr.get();
                 handleSignInResult(result);
             } else {
-                //showProgressDialog();
                 opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                     @Override
                     public void onResult(GoogleSignInResult googleSignInResult) {
-                        //hideProgressDialog();
                         handleSignInResult(googleSignInResult);
                     }
                 });
@@ -239,7 +237,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         updateGroups();
-        updateList();
+        selectItem();
         if (sp.getBoolean("database_old", false)) {
             DriveHandler.getInstance(this).getDBFromDrive();
             DriveHandler.getInstance(this).getPreferencesFromDrive();
@@ -250,7 +248,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             mUserMail.setText(getString(R.string.header_premium));
             mUserMenu.setVisibility(View.INVISIBLE);
         }
-
     }
 
     @Override
@@ -263,8 +260,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     private void goHome() {
         isHome = true;
-        toolbar.setTitle(getString(R.string.nav_all));
-        navigationView.setCheckedItem(R.id.nav_all);
+        selectedItem = R.id.nav_all;
+        toolbarTitle = getString(R.string.nav_all);
+        selectItem();
     }
 
     private static void updateList() {
@@ -291,7 +289,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     .setCheckable(false).setEnabled(false);
         }
         for (String s : groups) {
-            subMenu.add(0, 1234, Menu.NONE, s).setCheckable(true);
+            subMenu.add(0, s.hashCode(), Menu.NONE, s).setCheckable(true);
         }
         navigationView.invalidate();
     }
@@ -311,7 +309,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.action_sort_hives:
                 new HiveSortDialogFragment().show(fm, "SortHives");
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -329,8 +326,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public void onDialogFinished() {
         updateGroups();
         updateList();
-        //if (BeeApplication.getApiClient(this).isConnected())
-        //    DriveHandler.getInstance(this).createDBFile();
     }
 
     private void loadDefaultValues() {
@@ -425,11 +420,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        selectedItem = item.getItemId();
         Intent intent = null;
         switch (item.getItemId()) {
             case R.id.nav_all:
                 goHome();
+                selectedItem = R.id.nav_all;
                 updateList();
                 break;
             case R.id.nav_stats:
@@ -444,8 +439,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             default:
                 isHome = false;
                 selectedGroup = item.getTitle().toString();
-                toolbar.setTitle(selectedGroup);
-                updateList();
+                selectedItem = item.getItemId();
+                toolbarTitle = selectedGroup;
+                selectItem();
                 break;
         }
 
@@ -456,9 +452,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    private void selectItem(String title) {
-        toolbar.setTitle(title);
+    private void selectItem() {
+        toolbar.setTitle(toolbarTitle);
+        toolbar.invalidate();
         navigationView.setCheckedItem(selectedItem);
+        navigationView.invalidate();
         updateList();
     }
 
