@@ -20,6 +20,7 @@ import com.oligon.bienentracker.object.Inspection;
 import com.oligon.bienentracker.object.LogEntry;
 import com.oligon.bienentracker.object.Reminder;
 import com.oligon.bienentracker.object.Treatment;
+import com.oligon.bienentracker.ui.activities.HomeActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -242,28 +243,6 @@ public class HiveDB extends SQLiteOpenHelper {
         cur.close();
     }
 
-    public void addHive(Hive hive) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        if (hive.getId() != -1) values.put(HIVE_ID, hive.getId());
-        values.put(HIVE_NAME, hive.getName());
-        values.put(HIVE_POSITION, hive.getLocation());
-        values.put(HIVE_YEAR, hive.getYear());
-        values.put(HIVE_MARKER, hive.getMarker());
-        values.put(HIVE_OFFSPRING, hive.isOffspring() ? 1 : 0);
-        values.put(HIVE_INFO, hive.getInfo());
-        values.put(HIVE_GROUP, hive.getGroup());
-
-        values.put(HIVE_GENTLE, hive.getRating(Hive.Rating.GENTLENESS));
-        values.put(HIVE_ESCAPE, hive.getRating(Hive.Rating.ESCAPE));
-        values.put(HIVE_STRENGTH, hive.getRating(Hive.Rating.STRENGTH));
-
-        values.put(HIVE_REMINDER_TIME, "");
-
-        db.insert(HIVE_TABLE_NAME, null, values);
-        db.close();
-    }
-
     public void editHive(Hive hive) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -279,8 +258,12 @@ public class HiveDB extends SQLiteOpenHelper {
         values.put(HIVE_ESCAPE, hive.getRating(Hive.Rating.ESCAPE));
         values.put(HIVE_STRENGTH, hive.getRating(Hive.Rating.STRENGTH));
 
-        db.update(HIVE_TABLE_NAME, values, HIVE_ID + " = ? ", new String[]{Integer.toString(hive.getId())});
+        if (hive.getId() != -1)
+            db.update(HIVE_TABLE_NAME, values, HIVE_ID + " = ? ", new String[]{Integer.toString(hive.getId())});
+        else
+            db.insert(HIVE_TABLE_NAME, null, values);
         db.close();
+        HomeActivity.dbChanged = true;
     }
 
     public void updateHivePosition(int id, int position) {
@@ -289,6 +272,7 @@ public class HiveDB extends SQLiteOpenHelper {
         values.put(HIVE_SORTER, position);
         db.update(HIVE_TABLE_NAME, values, HIVE_ID + " = ?", new String[]{Integer.toString(id)});
         db.close();
+        HomeActivity.dbChanged = true;
     }
 
     public void deleteHive(int id) {
@@ -297,6 +281,7 @@ public class HiveDB extends SQLiteOpenHelper {
                 HIVE_ID + " = ? ",
                 new String[]{Integer.toString(id)});
         db.close();
+        HomeActivity.dbChanged = true;
     }
 
     public void updateHiveReminder(int id, Reminder reminder) {
@@ -306,6 +291,7 @@ public class HiveDB extends SQLiteOpenHelper {
         values.put(HIVE_REMINDER_DESCRIPTION, reminder.getDescription());
         db.update(HIVE_TABLE_NAME, values, HIVE_ID + " = ?", new String[]{Integer.toString(id)});
         db.close();
+        HomeActivity.dbChanged = true;
     }
 
     public void removeHiveReminder(int id) {
@@ -315,6 +301,7 @@ public class HiveDB extends SQLiteOpenHelper {
         values.put(HIVE_REMINDER_DESCRIPTION, "");
         db.update(HIVE_TABLE_NAME, values, HIVE_ID + " = ?", new String[]{Integer.toString(id)});
         db.close();
+        HomeActivity.dbChanged = true;
     }
 
     public ArrayList<Hive> getAllHives() {
@@ -476,6 +463,7 @@ public class HiveDB extends SQLiteOpenHelper {
         } else
             db.insert(LOG_TABLE_NAME, null, values);
         db.close();
+        HomeActivity.dbChanged = true;
     }
 
     public ArrayList<LogEntry> getAllLogs(int id, boolean reverse, int l) {
@@ -557,6 +545,7 @@ public class HiveDB extends SQLiteOpenHelper {
                 LOG_ID + " = ? ",
                 new String[]{Integer.toString(id)});
         db.close();
+        HomeActivity.dbChanged = true;
     }
 
     private String parseTreatment(Treatment t) {

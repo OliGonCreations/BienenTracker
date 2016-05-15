@@ -61,7 +61,6 @@ import com.oligon.bienentracker.object.LogEntry;
 import com.oligon.bienentracker.object.Treatment;
 import com.oligon.bienentracker.ui.dialogs.CommonDialogFragment;
 import com.oligon.bienentracker.util.Circle;
-import com.oligon.bienentracker.util.DriveHandler;
 import com.oligon.bienentracker.util.HiveDB;
 import com.oligon.bienentracker.weather.WeatherTask;
 
@@ -245,8 +244,6 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
         switch (item.getItemId()) {
             case R.id.menu_done:
                 db.addLog(mLogEntry);
-                if (BeeApplication.getApiClient(this).isConnected())
-                    DriveHandler.getInstance(this).createDBFile();
                 this.finish();
                 BeeApplication.getInstance().trackEvent("Log", "Add", "Log Entry added");
                 return true;

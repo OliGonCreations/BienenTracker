@@ -68,6 +68,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private static final int RC_SIGN_IN = 3494;
     private static final int ADD_GROUPS_ID = 5432;
 
+    public static boolean dbChanged = false;
     private static boolean isHome = true;
     private static String selectedGroup;
     private static int selectedItem;
@@ -218,6 +219,27 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        if (BeeApplication.getApiClient(this).isConnected() && dbChanged) {
+            DriveHandler.getInstance(this).createDBFile();
+        } else if (dbChanged) {
+            BeeApplication.getApiClient(this).connect();
+            BeeApplication.getApiClient(this).registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                @Override
+                public void onConnected(@Nullable Bundle bundle) {
+                    DriveHandler.getInstance((HomeActivity) context).createDBFile();
+                }
+
+                @Override
+                public void onConnectionSuspended(int i) {
+
+                }
+            });
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         updateGroups();
@@ -310,8 +332,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public void onDialogFinished() {
         updateGroups();
         updateList();
-        if (BeeApplication.getApiClient(this).isConnected())
-            DriveHandler.getInstance(this).createDBFile();
+        //if (BeeApplication.getApiClient(this).isConnected())
+        //    DriveHandler.getInstance(this).createDBFile();
     }
 
     private void loadDefaultValues() {
@@ -346,7 +368,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                                 Snackbar.make(list, R.string.action_recover, Snackbar.LENGTH_LONG).setAction(android.R.string.ok, new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        db.addHive(hive);
+                                        hive.setId(-1);
+                                        db.editHive(hive);
                                         updateList();
                                     }
                                 }).show();
@@ -360,17 +383,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         builder.create().show();
                         break;
                     case R.id.menu_card_edit:
-                        // TODO: redo
                         HiveDialogFragment dialog = new HiveDialogFragment();
                         Bundle args = new Bundle();
-                        args.putInt("id", hive.getId());
-                        args.putString("name", hive.getName());
-                        args.putString("position", hive.getLocation());
-                        args.putInt("year", hive.getYear());
-                        args.putString("marker", hive.getMarker());
-                        args.putBoolean("offspring", hive.isOffspring());
-                        args.putString("info", hive.getInfo());
-                        args.putString("group", hive.getGroup());
+                        args.putSerializable("hive", hive);
                         dialog.setArguments(args);
                         dialog.show(fm, "AddHive");
                         break;
@@ -462,7 +477,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
-        hideProgressDialog();
         if (result != null && result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
@@ -483,22 +497,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         Log.e(BeeApplication.TAG, "Connection Failed: " + connectionResult.getErrorMessage());
     }
 
-    private void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage("Loading");
-            mProgressDialog.setIndeterminate(true);
-        }
-        mProgressDialog.show();
-    }
-
-    private void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.hide();
-        }
-        mProgressDialog = null;
-    }
-
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(BeeApplication.getApiClient(this));
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -517,7 +515,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        hideProgressDialog();
         DriveHandler.getInstance(this).addDBChangeListener();
     }
 

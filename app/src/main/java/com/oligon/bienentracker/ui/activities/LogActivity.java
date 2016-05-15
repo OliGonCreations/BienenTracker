@@ -114,19 +114,11 @@ public class LogActivity extends AppCompatActivity implements OnDialogFinishedLi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_edit_hive:
-                // TODO: redo
                 HiveDialogFragment dialog = new HiveDialogFragment();
                 Bundle args = new Bundle();
-                args.putInt("id", mHive.getId());
-                args.putString("name", mHive.getName());
-                args.putString("position", mHive.getLocation());
-                args.putInt("year", mHive.getYear());
-                args.putString("marker", mHive.getMarker());
-                args.putBoolean("offspring", mHive.isOffspring());
-                args.putString("info", mHive.getInfo());
-                args.putString("group", mHive.getGroup());
+                args.putSerializable("hive", mHive);
                 dialog.setArguments(args);
-                dialog.show(getSupportFragmentManager(), "AddHive");
+                dialog.show(getSupportFragmentManager(), "EditHive");
                 return true;
             case R.id.menu_filter:
                 if (item.isChecked()) {
@@ -145,9 +137,6 @@ public class LogActivity extends AppCompatActivity implements OnDialogFinishedLi
                     filterDialog.show(fm, "FilterDialog");
                 }
                 return true;
-            /*case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;*/
             default:
                 return super.onOptionsItemSelected(item);
         }

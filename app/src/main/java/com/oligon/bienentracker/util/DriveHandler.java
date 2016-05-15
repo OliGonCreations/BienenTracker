@@ -21,6 +21,7 @@ import com.google.android.gms.drive.query.Filters;
 import com.google.android.gms.drive.query.Query;
 import com.google.android.gms.drive.query.SearchableField;
 import com.oligon.bienentracker.BeeApplication;
+import com.oligon.bienentracker.ui.activities.HomeActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -130,6 +131,7 @@ public class DriveHandler {
     }
 
     public void createDBFile() {
+        HomeActivity.dbChanged = false;
         Query query = new Query.Builder()
                 .addFilter(Filters.and(Filters.eq(
                         SearchableField.TITLE, "Hive.db"),

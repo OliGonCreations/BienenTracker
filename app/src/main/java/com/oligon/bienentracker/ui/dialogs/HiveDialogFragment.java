@@ -43,7 +43,7 @@ public class HiveDialogFragment extends DialogFragment implements AdapterView.On
     private EditText etName, etPosition, etYear, etMarker, etInfo;
     private CheckBox cbOffspring;
     private Spinner spGroup;
-    private int hiveId = -1;
+    private Hive mHive = new Hive(-1);
 
     private OnDialogFinishedListener mListener;
 
@@ -88,15 +88,6 @@ public class HiveDialogFragment extends DialogFragment implements AdapterView.On
 
         spGroup.setOnItemSelectedListener(this);
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        Set<String> set = sp.getStringSet("pref_list_groups", new HashSet<String>());
-
-        List<String> content = new ArrayList<>(set);
-        Collections.sort(content);
-        content.add(0, getString(R.string.no_group));
-        ArrayAdapter adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, content);
-        spGroup.setAdapter(adapter);
 
         builder.setView(view)
                 .setPositiveButton(android.R.string.ok, null)
@@ -107,15 +98,10 @@ public class HiveDialogFragment extends DialogFragment implements AdapterView.On
                 });
         Bundle args = getArguments();
         if (args != null && !args.isEmpty()) {
-            etName.setText(args.getString("name"), TextView.BufferType.EDITABLE);
-            etPosition.setText(args.getString("position"), TextView.BufferType.EDITABLE);
-            etYear.setText(String.valueOf(args.getInt("year") != 0 ? args.getInt("year") : ""), TextView.BufferType.EDITABLE);
-            etInfo.setText(args.getString("info"), TextView.BufferType.EDITABLE);
-            etMarker.setText(args.getString("marker"), TextView.BufferType.EDITABLE);
-            cbOffspring.setChecked(args.getBoolean("offspring"));
-            spGroup.setSelection(content.indexOf(args.getString("group")));
-            hiveId = args.getInt("id");
+            mHive = (Hive) args.getSerializable("hive");
         }
+
+        updateUI();
 
         etName.addTextChangedListener(new NameTextWatcher());
         etYear.addTextChangedListener(new YearTextWatcher());
@@ -132,34 +118,50 @@ public class HiveDialogFragment extends DialogFragment implements AdapterView.On
             positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Hive hive = new Hive(hiveId);
                     if (!validateName())
                         return;
                     if (!validateYear())
                         return;
 
-                    hive.setName(etName.getText().toString());
-                    hive.setLocation(etPosition.getText().toString());
+                    mHive.setName(etName.getText().toString());
+                    mHive.setLocation(etPosition.getText().toString());
 
                     if (!etYear.getText().toString().isEmpty()) {
-                        hive.setYear(Integer.parseInt(etYear.getText().toString()));
+                        mHive.setYear(Integer.parseInt(etYear.getText().toString()));
                     }
-                    hive.setMarker(etMarker.getText().toString());
-                    hive.setInfo(etInfo.getText().toString());
-                    hive.setType(cbOffspring.isChecked());
+                    mHive.setMarker(etMarker.getText().toString());
+                    mHive.setInfo(etInfo.getText().toString());
+                    mHive.setType(cbOffspring.isChecked());
                     if (spGroup.getSelectedItemPosition() != 0)
-                        hive.setGroup(String.valueOf(spGroup.getSelectedItem()));
+                        mHive.setGroup(String.valueOf(spGroup.getSelectedItem()));
+                    else mHive.setGroup("");
 
-                    if (hiveId != -1)
-                        HomeActivity.db.editHive(hive);
-                    else {
-                        HomeActivity.db.addHive(hive);
-                    }
+                    HomeActivity.db.editHive(mHive);
                     mListener.onDialogFinished();
                     d.dismiss();
                 }
             });
         }
+    }
+
+    private void updateUI() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Set<String> set = sp.getStringSet("pref_list_groups", new HashSet<String>());
+
+        List<String> content = new ArrayList<>(set);
+        Collections.sort(content);
+        content.add(0, getString(R.string.no_group));
+        ArrayAdapter adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, content);
+        spGroup.setAdapter(adapter);
+
+        etName.setText(mHive.getName(), TextView.BufferType.EDITABLE);
+        etPosition.setText(mHive.getLocation(), TextView.BufferType.EDITABLE);
+        etYear.setText(String.valueOf(mHive.getYear() != 0 ? mHive.getYear() : ""), TextView.BufferType.EDITABLE);
+        etInfo.setText(mHive.getInfo(), TextView.BufferType.EDITABLE);
+        etMarker.setText(mHive.getMarker(), TextView.BufferType.EDITABLE);
+        cbOffspring.setChecked(mHive.isOffspring());
+        spGroup.setSelection(content.indexOf(mHive.getGroup()));
     }
 
     private boolean validateName() {
