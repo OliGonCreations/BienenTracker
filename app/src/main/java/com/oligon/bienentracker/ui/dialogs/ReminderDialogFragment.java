@@ -22,7 +22,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -77,6 +76,7 @@ public class ReminderDialogFragment extends DialogFragment {
         context = getContext();
         mCalendar = Calendar.getInstance();
         mCalendar.set(Calendar.SECOND, 0);
+        mReminder.setTime(mCalendar.getTime());
 
         Bundle args = getArguments();
         if (args != null && !args.isEmpty())
