@@ -21,13 +21,23 @@
 
         <!-- <meta-data android:name="com.google.android.backup.api_key" android:value="AEdPqrEAAAAIGBXy0DQSf73-9EznpHUDHzpxlkN2g9Ywuna4MQ" /> -->
         <activity
-            android:name=".ui.activities.HomeActivity"
-            android:label="@string/nav_all"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter android:label="@string/app_name">
+            android:name=".ui.activities.SplashActivity"
+            android:label="@string/app_name"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activities.HomeActivity"
+            android:label="@string/nav_all"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
