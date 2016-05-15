@@ -155,4 +155,5 @@
     <string name="action_logout">Logout</string>
     <string name="header_login">Login</string>
     <string name="header_premium">Premium-Version notwendig</string>
+    <string name="header_login_msg">Mit Google einloggen</string>
 </resources>

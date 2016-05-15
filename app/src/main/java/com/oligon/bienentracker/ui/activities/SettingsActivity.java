@@ -50,6 +50,7 @@ import com.android.vending.billing.IInAppBillingService;
 import com.oligon.bienentracker.BeeApplication;
 import com.oligon.bienentracker.R;
 import com.oligon.bienentracker.util.AppCompatPreferenceActivity;
+import com.oligon.bienentracker.util.DriveHandler;
 import com.oligon.bienentracker.util.HiveDB;
 import com.oligon.bienentracker.util.adapter.RestoreListAdapter;
 
@@ -161,6 +162,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 mService = null;
             }
         }
+        if (BeeApplication.getApiClient((HomeActivity) HomeActivity.context).isConnected()) {
+            Log.d(BeeApplication.TAG, "Synching Preferences");
+            DriveHandler.getInstance((HomeActivity) HomeActivity.context).createPreferencesFile();
+        }
     }
 
     private void setupActionBar() {
@@ -187,7 +192,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     public static class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
         EditTextPreference mName, mId, mMail;
-        public static Preference export, backup, restore;
+        public static Preference export, backup;
         public static Preference premium;
 
         @Override

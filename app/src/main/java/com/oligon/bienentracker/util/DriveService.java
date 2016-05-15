@@ -13,6 +13,7 @@ public class DriveService extends DriveEventService {
     public void onChange(ChangeEvent event) {
         Log.d("DriveService", event.toString());
         if (event.hasContentChanged()) {
+            Log.d("DriveService", "Content Changed");
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             sp.edit().putBoolean("database_old", true).apply();
         }

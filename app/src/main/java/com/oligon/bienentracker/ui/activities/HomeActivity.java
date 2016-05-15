@@ -1,6 +1,5 @@
 package com.oligon.bienentracker.ui.activities;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -73,7 +72,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private static String selectedGroup;
     private static int selectedItem;
 
-    private static Context context;
+    protected static Context context;
     private static MenuItem mGroups;
     private static RecyclerView list;
     private static View empty_message;
@@ -85,8 +84,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private DrawerLayout drawer;
     private static NavigationView navigationView;
     private Toolbar toolbar;
-
-    private ProgressDialog mProgressDialog;
 
     private static TextView mUserName;
     private static TextView mUserMail;
@@ -150,7 +147,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         sp = PreferenceManager.getDefaultSharedPreferences(this);
         PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.pref_settings, false);
         loadDefaultValues();
-
 
         if (getApplicationContext().getPackageName().endsWith(".debug")) {
             sp.edit().putBoolean("premium_user", true).apply();
@@ -246,6 +242,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         updateList();
         if (sp.getBoolean("database_old", false)) {
             DriveHandler.getInstance(this).getDBFromDrive();
+            DriveHandler.getInstance(this).getPreferencesFromDrive();
         }
 
         if (!sp.getBoolean("premium_user", false)) {
@@ -485,7 +482,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             mUserMenu.setVisibility(View.VISIBLE);
         } else {
             // Signed out, show unauthenticated UI.
-            mUserName.setText("Mit Google einloggen");
+            mUserName.setText(getString(R.string.header_login_msg));
             mUserMail.setText("");
             mUserMenu.setVisibility(View.INVISIBLE);
         }
@@ -516,6 +513,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         DriveHandler.getInstance(this).addDBChangeListener();
+        DriveHandler.getInstance(this).addPreferencesChangeListener();
     }
 
     @Override
