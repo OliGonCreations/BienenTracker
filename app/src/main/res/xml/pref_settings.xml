@@ -72,6 +72,10 @@
             android:summary="@string/prefs_premium_purchase_summary"
             android:title="@string/prefs_premium_purchase_title" />
         <Preference
+            android:key="pref_premium_statistics"
+            android:summary="@string/prefs_premium_statistics_summary"
+            android:title="@string/prefs_premium_statistics_title" />
+        <Preference
             android:key="pref_premium_donate"
             android:summary="@string/prefs_premium_donate"
             android:title="@string/prefs_premium_donate_title" />

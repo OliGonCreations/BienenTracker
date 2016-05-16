@@ -2,9 +2,18 @@ package com.oligon.bienentracker;
 
 
 import android.app.Application;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 
+import com.android.vending.billing.IInAppBillingService;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
@@ -18,12 +27,32 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.drive.Drive;
 import com.oligon.bienentracker.util.AnalyticsTracker;
 
+import java.util.ArrayList;
+
 public class BeeApplication extends Application implements GoogleApiClient.OnConnectionFailedListener {
+
     public static final String TAG = BeeApplication.class.getSimpleName();
 
     private static GoogleApiClient mGoogleApiClient;
 
     private static BeeApplication mInstance;
+
+    public static IInAppBillingService mService;
+    private ServiceConnection mServiceConn = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mService = null;
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name,
+                                       IBinder service) {
+            mService = IInAppBillingService.Stub.asInterface(service);
+            PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
+                    .putBoolean("premium_user", isPremiumUser())
+                    .putBoolean("statistics_package", isStatisticsUser()).apply();
+        }
+    };
 
     @Override
     public void onCreate() {
@@ -32,6 +61,32 @@ public class BeeApplication extends Application implements GoogleApiClient.OnCon
 
         AnalyticsTracker.initialize(this);
         AnalyticsTracker.getInstance().get(AnalyticsTracker.Target.APP);
+
+        bindBillingService();
+
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        if (mService != null) {
+            try {
+                unbindService(mServiceConn);
+            } finally {
+                mService = null;
+            }
+        }
+    }
+
+    private void bindBillingService() {
+        try {
+            Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+            serviceIntent.setPackage("com.android.vending");
+            if (mService == null)
+                bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static synchronized BeeApplication getInstance() {
@@ -117,5 +172,41 @@ public class BeeApplication extends Application implements GoogleApiClient.OnCon
             mGoogleApiClient.connect();
         }
         return mGoogleApiClient;
+    }
+
+    private boolean isPremiumUser() {
+        try {
+            if (mService != null) {
+                Bundle ownedItems = mService.getPurchases(3, getPackageName(), "inapp", null);
+                int response = ownedItems.getInt("RESPONSE_CODE");
+                if (response == 0) {
+                    ArrayList<String> ownedSkus =
+                            ownedItems.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
+                    if (ownedSkus != null)
+                        return ownedSkus.contains("premium_user");
+                }
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private boolean isStatisticsUser() {
+        try {
+            if (mService != null) {
+                Bundle ownedItems = mService.getPurchases(3, getPackageName(), "inapp", null);
+                int response = ownedItems.getInt("RESPONSE_CODE");
+                if (response == 0) {
+                    ArrayList<String> ownedSkus =
+                            ownedItems.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
+                    if (ownedSkus != null)
+                        return ownedSkus.contains("statistics_package");
+                }
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

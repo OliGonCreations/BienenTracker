@@ -6,19 +6,16 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.IBinder;
 import android.os.RemoteException;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
@@ -46,7 +43,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.vending.billing.IInAppBillingService;
 import com.oligon.bienentracker.BeeApplication;
 import com.oligon.bienentracker.R;
 import com.oligon.bienentracker.util.AppCompatPreferenceActivity;
@@ -82,44 +78,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     private static SharedPreferences prefs;
 
-    private static boolean isPremiumUser;
+    private static boolean isPremiumUser, isStatisticsUser;
     private static boolean openFile;
     private static String filePath;
-
-    private static IInAppBillingService mService;
-    private ServiceConnection mServiceConn = new ServiceConnection() {
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mService = null;
-        }
-
-        @Override
-        public void onServiceConnected(ComponentName name,
-                                       IBinder service) {
-            mService = IInAppBillingService.Stub.asInterface(service);
-            updatePremiumStatus();
-        }
-    };
-
-    private void updatePremiumStatus() {
-        if (isPremiumUser()) {
-            SettingsFragment.export.setEnabled(true);
-            SettingsFragment.backup.setEnabled(true);
-            SettingsFragment.premium.setEnabled(false);
-            SettingsFragment.premium.setTitle(R.string.prefs_premium_purchased);
-            SettingsFragment.premium.setSummary(R.string.prefs_premium_purchased_summary);
-        } else {
-            SettingsFragment.export.setEnabled(false);
-            SettingsFragment.backup.setEnabled(false);
-            SettingsFragment.premium.setEnabled(true);
-        }
-
-        if (getApplicationContext().getPackageName().endsWith(".debug")) {
-            SettingsFragment.export.setEnabled(true);
-            SettingsFragment.backup.setEnabled(true);
-        }
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,16 +89,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         setContentView(R.layout.activity_settings);
         setupActionBar();
 
-        try {
-            Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
-            serviceIntent.setPackage("com.android.vending");
-            if (mService == null)
-                bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        isPremiumUser = prefs.getBoolean("premium_user", false);
+        isStatisticsUser = prefs.getBoolean("statistics_package", false);
 
         fm = getFragmentManager();
         getFragmentManager().beginTransaction()
@@ -155,13 +109,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mService != null) {
-            try {
-                unbindService(mServiceConn);
-            } finally {
-                mService = null;
-            }
-        }
         if (BeeApplication.getApiClient((HomeActivity) HomeActivity.context).isConnected()) {
             Log.d(BeeApplication.TAG, "Synching Preferences");
             DriveHandler.getInstance((HomeActivity) HomeActivity.context).createPreferencesFile();
@@ -193,7 +140,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         EditTextPreference mName, mId, mMail;
         public static Preference export, backup;
-        public static Preference premium;
+        public static Preference premium, statistics;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -219,6 +166,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             premium = findPreference("pref_premium_purchase");
             premium.setOnPreferenceClickListener(this);
+            statistics = findPreference("pref_premium_statistics");
+            statistics.setOnPreferenceClickListener(this);
             findPreference("pref_premium_donate").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -258,7 +207,29 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindSummary(mId);
             bindSummary(mMail);
 
-            isPremiumUser = prefs.getBoolean("premium_user", false);
+            if (isPremiumUser) {
+                SettingsFragment.export.setEnabled(true);
+                SettingsFragment.backup.setEnabled(true);
+                SettingsFragment.premium.setEnabled(false);
+                SettingsFragment.premium.setTitle(R.string.prefs_premium_purchased);
+                SettingsFragment.premium.setSummary(R.string.prefs_premium_purchased_summary);
+            } else {
+                SettingsFragment.export.setEnabled(false);
+                SettingsFragment.backup.setEnabled(false);
+                SettingsFragment.premium.setEnabled(true);
+            }
+
+            if (isStatisticsUser) {
+                SettingsFragment.statistics.setEnabled(false);
+            } else {
+                SettingsFragment.statistics.setEnabled(true);
+            }
+/*
+            if (context.getApplicationContext().getPackageName().endsWith(".debug")) {
+                SettingsFragment.export.setEnabled(true);
+                SettingsFragment.backup.setEnabled(true);
+            }*/
+
 
             export.setEnabled(isPremiumUser);
             premium.setEnabled(!isPremiumUser);
@@ -279,8 +250,35 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            Bundle buyIntentBundle = mService.getBuyIntent(3, context.getPackageName(),
+                            Bundle buyIntentBundle = BeeApplication.mService.getBuyIntent(3, context.getPackageName(),
                                     "premium_user", "inapp", "l-#dWQ8rbF#}&R4S$uH{gt&ESH#G14329112gqY5?&u=[+-6E9Hh3?mBHRe");
+                            PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
+                            if (pendingIntent != null)
+                                getActivity().startIntentSenderForResult(pendingIntent.getIntentSender(),
+                                        1001, new Intent(), 0, 0, 0);
+                        } catch (RemoteException | IntentSender.SendIntentException e) {
+                            e.printStackTrace();
+                            BeeApplication.getInstance().trackException(e);
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                dialog.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                dialog.create().show();
+            } else if (preference.getKey().equals("pref_premium_statistics")) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(context, R.style.AlertDialogOrange);
+                dialog.setMessage(R.string.dialog_premium_statistics_message);
+                dialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            Bundle buyIntentBundle = BeeApplication.mService.getBuyIntent(3, context.getPackageName(),
+                                    "statistics_package", "inapp", "l-#dWQ8rbF#}&R4S$uH{gt&ESH#G14329112gqY5?&u=[+-6E9Hh3?mBHRe");
                             PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
                             if (pendingIntent != null)
                                 getActivity().startIntentSenderForResult(pendingIntent.getIntentSender(),
@@ -468,37 +466,24 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 try {
                     JSONObject jo = new JSONObject(purchaseData);
                     String sku = jo.getString("productId");
-                    if (sku.equals("premium_user")) {
-                        Toast.makeText(context, R.string.premium_purchased, Toast.LENGTH_LONG).show();
-                        SettingsActivity.this.recreate();
-                    } else {
-                        mService.consumePurchase(3, getPackageName(), jo.getString("purchaseToken"));
+                    switch (sku) {
+                        case "premium_user":
+                            Toast.makeText(context, R.string.premium_purchased, Toast.LENGTH_LONG).show();
+                            SettingsActivity.this.recreate();
+                            break;
+                        case "statistics_package":
+                            Toast.makeText(context, R.string.statistics_purchased, Toast.LENGTH_LONG).show();
+                            SettingsActivity.this.recreate();
+                            break;
+                        default:
+                            BeeApplication.mService.consumePurchase(3, getPackageName(), jo.getString("purchaseToken"));
+                            break;
                     }
                 } catch (JSONException | RemoteException e) {
                     e.printStackTrace();
                 }
             }
         }
-    }
-
-    private static boolean isPremiumUser() {
-        try {
-            if (mService != null) {
-                Bundle ownedItems = mService.getPurchases(3, context.getPackageName(), "inapp", null);
-                int response = ownedItems.getInt("RESPONSE_CODE");
-                if (response == 0) {
-                    ArrayList<String> ownedSkus =
-                            ownedItems.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
-                    assert ownedSkus != null;
-                    isPremiumUser = ownedSkus.contains("premium_user");
-                    prefs.edit().putBoolean("premium_user", isPremiumUser).apply();
-                    return isPremiumUser;
-                }
-            }
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
 
@@ -668,7 +653,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         new ArrayList<>(Arrays.asList(params)));
                 Log.d("BienenTracker", querySkus.toString());
                 try {
-                    Bundle skuDetails = mService.getSkuDetails(3,
+                    Bundle skuDetails = BeeApplication.mService.getSkuDetails(3,
                             context.getPackageName(), "inapp", querySkus);
                     int response = skuDetails.getInt("RESPONSE_CODE");
                     if (response == 0) {
@@ -764,7 +749,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     private static void donate(String id) {
         try {
-            Bundle buyIntentBundle = mService.getBuyIntent(3, context.getPackageName(),
+            Bundle buyIntentBundle = BeeApplication.mService.getBuyIntent(3, context.getPackageName(),
                     id, "inapp", "l-#dWasdf&ES2g3414329112gqY5sdf9Hh3?mBHRe");
             PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
             if (pendingIntent != null)
