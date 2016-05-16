@@ -62,11 +62,7 @@ public class LogActivity extends AppCompatActivity implements OnDialogFinishedLi
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ActionBar ab = getSupportActionBar();
-        if (ab != null) {
-            ab.setTitle(mHive.getName());
-            ab.setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setTitle(mHive.getName());
 
         mList = (RecyclerView) findViewById(R.id.log_list);
         assert mList != null;
