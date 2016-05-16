@@ -118,7 +118,7 @@
     <string name="error_msg_name">Name is required</string>
     <string name="dialog_premium_purchase_message">Unlock premium features, like exporting your log to a excel-sheet (more coming soon), with a single purchase.</string>
     <string name="hint_common_other">Others</string>
-    <string name="prefs_content_activities">Sonstige Tätigkeiten</string>
+    <string name="prefs_content_activities">Other Activities</string>
     <string name="error_msg_year">Valid year required</string>
     <string name="dialog_title_rating">Rate hive</string>
     <string name="menu_rate">Rate</string>
@@ -139,8 +139,8 @@
     <string name="inspection_pins">Pins</string>
     <string name="dialog_export_warning">BienenTracker-Datenbanken müssen sich in dem Ordner \"Bienen Tracker\" befinden. Werden nicht kompatible Datenbanken wiederhergestellt, kann es zu Fehlern kommen.</string>
     <string name="export_backup">backup</string>
-    <string name="error_msg_backup_error">Sicherung fehlgeschlagen</string>
-    <string name="successfully_restored">Erfolgreich wiederhergestellt</string>
+    <string name="error_msg_backup_error">Backup failed</string>
+    <string name="successfully_restored">Restore successful</string>
     <string name="last_backup">Last backup:\n%1$s</string>
     <string name="no_backup">No backup\navailable</string>
     <string name="alert_restore_db">Restore database? Current data will be lost.</string>
@@ -159,15 +159,27 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_statistics">Statistiken</string>
-    <string name="nav_all">Alle Völker</string>
-    <string name="nav_groups">Gruppen</string>
+    <string name="action_statistics">Statistics</string>
+    <string name="nav_all">Alle Hives</string>
+    <string name="nav_groups">Groups</string>
     <string name="prefs_content_groups">Groups</string>
     <string name="no_group">No group</string>
-    <string name="nav_no_groups">in den Einstellungen hinzufügen</string>
+    <string name="nav_no_groups">edit in settings</string>
     <string name="action_logout">Logout</string>
     <string name="header_login">Login</string>
     <string name="header_premium">Premium necessary</string>
     <string name="header_login_msg">Login with Google</string>
+    <string name="title_activity_stats">Statistics</string>
+    <string name="statistics_groups">Groups</string>
+    <string name="statistics_range">Period</string>
+    <string name="statistics_earnings">Gesamtertrag: %1$skg</string>
+    <string name="statistics_trend_title">Trend</string>
+    <string name="statistics_food_title">Foud</string>
+    <string name="statistics_no_data">No data</string>
+    <string name="prefs_premium_statistics_summary">Durch In-App-Kauf freischalten</string>
+    <string name="prefs_premium_statistics_title">Statistiken</string>
+    <string name="statistics_purchased">Buy statistics package</string>
+    <string name="hive_group">Group</string>
+    <string name="dialog_premium_statistics_message">Unlock the statistics-package. You receive statistics for your earnings and investments in bee food.</string>
 
 </resources>

@@ -148,6 +148,7 @@
     <string name="nav_all">Alle Völker</string>
     <string name="navigation_drawer_close">Menü schließen</string>
     <string name="nav_groups">Gruppen</string>
+    <string name="hive_group">Gruppe</string>
     <string name="navigation_drawer_open">Menü öffnen</string>
     <string name="no_group">Keine Gruppe</string>
     <string name="prefs_content_groups">Gruppen</string>
@@ -156,4 +157,15 @@
     <string name="header_login">Login</string>
     <string name="header_premium">Premium-Version notwendig</string>
     <string name="header_login_msg">Mit Google einloggen</string>
+    <string name="title_activity_stats">Statistiken</string>
+    <string name="prefs_premium_statistics_title">Statistiken</string>
+    <string name="prefs_premium_statistics_summary">Durch In-App-Kauf freischalten</string>
+    <string name="statistics_earnings">Gesamtertrag: %1$skg</string>
+    <string name="statistics_food_title">Futter</string>
+    <string name="statistics_groups">Gruppen</string>
+    <string name="statistics_no_data">Keine Daten vorhanden</string>
+    <string name="statistics_purchased">Statistik-Paket gekauft</string>
+    <string name="statistics_range">Zeitraum</string>
+    <string name="statistics_trend_title">Verlauf</string>
+    <string name="dialog_premium_statistics_message">Durch den Kauf schalten Sie das Statistik-Paket frei. Sie erhalten übersichtliche Statistiken zu Ihrer Ernte und Ihrem Futterverbrauch</string>
 </resources>

@@ -156,4 +156,16 @@
     <string name="header_login">Login</string>
     <string name="header_premium">Premium necessary</string>
     <string name="header_login_msg">Login with Google</string>
+    <string name="title_activity_stats">Statistics</string>
+    <string name="hive_group">Group</string>
+    <string name="statistics_trend_title">Trend</string>
+    <string name="statistics_range">Period</string>
+    <string name="statistics_purchased">Buy statistics package</string>
+    <string name="statistics_no_data">No data</string>
+    <string name="statistics_groups">Groups</string>
+    <string name="statistics_food_title">Food</string>
+    <string name="statistics_earnings">Total earnings: %1$skg</string>
+    <string name="prefs_premium_statistics_title">Statistiken</string>
+    <string name="prefs_premium_statistics_summary">Unlock with in-app purchase</string>
+    <string name="dialog_premium_statistics_message">Unlock the statistics-package. You receive statistics for your earnings and investments in bee food.</string>
 </resources>
