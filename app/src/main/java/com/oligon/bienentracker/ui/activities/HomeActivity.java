@@ -28,7 +28,6 @@ import android.view.SubMenu;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -75,6 +74,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected static Context context;
     private static MenuItem mGroups;
     private static RecyclerView list;
+    private static LinearLayoutManager llm;
     private static View empty_message;
     private static List<Hive> hives = new ArrayList<>();
     private static FragmentManager fm;
@@ -89,7 +89,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private static TextView mUserMail;
     private static ImageButton mUserMenu;
 
-    private SharedPreferences sp;
+    private static SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +150,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         if (getApplicationContext().getPackageName().endsWith(".debug")) {
             sp.edit().putBoolean("premium_user", true).apply();
+            sp.edit().putBoolean("statistics_package", true).apply();
         }
+
+        navigationView.getMenu().findItem(R.id.nav_stats).setEnabled(sp.getBoolean("statistics_package", false));
 
         fm = getSupportFragmentManager();
 
@@ -164,7 +167,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         list = (RecyclerView) findViewById(R.id.list_log);
 
-        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         list.setLayoutManager(llm);
 
@@ -206,6 +209,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onResult(GoogleSignInResult googleSignInResult) {
                         handleSignInResult(googleSignInResult);
+                        sp.edit().putBoolean("database_old", true).apply();
                     }
                 });
             }
@@ -265,7 +269,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         selectItem();
     }
 
-    private static void updateList() {
+    public static void updateList() {
+        int position = llm.findFirstVisibleItemPosition();
+        int offset = list.computeVerticalScrollOffset();
         hives = isHome ? db.getAllHives() : db.getAllHivesByGroup(selectedGroup);
         List<LogEntry> logs = new ArrayList<>();
         for (Hive hive : hives)
@@ -273,11 +279,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         HiveListAdapter mHiveListAdapter = new HiveListAdapter(hives, logs, (HomeActivity) context);
         list.setAdapter(mHiveListAdapter);
 
+        llm.scrollToPositionWithOffset(position, offset);
+
         if (hives.size() == 0) empty_message.setVisibility(View.VISIBLE);
         else empty_message.setVisibility(View.GONE);
     }
 
-    private static void updateGroups() {
+    public static void updateGroups() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> set = sp.getStringSet("pref_list_groups", new HashSet<String>());
         List<String> groups = new ArrayList<>(set);
@@ -428,7 +436,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 updateList();
                 break;
             case R.id.nav_stats:
-                Toast.makeText(HomeActivity.this, "Bald verfügbar", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, StatisticsActivity.class);
                 break;
             case R.id.nav_settings:
                 intent = new Intent(this, SettingsActivity.class);

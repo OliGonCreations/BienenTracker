@@ -306,6 +306,8 @@ public class DriveHandler {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
             sp.edit().putBoolean("database_old", false).apply();
             HiveDB.forceUpgrade();
+            HomeActivity.updateList();
+            HomeActivity.updateGroups();
         }
     }
 

@@ -78,6 +78,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activities.HomeActivity" />
         </activity>
+        <activity
+            android:name=".ui.activities.StatisticsActivity"
+            android:label="@string/title_activity_stats"
+            android:parentActivityName=".ui.activities.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.HomeActivity" />
+        </activity>
 
         <receiver android:name=".NotificationReceiver" />
 

@@ -18,4 +18,17 @@
     <color name="beeYellow">#FFC107</color>
     <color name="beeRed">#F44336</color>
     <color name="beeGreen">#4CAF50</color>
+
+    <!-- pie -->
+    <color name="pie1">#673AB7</color>
+    <color name="pie2">#3F51B5</color>
+    <color name="pie3">#2196F3</color>
+    <color name="pie4">#03A9F4</color>
+    <color name="pie5">#00BCD4</color>
+    <color name="pie6">#4CAF50</color>
+    <color name="pie7">#8BC34A</color>
+    <color name="pie8">#CDDC39</color>
+    <color name="pie9">#FFC107</color>
+
+
 </resources>

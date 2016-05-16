@@ -19,7 +19,10 @@ import com.oligon.bienentracker.object.Hive;
 import com.oligon.bienentracker.object.Inspection;
 import com.oligon.bienentracker.object.LogEntry;
 import com.oligon.bienentracker.object.Reminder;
+import com.oligon.bienentracker.object.StatisticsEarnings;
+import com.oligon.bienentracker.object.StatisticsFood;
 import com.oligon.bienentracker.object.Treatment;
+import com.oligon.bienentracker.object.Trend;
 import com.oligon.bienentracker.ui.activities.HomeActivity;
 
 import java.io.File;
@@ -27,9 +30,12 @@ import java.io.IOException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import jxl.CellView;
 import jxl.SheetSettings;
@@ -455,7 +461,6 @@ public class HiveDB extends SQLiteOpenHelper {
             values.put(LOG_DIAPER, mActivities.getDiaper());
             values.put(LOG_OTHER_ACT, mActivities.getOther());
         }
-        //values.put(LOG_ACTIVITIES, parseActivites(mActivities));
 
         if (log.getId() != -1) {
             db.update(LOG_TABLE_NAME, values, LOG_ID + " = ?",
@@ -871,4 +876,97 @@ public class HiveDB extends SQLiteOpenHelper {
     public static void forceUpgrade() {
         instance.getWritableDatabase().close();
     }
+
+    /* Statistics */
+    public StatisticsEarnings getStatisticsEarnings(Calendar from, Calendar till) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Map<Integer, String> hives = new HashMap<>();
+        Map<Integer, String> groups = new HashMap<>();
+        Cursor curHives = db.query(HIVE_TABLE_NAME, new String[]{HIVE_ID, HIVE_NAME, HIVE_GROUP}, null, null, null, null, null);
+        while (curHives.moveToNext()) {
+            hives.put(curHives.getInt(curHives.getColumnIndex(HIVE_ID)), curHives.getString(curHives.getColumnIndex(HIVE_NAME)));
+            groups.put(curHives.getInt(curHives.getColumnIndex(HIVE_ID)), curHives.getString(curHives.getColumnIndex(HIVE_GROUP)));
+        }
+        curHives.close();
+
+        Cursor cur = db.query(LOG_TABLE_NAME, new String[]{LOG_HIVE_ID, LOG_HARVEST},
+                LOG_HARVEST + " != '' AND " + LOG_DATE + " >= '" + getDateTime(from.getTime())
+                        + "' AND " + LOG_DATE + " <= '" + getDateTime(till.getTime()) + "'",
+                null, null, null, null);
+        StatisticsEarnings stats = new StatisticsEarnings();
+        while (cur.moveToNext()) {
+            Harvest h = getHarvest(cur.getString(cur.getColumnIndex(LOG_HARVEST)));
+            if (h != null) {
+                stats.addHoney(hives.get(cur.getInt(cur.getColumnIndex(LOG_HIVE_ID))),
+                        groups.get(cur.getInt(cur.getColumnIndex(LOG_HIVE_ID))),
+                        h.getWeight(),
+                        h.getCombCount());
+
+            }
+        }
+        cur.close();
+        db.close();
+        return stats;
+    }
+
+    public StatisticsFood getStatisticsFood(Calendar from, Calendar till) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cur = db.query(LOG_TABLE_NAME, new String[]{LOG_FOOD},
+                LOG_FOOD + " != '' AND " + LOG_DATE + " >= '" + getDateTime(from.getTime())
+                        + "' AND " + LOG_DATE + " <= '" + getDateTime(till.getTime()) + "'",
+                null, null, null, null);
+        StatisticsFood stats = new StatisticsFood();
+        while (cur.moveToNext()) {
+            Food food = getFood(cur.getString(cur.getColumnIndex(LOG_FOOD)));
+            if (food != null) {
+                stats.addFood(food.getFood(), food.getAmount());
+            }
+        }
+        cur.close();
+        db.close();
+        return stats;
+    }
+
+    public Trend getTrend() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cur = db.query(LOG_TABLE_NAME, new String[]{LOG_DATE, LOG_HARVEST}, null, null, null, null, LOG_DATE + " ASC");
+        Trend trend = new Trend();
+        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy", Locale.getDefault());
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MMM", Locale.getDefault());
+        while (cur.moveToNext()) {
+            Harvest h = getHarvest(cur.getString(cur.getColumnIndex(LOG_HARVEST)));
+            if (h != null) {
+                Date date = getDateFromString(cur.getString(cur.getColumnIndex(LOG_DATE)));
+                trend.addHoney(yearFormat.format(date), monthFormat.format(date), h.getWeight());
+            }
+        }
+        cur.close();
+        db.close();
+        return trend;
+    }
+
+    public Calendar getFirstEntryDate() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(LOG_TABLE_NAME, new String[]{LOG_DATE}, null, null, null, null, LOG_DATE + " ASC", "1");
+        Calendar calendar = Calendar.getInstance();
+        while (cursor.moveToNext()) {
+            calendar.setTime(getDateFromString(cursor.getString(cursor.getColumnIndex(LOG_DATE))));
+        }
+        cursor.close();
+        db.close();
+        return calendar;
+    }
+
+    public Calendar getLastEntryDate() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(LOG_TABLE_NAME, new String[]{LOG_DATE}, null, null, null, null, LOG_DATE + " DESC", "1");
+        Calendar calendar = Calendar.getInstance();
+        while (cursor.moveToNext()) {
+            calendar.setTime(getDateFromString(cursor.getString(cursor.getColumnIndex(LOG_DATE))));
+        }
+        cursor.close();
+        db.close();
+        return calendar;
+    }
+
 }
