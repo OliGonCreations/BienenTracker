@@ -104,6 +104,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         super.onResume();
         if (openFile)
             openFile(filePath);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     @Override
@@ -278,7 +279,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         try {
                             Bundle buyIntentBundle = BeeApplication.mService.getBuyIntent(3, context.getPackageName(),
-                                    "statistics_package", "inapp", "l-#dWQ8rbF#}&R4S$uH{gt&ESH#G14329112gqY5?&u=[+-6E9Hh3?mBHRe");
+                                    "statistics_package", "inapp", "K_9Iuu$Du}8g0j0$P2CP{Q,`8491P^%-IV)HfutXa|qOf?QT/9AggmoC27$aAv");
                             PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
                             if (pendingIntent != null)
                                 getActivity().startIntentSenderForResult(pendingIntent.getIntentSender(),
