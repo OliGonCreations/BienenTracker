@@ -69,12 +69,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public static boolean dbChanged = false;
     private static boolean isHome = true;
     private static String selectedGroup, toolbarTitle;
-    private static int selectedItem;
+    private static int selectedItem, selectedHive;
 
     protected static Context context;
     private static MenuItem mGroups;
     private static RecyclerView list;
     private static LinearLayoutManager llm;
+    private static HiveListAdapter mHiveListAdapter;
     private static View empty_message;
     private static List<Hive> hives = new ArrayList<>();
     private static FragmentManager fm;
@@ -165,11 +166,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        mHiveListAdapter = new HiveListAdapter(this);
+
         list = (RecyclerView) findViewById(R.id.list_log);
 
         llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         list.setLayoutManager(llm);
+        list.setAdapter(mHiveListAdapter);
 
         db = HiveDB.getInstance(this);
 
@@ -220,8 +224,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStop() {
         super.onStop();
         if (BeeApplication.getApiClient(this).isConnected() && dbChanged) {
+            dbChanged = false;
             DriveHandler.getInstance(this).createDBFile();
         } else if (dbChanged) {
+            dbChanged = false;
             BeeApplication.getApiClient(this).connect();
             BeeApplication.getApiClient(this).registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                 @Override
@@ -260,6 +266,21 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         outState.putInt("nav_item", selectedItem);
         outState.putString("toolbar_title", toolbar.getTitle().toString());
         outState.putBoolean("is_home", isHome);
+
+        outState.putInt("recycler_position", llm.findFirstVisibleItemPosition());
+        outState.putInt("recycler_offset", list.computeVerticalScrollOffset());
+        outState.putInt("selected_item", selectedHive);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            selectedHive = savedInstanceState.getInt("selected_item");
+            int position = savedInstanceState.getInt("recycler_position");
+            int offset = savedInstanceState.getInt("recycler_offset");
+            llm.scrollToPositionWithOffset(position, offset);
+        }
     }
 
     private void goHome() {
@@ -270,17 +291,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public static void updateList() {
-        int position = llm.findFirstVisibleItemPosition();
-        int offset = list.computeVerticalScrollOffset();
         hives = isHome ? db.getAllHives() : db.getAllHivesByGroup(selectedGroup);
         List<LogEntry> logs = new ArrayList<>();
         for (Hive hive : hives)
             logs.add(db.getLog(hive.getId()));
-        HiveListAdapter mHiveListAdapter = new HiveListAdapter(hives, logs, (HomeActivity) context);
-        list.setAdapter(mHiveListAdapter);
+        mHiveListAdapter.updateData(hives, logs);
 
-        llm.scrollToPositionWithOffset(position, offset);
-
+        //HiveListAdapter.HiveViewHolder viewHolder = (HiveListAdapter.HiveViewHolder) list.findViewHolderForAdapterPosition(4);
+        //if (viewHolder != null)
+        //    viewHolder.toggleItem();
         if (hives.size() == 0) empty_message.setVisibility(View.VISIBLE);
         else empty_message.setVisibility(View.GONE);
     }
@@ -404,7 +423,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onAddLogClick(final Hive hive, View title) {
+    public void onAddLogClick(final Hive hive) {
         Intent intent = new Intent(context, NewEntryActivity.class);
         intent.putExtra("HiveId", hive.getId());
         context.startActivity(intent);

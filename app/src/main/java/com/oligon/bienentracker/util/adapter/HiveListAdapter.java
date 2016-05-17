@@ -15,11 +15,12 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.oligon.bienentracker.R;
-import com.oligon.bienentracker.util.Circle;
 import com.oligon.bienentracker.object.Hive;
 import com.oligon.bienentracker.object.LogEntry;
+import com.oligon.bienentracker.util.Circle;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,11 +32,18 @@ public class HiveListAdapter extends RecyclerView.Adapter<HiveListAdapter.HiveVi
     private LogClickListener mListener;
     private SharedPreferences mPrefs;
 
-
-    public HiveListAdapter(List<Hive> mList, List<LogEntry> mLogs, LogClickListener mListener) {
-        this.mList = mList;
-        this.mLogs = mLogs;
+    public HiveListAdapter(LogClickListener mListener) {
         this.mListener = mListener;
+        mList = new ArrayList<>();
+        mLogs = new ArrayList<>();
+    }
+
+    public void updateData(List<Hive> mList, List<LogEntry> mLogs) {
+        this.mList.clear();
+        this.mLogs.clear();
+        this.mList.addAll(mList);
+        this.mLogs.addAll(mLogs);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -65,6 +73,7 @@ public class HiveListAdapter extends RecyclerView.Adapter<HiveListAdapter.HiveVi
             holder.hive_circle.setVisibility(View.VISIBLE);
         } else {
             holder.hive_circle.setVisibility(View.INVISIBLE);
+            holder.hive_year.setText("");
         }
         String[] ratings = context.getResources().getStringArray(R.array.prefs_rating_entries);
         int ratingView = Integer.parseInt(mPrefs.getString("pref_list_rating_view", "0"));
@@ -116,6 +125,8 @@ public class HiveListAdapter extends RecyclerView.Adapter<HiveListAdapter.HiveVi
             holder.card_hive_more.setVisibility(View.GONE);
             holder.card_hive_title.setText(R.string.log_empty_message);
         }
+
+        holder.expandedView.setVisibility(View.GONE);
     }
 
     @Override
@@ -126,7 +137,7 @@ public class HiveListAdapter extends RecyclerView.Adapter<HiveListAdapter.HiveVi
     public interface LogClickListener {
         void onClick(View caller, final Hive hive);
 
-        void onAddLogClick(final Hive hive, View title);
+        void onAddLogClick(final Hive hive); //, int pos);
 
         void onMoreLogClick(final Hive hive);
 
@@ -138,6 +149,7 @@ public class HiveListAdapter extends RecyclerView.Adapter<HiveListAdapter.HiveVi
         //public CardView cardView;
         public View expandedView;
         public Hive item;
+        public int position;
         private boolean rotationDirection = true;
         ObjectAnimator rotation;
 
@@ -204,21 +216,20 @@ public class HiveListAdapter extends RecyclerView.Adapter<HiveListAdapter.HiveVi
                     mListener.onAddReminderClick(item);
                     break;
                 case R.id.card_hive_add:
-                    mListener.onAddLogClick(item, hive_name);
+                    mListener.onAddLogClick(item);
                     break;
                 case R.id.card_hive_more:
                     mListener.onMoreLogClick(item);
                     break;
                 case R.id.card_hive_main:
-                    toggleProductDescriptionHeight();
+                    toggleItem();
                     break;
                 default:
                     break;
             }
         }
 
-
-        private void toggleProductDescriptionHeight() {
+        public void toggleItem() {
             int from, to;
             if (rotationDirection) {
                 from = 0;
