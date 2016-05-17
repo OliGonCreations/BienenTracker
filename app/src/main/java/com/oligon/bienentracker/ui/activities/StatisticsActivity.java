@@ -21,6 +21,7 @@ import java.util.Calendar;
 
 public class StatisticsActivity extends AppCompatActivity {
 
+    public static final int COLORS_PRIMARY_SIZE = 6;
     public static ArrayList<Integer> COLORS_PRIMARY = new ArrayList<>();
     public static ArrayList<Integer> COLORS_SECONDARY = new ArrayList<>();
 
@@ -51,15 +52,24 @@ public class StatisticsActivity extends AppCompatActivity {
     }
 
     private void setupColors() {
-        //COLORS_PRIMARY.add(ContextCompat.getColor(this, R.color.pie1));
-        //COLORS_PRIMARY.add(ContextCompat.getColor(this, R.color.pie2));
-        COLORS_PRIMARY.add(ContextCompat.getColor(this, R.color.pie3));
-        COLORS_PRIMARY.add(ContextCompat.getColor(this, R.color.pie4));
-        COLORS_PRIMARY.add(ContextCompat.getColor(this, R.color.pie5));
-        COLORS_SECONDARY.add(ContextCompat.getColor(this, R.color.pie6));
-        COLORS_SECONDARY.add(ContextCompat.getColor(this, R.color.pie7));
-        COLORS_SECONDARY.add(ContextCompat.getColor(this, R.color.pie8));
-        COLORS_SECONDARY.add(ContextCompat.getColor(this, R.color.pie9));
+        COLORS_PRIMARY.add(ContextCompat.getColor(this, R.color.primary_0));
+        COLORS_PRIMARY.add(ContextCompat.getColor(this, R.color.primary_1));
+        COLORS_PRIMARY.add(ContextCompat.getColor(this, R.color.primary_2));
+        COLORS_PRIMARY.add(ContextCompat.getColor(this, R.color.primary_3));
+        COLORS_PRIMARY.add(ContextCompat.getColor(this, R.color.primary_4));
+        COLORS_PRIMARY.add(ContextCompat.getColor(this, R.color.primary_5));
+        COLORS_PRIMARY.add(ContextCompat.getColor(this, R.color.primary_6));
+        COLORS_PRIMARY.add(ContextCompat.getColor(this, R.color.primary_7));
+        COLORS_PRIMARY.add(ContextCompat.getColor(this, R.color.primary_8));
+        COLORS_SECONDARY.add(ContextCompat.getColor(this, R.color.secondary_0));
+        COLORS_SECONDARY.add(ContextCompat.getColor(this, R.color.secondary_1));
+        COLORS_SECONDARY.add(ContextCompat.getColor(this, R.color.secondary_2));
+        COLORS_SECONDARY.add(ContextCompat.getColor(this, R.color.secondary_3));
+        COLORS_SECONDARY.add(ContextCompat.getColor(this, R.color.secondary_4));
+        COLORS_SECONDARY.add(ContextCompat.getColor(this, R.color.secondary_5));
+        COLORS_SECONDARY.add(ContextCompat.getColor(this, R.color.secondary_6));
+        COLORS_SECONDARY.add(ContextCompat.getColor(this, R.color.secondary_7));
+        COLORS_SECONDARY.add(ContextCompat.getColor(this, R.color.secondary_8));
     }
 
     public static Calendar getZeroCalendar(int year) {
