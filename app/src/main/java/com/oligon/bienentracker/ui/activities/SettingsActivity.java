@@ -470,10 +470,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     switch (sku) {
                         case "premium_user":
                             Toast.makeText(context, R.string.premium_purchased, Toast.LENGTH_LONG).show();
+                            prefs.edit().putBoolean("premium_user", true).apply();
                             SettingsActivity.this.recreate();
                             break;
                         case "statistics_package":
                             Toast.makeText(context, R.string.statistics_purchased, Toast.LENGTH_LONG).show();
+                            prefs.edit().putBoolean("statistics_package", true).apply();
                             SettingsActivity.this.recreate();
                             break;
                         default:

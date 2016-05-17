@@ -154,8 +154,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             sp.edit().putBoolean("statistics_package", true).apply();
         }
 
-        navigationView.getMenu().findItem(R.id.nav_stats).setEnabled(sp.getBoolean("statistics_package", false));
-
         fm = getSupportFragmentManager();
 
         empty_message = findViewById(R.id.home_empty_message);
@@ -318,6 +316,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         for (String s : groups) {
             subMenu.add(0, s.hashCode(), Menu.NONE, s).setCheckable(true);
         }
+        navigationView.getMenu().findItem(R.id.nav_stats).setEnabled(sp.getBoolean("statistics_package", false));
         navigationView.invalidate();
     }
 
