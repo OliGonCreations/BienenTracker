@@ -168,4 +168,5 @@
     <string name="prefs_premium_statistics_title">Statistiken</string>
     <string name="prefs_premium_statistics_summary">Unlock with in-app purchase</string>
     <string name="dialog_premium_statistics_message">Unlock the statistics-package. You receive statistics for your earnings and investments in bee food.</string>
+    <string name="others">Others</string>
 </resources>

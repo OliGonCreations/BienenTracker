@@ -168,4 +168,5 @@
     <string name="statistics_range">Zeitraum</string>
     <string name="statistics_trend_title">Verlauf</string>
     <string name="dialog_premium_statistics_message">Durch den Kauf schalten Sie das Statistik-Paket frei. Sie erhalten übersichtliche Statistiken zu Ihrer Ernte und Ihrem Futterverbrauch</string>
+    <string name="others">Andere</string>
 </resources>

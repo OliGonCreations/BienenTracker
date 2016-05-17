@@ -59,7 +59,7 @@ public class HiveDB extends SQLiteOpenHelper {
     private static Context mContext;
     public static HiveDB instance;
 
-    private final static int DB_VERSION = 6;
+    private final static int DB_VERSION = 7;
     public final static String DB_NAME = "Hive.db";
 
     private final static String LOG_ID = "id";
@@ -105,6 +105,12 @@ public class HiveDB extends SQLiteOpenHelper {
     private final static String HIVE_REMINDER_TIME = "reminderTime";
     private final static String HIVE_REMINDER_DESCRIPTION = "reminderDescription";
 
+    private final static String STING_TABLE_NAME = "stings";
+    private final static String STING_ID = "stringId";
+    private final static String STING_DATE = "date";
+    private final static String STING_HIVE = "hive";
+    private final static String STING_ALERGIC = "reaction";
+
 
     private final static String DB_CREATE_LOG = "CREATE TABLE " + LOG_TABLE_NAME + "("
             + LOG_ID + " INTEGER PRIMARY KEY, " + LOG_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP, "
@@ -131,6 +137,10 @@ public class HiveDB extends SQLiteOpenHelper {
             + HIVE_INFO + " TEXT," + HIVE_SORTER + " INTEGER, " + HIVE_GENTLE + " REAL, "
             + HIVE_ESCAPE + " REAL, " + HIVE_STRENGTH + " REAL," + HIVE_REMINDER_TIME + " TEXT, "
             + HIVE_REMINDER_DESCRIPTION + " TEXT," + HIVE_GROUP + " TEXT)";
+
+    private final static String DB_CREATE_STING = "CREATE TABLE " + STING_TABLE_NAME + "("
+            + STING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STING_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP, "
+            + STING_HIVE + " TEXT, " + STING_ALERGIC + " TEXT)";
 
     private final static String ALTER_SORTER = "ALTER TABLE " + HIVE_TABLE_NAME + " ADD COLUMN "
             + HIVE_SORTER + " INTEGER";
@@ -188,6 +198,7 @@ public class HiveDB extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DB_CREATE_HIVE);
         db.execSQL(DB_CREATE_LOG);
+        db.execSQL(DB_CREATE_STING);
     }
 
     @Override
@@ -220,6 +231,9 @@ public class HiveDB extends SQLiteOpenHelper {
         }
         if (oldVersion < 6) { // Update to Version 6
             db.execSQL(ALTER_GROUP);
+        }
+        if (oldVersion < 7) {
+            db.execSQL(DB_CREATE_STING);
         }
     }
 
@@ -675,6 +689,31 @@ public class HiveDB extends SQLiteOpenHelper {
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         return dateFormat.parse(s, new ParsePosition(0));
+    }
+
+    /* Sting Statistic */
+
+    public void addSting(Date date) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(STING_DATE, getDateTime(date));
+        values.put(STING_ALERGIC, "");
+        values.put(STING_HIVE, "");
+        db.insert(STING_TABLE_NAME, null, values);
+        db.close();
+    }
+
+    public void removeLastSting() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(STING_TABLE_NAME, STING_ID + " = (SELECT MAX(" + STING_ID + ") FROM " + STING_TABLE_NAME + ")", null);
+        db.close();
+    }
+
+    public int getStingCount() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int count = db.query(STING_TABLE_NAME, new String[]{STING_ID}, null, null, null, null, null).getCount();
+        db.close();
+        return count;
     }
 
 

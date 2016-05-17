@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import com.oligon.bienentracker.R;
 import com.oligon.bienentracker.ui.fragments.StatisticsEarningsFragment;
 import com.oligon.bienentracker.ui.fragments.StatisticsFoodFragment;
+import com.oligon.bienentracker.ui.fragments.StatisticsStingFragment;
 import com.oligon.bienentracker.util.HiveDB;
 import com.oligon.bienentracker.util.adapter.StatisticsViewPagerAdapter;
 
@@ -21,7 +22,6 @@ import java.util.Calendar;
 
 public class StatisticsActivity extends AppCompatActivity {
 
-    public static final int COLORS_PRIMARY_SIZE = 6;
     public static ArrayList<Integer> COLORS_PRIMARY = new ArrayList<>();
     public static ArrayList<Integer> COLORS_SECONDARY = new ArrayList<>();
 
@@ -43,8 +43,9 @@ public class StatisticsActivity extends AppCompatActivity {
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.statistics_viewpager);
         StatisticsViewPagerAdapter adapter = new StatisticsViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new StatisticsEarningsFragment(), "Ertrag");
-        adapter.addFragment(new StatisticsFoodFragment(), "Futter");
+        adapter.addFragment(new StatisticsEarningsFragment(), getString(R.string.statistics_tab_earnings));
+        adapter.addFragment(new StatisticsFoodFragment(), getString(R.string.statistics_tab_food));
+        adapter.addFragment(new StatisticsStingFragment(), getString(R.string.statistics_tab_sting));
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
