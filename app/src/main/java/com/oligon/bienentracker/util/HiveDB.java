@@ -893,14 +893,13 @@ public class HiveDB extends SQLiteOpenHelper {
                 LOG_HARVEST + " != '' AND " + LOG_DATE + " >= '" + getDateTime(from.getTime())
                         + "' AND " + LOG_DATE + " <= '" + getDateTime(till.getTime()) + "'",
                 null, null, null, null);
-        StatisticsEarnings stats = new StatisticsEarnings();
+        StatisticsEarnings stats = new StatisticsEarnings(mContext);
         while (cur.moveToNext()) {
             Harvest h = getHarvest(cur.getString(cur.getColumnIndex(LOG_HARVEST)));
             if (h != null) {
                 stats.addHoney(hives.get(cur.getInt(cur.getColumnIndex(LOG_HIVE_ID))),
                         groups.get(cur.getInt(cur.getColumnIndex(LOG_HIVE_ID))),
-                        h.getWeight(),
-                        h.getCombCount());
+                        h.getWeight());
 
             }
         }

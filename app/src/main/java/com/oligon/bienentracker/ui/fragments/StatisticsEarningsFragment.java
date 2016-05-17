@@ -52,6 +52,8 @@ import java.util.TreeSet;
 public class StatisticsEarningsFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
 
     private static boolean MAGIC_FLAG = false;
+    private static String OTHERS;
+    private static final int MAX_HIVES_SHOWN_IN_CHART = 5;
 
     private StatisticsEarnings mStats;
     private Trend mTrend;
@@ -75,6 +77,8 @@ public class StatisticsEarningsFragment extends Fragment implements RadioGroup.O
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        OTHERS = getString(R.string.others);
+
         mTrend = StatisticsActivity.db.getTrend();
 
         mYearSelector = (Spinner) view.findViewById(R.id.statistics_range_year_value);
@@ -292,7 +296,6 @@ public class StatisticsEarningsFragment extends Fragment implements RadioGroup.O
     }
 
     private void updatePieCharts() {
-        TreeMap<String, Double> honeyStats = mStats.getHoneyStats();
         TreeMap<String, Double> groupStats = mStats.getGroupStats();
 
         // Groupchart
@@ -311,7 +314,6 @@ public class StatisticsEarningsFragment extends Fragment implements RadioGroup.O
         dataSet.setSelectionShift(5f);
 
         dataSet.setColors(StatisticsActivity.COLORS_PRIMARY);
-        //dataSet.setSelectionShift(0f);
 
         PieData data = new PieData(xVals, dataSet);
         data.setValueFormatter(new WeightFormatter());
@@ -320,8 +322,6 @@ public class StatisticsEarningsFragment extends Fragment implements RadioGroup.O
         data.setValueTypeface(tf);
         mGroupChart.setData(data);
 
-        // undo all highlights
-        mGroupChart.highlightValues(null);
         mGroupChart.highlightValue(new Highlight(0, 0), false);
         mGroupChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
@@ -365,7 +365,6 @@ public class StatisticsEarningsFragment extends Fragment implements RadioGroup.O
         dataSet.setSelectionShift(0f);
 
         dataSet.setColors(StatisticsActivity.COLORS_SECONDARY);
-        //dataSet.setSelectionShift(0f);
 
         PieData data = new PieData(xVals, dataSet);
         data.setValueFormatter(new WeightFormatter());
@@ -374,7 +373,6 @@ public class StatisticsEarningsFragment extends Fragment implements RadioGroup.O
         data.setValueTypeface(tf);
         mGroupDetailChart.setData(data);
 
-        // undo all highlights
         mGroupDetailChart.highlightValues(null);
 
         mGroupDetailChart.invalidate();
@@ -386,13 +384,11 @@ public class StatisticsEarningsFragment extends Fragment implements RadioGroup.O
         switch (checkedId) {
             case R.id.statistics_range_all:
                 showTrend();
-                setRangeAll();
                 setTrendAll();
                 break;
             case R.id.statistics_range_year:
                 hideTrend();
                 setRangeYear();
-                //setTrendYear();
                 break;
         }
     }
@@ -416,17 +412,32 @@ public class StatisticsEarningsFragment extends Fragment implements RadioGroup.O
         }
     }
 
-    private static <K, V extends Comparable<? super V>> SortedSet<Map.Entry<K, V>> entriesSortedByValues(Map<K, V> map) {
-        SortedSet<Map.Entry<K, V>> sortedEntries = new TreeSet<>(
-                new Comparator<Map.Entry<K, V>>() {
+    private static SortedSet<Map.Entry<String, Double>> entriesSortedByValues(TreeMap<String, Double> map) {
+        SortedSet<Map.Entry<String, Double>> sortedEntries = new TreeSet<>(
+                new Comparator<Map.Entry<String, Double>>() {
                     @Override
-                    public int compare(Map.Entry<K, V> e1, Map.Entry<K, V> e2) {
-                        int res = e1.getValue().compareTo(e2.getValue());
+                    public int compare(Map.Entry<String, Double> e1, Map.Entry<String, Double> e2) {
+                        if (e1.getKey().equals(OTHERS)) return 1;
+                        int res = e2.getValue().compareTo(e1.getValue());
                         return res != 0 ? res : 1; // Special fix to preserve items with equal values
                     }
                 }
         );
-        sortedEntries.addAll(map.entrySet());
+        TreeMap<String, Double> tempMap = (TreeMap<String, Double>) map.clone();
+        sortedEntries.addAll(tempMap.entrySet());
+        if (sortedEntries.size() > MAX_HIVES_SHOWN_IN_CHART) {
+            double others = 0;
+            while (tempMap.size() > MAX_HIVES_SHOWN_IN_CHART) {
+                Map.Entry<String, Double> last = sortedEntries.last();
+                others += last.getValue();
+                tempMap.remove(last.getKey());
+                sortedEntries.clear();
+                sortedEntries.addAll(tempMap.entrySet());
+            }
+            Map<String, Double> temp = new TreeMap<>();
+            temp.put(OTHERS, others);
+            sortedEntries.addAll(temp.entrySet());
+        }
         return sortedEntries;
     }
 

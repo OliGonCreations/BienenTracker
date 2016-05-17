@@ -1,34 +1,28 @@
 package com.oligon.bienentracker.object;
 
+import android.content.Context;
+
+import com.oligon.bienentracker.R;
+
 import java.util.TreeMap;
 
 public class StatisticsEarnings {
 
+    private Context context;
     private double honeySum;
-    private int combSum;
-    private TreeMap<String, Double> honeyStats;
-    private TreeMap<String, Integer> combStats;
 
     private TreeMap<String, Double> honeyStatsGroup;
     private TreeMap<String, TreeMap<String, Double>> honeyStatsGroupDetail;
 
-    public StatisticsEarnings() {
-        honeyStats = new TreeMap<>();
-        combStats = new TreeMap<>();
+    public StatisticsEarnings(Context context) {
+        this.context = context;
         honeyStatsGroup = new TreeMap<>();
         honeyStatsGroupDetail = new TreeMap<>();
     }
 
-    public void addHoney(String hive, String group, double weight, double combs) {
+    public void addHoney(String hive, String group, double weight) {
         if (hive == null) return;
-        if (honeyStats.containsKey(hive)) {
-            Double previous = honeyStats.get(hive);
-            honeyStats.remove(hive);
-            honeyStats.put(hive, previous + weight);
-        } else {
-            honeyStats.put(hive, weight);
-        }
-        if (group == null || group.isEmpty()) group = "Keine Gruppe";
+        if (group == null || group.isEmpty()) group = context.getString(R.string.no_group);
         if (honeyStatsGroup.containsKey(group)) {
             Double previous = honeyStatsGroup.get(group);
             honeyStatsGroup.remove(group);
@@ -50,10 +44,6 @@ public class StatisticsEarnings {
             honeyStatsGroupDetail.put(group, data);
         }
         honeySum += weight;
-    }
-
-    public TreeMap<String, Double> getHoneyStats() {
-        return honeyStats;
     }
 
     public TreeMap<String, Double> getGroupStats() {
