@@ -37,6 +37,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.drive.Drive;
 import com.oligon.bienentracker.BeeApplication;
 import com.oligon.bienentracker.R;
 import com.oligon.bienentracker.object.Hive;
@@ -211,33 +212,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onResult(GoogleSignInResult googleSignInResult) {
                         handleSignInResult(googleSignInResult);
-                        sp.edit().putBoolean("database_old", true).apply();
                     }
                 });
             }
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (BeeApplication.getApiClient(this).isConnected() && dbChanged) {
-            dbChanged = false;
-            DriveHandler.getInstance(this).createDBFile();
-        } else if (dbChanged) {
-            dbChanged = false;
-            BeeApplication.getApiClient(this).connect();
-            BeeApplication.getApiClient(this).registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                @Override
-                public void onConnected(@Nullable Bundle bundle) {
-                    DriveHandler.getInstance((HomeActivity) context).createDBFile();
-                }
-
-                @Override
-                public void onConnectionSuspended(int i) {
-
-                }
-            });
         }
     }
 
@@ -246,10 +223,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         updateGroups();
         selectItem();
-        if (sp.getBoolean("database_old", false)) {
-            DriveHandler.getInstance(this).getDBFromDrive();
-            DriveHandler.getInstance(this).getPreferencesFromDrive();
-        }
 
         if (!sp.getBoolean("premium_user", false)) {
             mUserName.setText(getString(R.string.header_login));
@@ -279,6 +252,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             int offset = savedInstanceState.getInt("recycler_offset");
             llm.scrollToPositionWithOffset(position, offset);
         }
+    }
+
+    private void syncDatabase() {
+        if (BeeApplication.getApiClient(this).isConnected())
+            DriveHandler.getInstance(this).syncDatabase();
     }
 
     private void goHome() {
@@ -352,6 +330,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public void onDialogFinished() {
         updateGroups();
         updateList();
+        if (sp.getBoolean("premium_user", false))
+            syncDatabase();
     }
 
     private void loadDefaultValues() {
@@ -504,6 +484,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             mUserName.setText(acct.getDisplayName());
             mUserMail.setText(acct.getEmail());
             mUserMenu.setVisibility(View.VISIBLE);
+            syncDatabase();
         } else {
             // Signed out, show unauthenticated UI.
             mUserName.setText(getString(R.string.header_login_msg));
@@ -536,8 +517,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        DriveHandler.getInstance(this).addDBChangeListener();
-        DriveHandler.getInstance(this).addPreferencesChangeListener();
+        Drive.DriveApi.requestSync(BeeApplication.getApiClient(this)).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(@NonNull Status status) {
+                if (status.isSuccess()) {
+                    syncDatabase();
+                }
+            }
+        });
     }
 
     @Override

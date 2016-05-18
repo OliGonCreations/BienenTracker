@@ -46,7 +46,6 @@ import android.widget.Toast;
 import com.oligon.bienentracker.BeeApplication;
 import com.oligon.bienentracker.R;
 import com.oligon.bienentracker.util.AppCompatPreferenceActivity;
-import com.oligon.bienentracker.util.DriveHandler;
 import com.oligon.bienentracker.util.HiveDB;
 import com.oligon.bienentracker.util.adapter.RestoreListAdapter;
 
@@ -110,10 +109,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (BeeApplication.getApiClient((HomeActivity) HomeActivity.context).isConnected()) {
+        /*if (BeeApplication.getApiClient((HomeActivity) HomeActivity.context).isConnected()) {
             Log.d(BeeApplication.TAG, "Synching Preferences");
             DriveHandler.getInstance((HomeActivity) HomeActivity.context).createPreferencesFile();
-        }
+        }*/
     }
 
     private void setupActionBar() {
