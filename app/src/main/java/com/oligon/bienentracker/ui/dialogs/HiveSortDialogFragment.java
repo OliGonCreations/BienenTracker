@@ -75,7 +75,8 @@ public class HiveSortDialogFragment extends DialogFragment implements OnStartDra
         List<Hive> mHives = HomeActivity.db.getAllHives();
         adapter = new RecyclerListAdapter(mHives, this);
 
-        @SuppressLint("InflateParams") RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.dialog_list, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_sort, null);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.dialog_sort_list);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
@@ -85,9 +86,9 @@ public class HiveSortDialogFragment extends DialogFragment implements OnStartDra
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(recyclerView);
 
-        View view = recyclerView;
         if (mHives.size() == 0) {
-            view = inflater.inflate(R.layout.dialog_empty, null);
+            view.findViewById(R.id.dialog_sort_empty).setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
         }
 
         builder.setView(view)

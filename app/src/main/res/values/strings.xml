@@ -186,5 +186,6 @@
     <string name="statistics_tab_food">Futter</string>
     <string name="statistics_tab_sting">Stiche</string>
     <string name="statistics_sting">Bienenstiche-Zähler</string>
+    <string name="dialog_sort_title">Sort</string>
 
 </resources>
