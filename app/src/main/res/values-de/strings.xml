@@ -174,4 +174,5 @@
     <string name="statistics_tab_earnings">Ertrag</string>
     <string name="statistics_tab_sting">Stiche</string>
     <string name="dialog_sort_title">Sortieren</string>
+    <string name="prefs_statistics_purchased">Sie sind bereits Statistiker</string>
 </resources>

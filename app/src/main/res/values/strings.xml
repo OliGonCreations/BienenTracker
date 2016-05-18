@@ -187,5 +187,6 @@
     <string name="statistics_tab_sting">Stiche</string>
     <string name="statistics_sting">Bienenstiche-Zähler</string>
     <string name="dialog_sort_title">Sort</string>
+    <string name="prefs_statistics_purchased">You are a statistician</string>
 
 </resources>

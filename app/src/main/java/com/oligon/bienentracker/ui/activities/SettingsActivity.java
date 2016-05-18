@@ -222,6 +222,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             if (isStatisticsUser) {
                 SettingsFragment.statistics.setEnabled(false);
+                SettingsFragment.statistics.setTitle(R.string.prefs_statistics_purchased);
+                SettingsFragment.statistics.setSummary(R.string.prefs_premium_purchased_summary);
             } else {
                 SettingsFragment.statistics.setEnabled(true);
             }
