@@ -38,6 +38,7 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveStatusCodes;
 import com.oligon.bienentracker.BeeApplication;
 import com.oligon.bienentracker.R;
 import com.oligon.bienentracker.object.Hive;
@@ -54,6 +55,7 @@ import com.oligon.bienentracker.util.adapter.HiveListAdapter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -66,6 +68,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final int RC_SIGN_IN = 3494;
     private static final int ADD_GROUPS_ID = 5432;
+    private static final long LIMIT_EXCEED_TIME = 1000 * 60 * 3;
 
     public static boolean dbChanged = false;
     private static boolean isHome = true;
@@ -255,8 +258,28 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void syncDatabase() {
-        if (BeeApplication.getApiClient(this).isConnected())
+        Log.d(BeeApplication.TAG, "Trying to sync database");
+        if (BeeApplication.getApiClient(this).isConnected()) {
+            Log.d(BeeApplication.TAG, "Syncing");
             DriveHandler.getInstance(this).syncDatabase();
+        } else {
+            Log.d(BeeApplication.TAG, "Not connected");
+            BeeApplication.getApiClient(this).registerConnectionCallbacks(this);
+            BeeApplication.getApiClient(this).connect();
+        }
+    }
+
+    private void syncPreferences() {
+        Log.d(BeeApplication.TAG, "Trying to sync preferences");
+        if (BeeApplication.getApiClient(this).isConnected()) {
+            Log.d(BeeApplication.TAG, "Syncing Preferences");
+            DriveHandler.getInstance(this).syncPreferences();
+        } else {
+            Log.d(BeeApplication.TAG, "Not connected");
+            BeeApplication.getApiClient(this).registerConnectionCallbacks(this);
+            BeeApplication.getApiClient(this).connect();
+        }
+
     }
 
     private void goHome() {
@@ -331,7 +354,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         updateGroups();
         updateList();
         if (sp.getBoolean("premium_user", false))
-            syncDatabase();
+            syncData();
     }
 
     private void loadDefaultValues() {
@@ -484,7 +507,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             mUserName.setText(acct.getDisplayName());
             mUserMail.setText(acct.getEmail());
             mUserMenu.setVisibility(View.VISIBLE);
-            syncDatabase();
+            syncData();
         } else {
             // Signed out, show unauthenticated UI.
             mUserName.setText(getString(R.string.header_login_msg));
@@ -500,8 +523,30 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(BeeApplication.getApiClient(this));
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        if (sp.getBoolean("is_first_signin", true)) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.AlertDialogOrange);
+            dialog.setTitle(getString(R.string.signin_dialog_title));
+            dialog.setMessage(getString(R.string.signin_dialog_message));
+            dialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    sp.edit().putBoolean("is_first_signin", false).apply();
+                    Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(BeeApplication.getApiClient((HomeActivity) context));
+                    startActivityForResult(signInIntent, RC_SIGN_IN);
+                }
+            });
+            dialog.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.setCancelable(false);
+            dialog.show();
+        } else {
+            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(BeeApplication.getApiClient((HomeActivity) context));
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        }
     }
 
     public void signOut() {
@@ -517,18 +562,41 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Drive.DriveApi.requestSync(BeeApplication.getApiClient(this)).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
-                if (status.isSuccess()) {
-                    syncDatabase();
-                }
-            }
-        });
+        syncData();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
 
+    }
+
+    private synchronized void syncData() {
+        if (!BeeApplication.getApiClient(this).isConnected()) {
+            Log.d(BeeApplication.TAG, "Client not connected");
+            return;
+        }
+        long lastsync = sp.getLong("last_sync_request", 0);
+        if (new Date().getTime() - lastsync > LIMIT_EXCEED_TIME) {
+            Log.d(BeeApplication.TAG, "Last sync long ago, requesting sync");
+            Drive.DriveApi.requestSync(BeeApplication.getApiClient(this)).setResultCallback(new ResultCallback<Status>() {
+                @Override
+                public void onResult(@NonNull Status status) {
+                    Log.d(BeeApplication.TAG, "Request Sync Message: " + status.getStatusMessage());
+                    sp.edit().putLong("last_sync_request", new Date().getTime()).apply();
+                    if (status.isSuccess()) {
+                        Log.d(BeeApplication.TAG, "Request sync successfull");
+                        syncDatabase();
+                        syncPreferences();
+                    } else if (status.getStatusCode() == DriveStatusCodes.DRIVE_RATE_LIMIT_EXCEEDED) {
+                        syncDatabase();
+                        syncPreferences();
+                    }
+                }
+            });
+        } else {
+            Log.d(BeeApplication.TAG, "Last sync not so long ago; no request");
+            syncDatabase();
+            syncPreferences();
+        }
     }
 }
