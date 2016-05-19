@@ -3,6 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin_small"
+    android:paddingLeft="@dimen/activity_horizontal_margin_small"
+    android:paddingRight="@dimen/activity_horizontal_margin_small"
+    android:paddingTop="@dimen/activity_vertical_margin_small"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
@@ -26,9 +30,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:layout_marginEnd="@dimen/activity_vertical_margin"
-                    android:layout_marginStart="@dimen/activity_vertical_margin"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/card_margin"
+                    android:layout_marginStart="@dimen/card_margin"
+                    android:layout_marginTop="@dimen/card_margin"
                     android:text="@string/statistics_range"
                     android:textAllCaps="true"
                     android:textSize="16sp"
@@ -39,9 +43,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/statistics_range_title"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin"
-                    android:layout_marginEnd="@dimen/activity_vertical_margin"
-                    android:layout_marginStart="@dimen/activity_vertical_margin">
+                    android:layout_marginBottom="@dimen/card_margin"
+                    android:layout_marginEnd="@dimen/card_margin"
+                    android:layout_marginStart="@dimen/card_margin">
 
                     <RadioButton
                         android:id="@+id/statistics_range_all"
@@ -62,8 +66,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/statistics_range_selector"
                     android:layout_alignTop="@+id/statistics_range_selector"
-                    android:layout_marginEnd="@dimen/activity_vertical_margin"
-                    android:layout_marginStart="@dimen/activity_vertical_margin"
+                    android:layout_marginEnd="@dimen/card_margin"
+                    android:layout_marginStart="@dimen/card_margin"
                     android:layout_toEndOf="@+id/statistics_range_selector" />
 
             </RelativeLayout>
@@ -86,9 +90,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:layout_marginEnd="@dimen/activity_vertical_margin"
-                    android:layout_marginStart="@dimen/activity_vertical_margin"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/card_margin"
+                    android:layout_marginStart="@dimen/card_margin"
+                    android:layout_marginTop="@dimen/card_margin"
                     android:text="@string/statistics_trend_title"
                     android:textAllCaps="true"
                     android:textSize="16sp"
@@ -97,7 +101,7 @@
                 <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/statistics_trend_bar"
                     android:layout_width="match_parent"
-                    android:layout_height="240dp"
+                    android:layout_height="@dimen/chart_height"
                     android:layout_below="@+id/statistics_trend_title" />
             </RelativeLayout>
 
@@ -119,9 +123,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:layout_marginEnd="@dimen/activity_vertical_margin"
-                    android:layout_marginStart="@dimen/activity_vertical_margin"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/card_margin"
+                    android:layout_marginStart="@dimen/card_margin"
+                    android:layout_marginTop="@dimen/card_margin"
                     android:text="@string/statistics_groups"
                     android:textAllCaps="true"
                     android:textSize="16sp"
@@ -131,7 +135,7 @@
                 <LinearLayout
                     android:id="@+id/statistics_groups_charts"
                     android:layout_width="match_parent"
-                    android:layout_height="240dp"
+                    android:layout_height="@dimen/chart_height"
                     android:layout_below="@+id/statistics_groups_title"
                     android:background="@color/cardview_dark_background"
                     android:divider="?android:attr/listDivider"
@@ -142,13 +146,13 @@
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/statistics_groups_chart"
                         android:layout_width="match_parent"
-                        android:layout_height="240dp"
+                        android:layout_height="@dimen/chart_height"
                         android:layout_weight="1" />
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/statistics_groups_detail_chart"
                         android:layout_width="match_parent"
-                        android:layout_height="240dp"
+                        android:layout_height="@dimen/chart_height"
                         android:layout_weight="1" />
                 </LinearLayout>
 
@@ -158,8 +162,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/statistics_groups_charts"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin"
-                    android:layout_marginStart="@dimen/activity_vertical_margin"
+                    android:layout_marginBottom="@dimen/card_margin"
+                    android:layout_marginStart="@dimen/card_margin"
                     android:layout_marginTop="4dp"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -170,8 +174,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_below="@+id/statistics_groups_charts"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin"
-                    android:layout_marginEnd="@dimen/activity_vertical_margin"
+                    android:layout_marginBottom="@dimen/card_margin"
+                    android:layout_marginEnd="@dimen/card_margin"
                     android:layout_marginTop="4dp"
                     android:textSize="14sp"
                     android:textStyle="bold" />

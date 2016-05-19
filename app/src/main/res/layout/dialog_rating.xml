@@ -31,6 +31,7 @@
 
     <RatingBar
         android:id="@+id/rating_gentle"
+        style="@style/Widget.AppCompat.RatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -51,6 +52,7 @@
 
     <RatingBar
         android:id="@+id/rating_escape"
+        style="@style/Widget.AppCompat.RatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -71,6 +73,7 @@
 
     <RatingBar
         android:id="@+id/rating_strength"
+        style="@style/Widget.AppCompat.RatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

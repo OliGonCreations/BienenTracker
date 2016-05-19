@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="activity_horizontal_margin">128dp</dimen>
-    <dimen name="activity_horizontal_margin_small">96dp</dimen>
+    <dimen name="activity_horizontal_margin">172dp</dimen>
+    <dimen name="activity_horizontal_margin_small">172dp</dimen>
     <dimen name="floating_padding">32dp</dimen>
+
+    <dimen name="chart_height">360dp</dimen>
 </resources>

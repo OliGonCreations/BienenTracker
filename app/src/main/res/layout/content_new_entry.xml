@@ -56,7 +56,7 @@
             android:layout_alignTop="@+id/text_location"
             android:layout_toStartOf="@+id/text_location"
             android:contentDescription="@null"
-            android:src="@drawable/ic_location"
+            app:srcCompat="@drawable/ic_location"
             android:tint="@color/colorGrey" />
 
         <TextView
@@ -109,7 +109,7 @@
             android:clickable="true"
             android:contentDescription="@null"
             android:focusable="true"
-            android:src="@drawable/ic_weather_load"
+            app:srcCompat="@drawable/ic_weather_load"
             android:tint="@color/colorGrey" />
 
         <TextView
@@ -132,7 +132,7 @@
             android:layout_below="@+id/location_img"
             android:layout_toStartOf="@+id/text_weather_temp"
             android:contentDescription="@null"
-            android:src="@drawable/ic_weather_thermometer"
+            app:srcCompat="@drawable/ic_weather_thermometer"
             android:tint="@color/colorGrey" />
 
         <TextView
@@ -156,7 +156,7 @@
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/location_img"
             android:contentDescription="@null"
-            android:src="@drawable/ic_edit"
+            app:srcCompat="@drawable/ic_edit"
             android:tint="@color/colorPrimaryGreen" />
 
 

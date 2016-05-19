@@ -9,4 +9,8 @@
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
 
+    <dimen name="card_margin">16dp</dimen>
+
+    <dimen name="chart_height">240dp</dimen>
+
 </resources>

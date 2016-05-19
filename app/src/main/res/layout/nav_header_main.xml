@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/ic_header"
     android:gravity="bottom"
     android:orientation="vertical"
@@ -13,8 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/header_user_mail"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         tools:text="Jonas Menken" />
@@ -24,9 +25,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         tools:text="jonas.menken@gm" />
 
     <ImageButton
@@ -37,6 +38,7 @@
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/header_user_mail"
         android:background="?android:attr/selectableItemBackground"
-        android:src="@drawable/ic_arrow_drop_down" />
+        app:srcCompat="@drawable/ic_arrow_drop_down"
+        android:contentDescription="@null" />
 
 </RelativeLayout>

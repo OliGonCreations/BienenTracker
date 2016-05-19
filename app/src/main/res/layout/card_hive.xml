@@ -30,7 +30,7 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@null"
                 android:padding="8dp"
-                android:src="@drawable/ic_more"
+                app:srcCompat="@drawable/ic_more"
                 android:tint="@color/colorPrimary" />
 
             <ImageButton
@@ -41,7 +41,7 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@null"
                 android:padding="8dp"
-                android:src="@drawable/ic_reminder_off"
+                app:srcCompat="@drawable/ic_reminder_off"
                 android:tint="@color/colorGrey"
                 android:scaleType="centerInside"/>
 
@@ -53,7 +53,7 @@
                 android:layout_alignParentEnd="true"
                 android:contentDescription="@null"
                 android:padding="12dp"
-                android:src="@drawable/ic_expand"
+                app:srcCompat="@drawable/ic_expand"
                 android:tint="@color/colorGrey" />
 
             <ImageView
@@ -66,7 +66,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:contentDescription="@null"
-                android:src="@drawable/ic_beehive" />
+                app:srcCompat="@drawable/ic_beehive" />
 
             <TextView
                 android:id="@+id/card_hive_name"
@@ -91,7 +91,7 @@
                 android:layout_alignStart="@+id/card_hive_name"
                 android:layout_alignTop="@+id/card_hive_location"
                 android:contentDescription="@null"
-                android:src="@drawable/ic_location"
+                app:srcCompat="@drawable/ic_location"
                 android:tint="@color/colorPrimary" />
 
             <TextView
@@ -145,7 +145,7 @@
 
             <RatingBar
                 android:id="@+id/card_hive_rating"
-                style="?android:attr/ratingBarStyleSmall"
+                style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/card_hive_rating_text"

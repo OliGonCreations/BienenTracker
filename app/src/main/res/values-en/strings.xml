@@ -175,4 +175,7 @@
     <string name="statistics_tab_sting">Bee stings</string>
     <string name="dialog_sort_title">Sort</string>
     <string name="prefs_statistics_purchased">You are a statistician</string>
+    <string name="sync_dialog_title">Synchronisation</string>
+    <string name="sync_dialog_message">New data found in the cloud. Overwrite data on this device?</string>
+    <string name="signin_dialog_message">With Google sign-in you enable a continuous cloud sync. To prevent data loss when switching devices, you should wait at least 5 minutes.</string>
 </resources>
