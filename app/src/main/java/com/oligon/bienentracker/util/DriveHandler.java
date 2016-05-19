@@ -27,6 +27,12 @@ import com.oligon.bienentracker.BeeApplication;
 import com.oligon.bienentracker.R;
 import com.oligon.bienentracker.ui.activities.HomeActivity;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -34,14 +40,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 public class DriveHandler {
 
     private Context context;
     private static DriveHandler instance;
     private static GoogleApiClient mApiClient;
-
-    private static String FILE_ID, FILE_ID_PREFERENCES;
 
     public static synchronized DriveHandler getInstance(FragmentActivity context) {
         if (instance == null) {
@@ -54,175 +64,6 @@ public class DriveHandler {
         this.context = context;
         mApiClient = BeeApplication.getApiClient(context);
     }
-
-    private boolean isConnected() {
-        return mApiClient.isConnected();
-    }
-
-    /*public void deleteDrive() {
-        if (!isConnected()) return;
-        Drive.DriveApi.getAppFolder(mApiClient)
-                .listChildren(mApiClient)
-                .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
-                    @Override
-                    public void onResult(@NonNull DriveApi.MetadataBufferResult result) {
-                        if (!result.getStatus().isSuccess()) {
-                            Log.d(BeeApplication.TAG, "Error while trying to create the folder");
-                            return;
-                        }
-                        for (Metadata data : result.getMetadataBuffer()) {
-                            Log.d(BeeApplication.TAG, "Title: " + data.getTitle());
-                            data.getDriveId().asDriveResource().delete(mApiClient);
-                        }
-                    }
-                });
-    }*/
-
-    public void addDBChangeListener() {
-        Query query = new Query.Builder()
-                .addFilter(Filters.and(Filters.eq(
-                        SearchableField.TITLE, "Hive.db"),
-                        Filters.eq(SearchableField.TRASHED, false)))
-                .build();
-        Drive.DriveApi.query(mApiClient, query)
-                .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
-                    @Override
-                    public void onResult(@NonNull DriveApi.MetadataBufferResult result) {
-                        if (!result.getStatus().isSuccess()) {
-                            Log.d(BeeApplication.TAG, "Cannot create file in the root.");
-                        } else {
-                            for (Metadata m : result.getMetadataBuffer()) {
-                                if (m.getTitle().equals("Hive.db")) {
-                                    Log.d(BeeApplication.TAG, "File exists");
-                                    FILE_ID = m.getDriveId().getResourceId();
-                                    m.getDriveId().asDriveFile().addChangeSubscription(mApiClient);
-                                    break;
-                                }
-                            }
-                            result.release();
-                        }
-                    }
-                });
-    }
-/*
-    public void getDBFromDrive() {
-        Query query = new Query.Builder()
-                .addFilter(Filters.and(Filters.eq(
-                        SearchableField.TITLE, "Hive.db"),
-                        Filters.eq(SearchableField.TRASHED, false)))
-                .build();
-        Drive.DriveApi.query(mApiClient, query)
-                .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
-                    @Override
-                    public void onResult(@NonNull DriveApi.MetadataBufferResult result) {
-                        if (!result.getStatus().isSuccess()) {
-                            Log.d(BeeApplication.TAG, "Cannot create file in the root.");
-                        } else {
-                            DriveFile file = null;
-                            for (Metadata m : result.getMetadataBuffer()) {
-                                if (m.getTitle().equals("Hive.db")) {
-                                    Log.d(BeeApplication.TAG, "File exists");
-                                    file = m.getDriveId().asDriveFile();
-                                    break;
-                                }
-                            }
-                            if (file != null) {
-                                new FetchDBAsyncTask().execute(file);
-                            }
-                            result.release();
-                        }
-                    }
-                });
-    }*/
-/*
-    public void createDBFile() {
-        HomeActivity.dbChanged = false;
-        Query query = new Query.Builder()
-                .addFilter(Filters.and(Filters.eq(
-                        SearchableField.TITLE, "Hive"),
-                        Filters.eq(SearchableField.TRASHED, false)))
-                .build();
-        Drive.DriveApi.query(mApiClient, query) // .getAppFolder(mApiClient).queryChildren
-                .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
-                    @Override
-                    public void onResult(@NonNull DriveApi.MetadataBufferResult result) {
-                        if (!result.getStatus().isSuccess()) {
-                            Log.d(BeeApplication.TAG, "Cannot create file in the root.");
-                        } else {
-                            boolean isFound = false;
-                            for (Metadata m : result.getMetadataBuffer()) {
-                                if (m.getTitle().equals("Hive.db")) {
-                                    Log.d(BeeApplication.TAG, "File exists");
-                                    FILE_ID = m.getDriveId().getResourceId();
-                                    isFound = true;
-                                    break;
-                                }
-                            }
-                            if (!isFound) {
-                                Log.d(BeeApplication.TAG, "File not found; creating it.");
-                                Drive.DriveApi.newDriveContents(mApiClient)
-                                        .setResultCallback(driveContentsCallback);
-                            } else {
-                                copyDBToDrive();
-                            }
-                        }
-                        result.release();
-                    }
-                });
-    }
-
-    public void copyDBToDrive() {
-        if (!isConnected()) return;
-
-        final ResultCallback<DriveApi.DriveIdResult> idCallback = new ResultCallback<DriveApi.DriveIdResult>() {
-            @Override
-            public void onResult(@NonNull DriveApi.DriveIdResult result) {
-                if (!result.getStatus().isSuccess()) {
-                    Log.d(BeeApplication.TAG, "Cannot find DriveId. Are you authorized to view this file?");
-                    return;
-                }
-                new UploadDBAsyncTask().execute(result.getDriveId().asDriveFile());
-            }
-        };
-        if (FILE_ID != null)
-            Drive.DriveApi.fetchDriveId(mApiClient, FILE_ID)
-                    .setResultCallback(idCallback);
-    }
-
-    final private ResultCallback<DriveApi.DriveContentsResult> driveContentsCallback =
-            new ResultCallback<DriveApi.DriveContentsResult>() {
-                @Override
-                public void onResult(@NonNull DriveApi.DriveContentsResult result) {
-                    if (!result.getStatus().isSuccess()) {
-                        Log.d(BeeApplication.TAG, "Error while trying to create new file contents");
-                        return;
-                    }
-
-                    MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                            .setTitle("Hive.db")
-                            .setMimeType("text/plain")
-                            .build();
-                    Drive.DriveApi.getAppFolder(mApiClient)
-                            .createFile(mApiClient, changeSet, result.getDriveContents())
-                            .setResultCallback(fileCallback);
-                }
-            };
-
-    final private ResultCallback<DriveFolder.DriveFileResult> fileCallback = new
-            ResultCallback<DriveFolder.DriveFileResult>() {
-                @Override
-                public void onResult(@NonNull DriveFolder.DriveFileResult result) {
-                    if (!result.getStatus().isSuccess()) {
-                        Log.d(BeeApplication.TAG, "Error while trying to create the file");
-                        return;
-                    }
-                    Log.d(BeeApplication.TAG, "Created a file in App Folder: "
-                            + result.getDriveFile().getDriveId());
-                    FILE_ID = result.getDriveFile().getDriveId().getResourceId();
-                    if (FILE_ID != null)
-                        copyDBToDrive();
-                }
-            };*/
 
     public void syncDatabase() {
         final long lastUpload = PreferenceManager.getDefaultSharedPreferences(context).getLong("database_timestamp", 0);
@@ -246,13 +87,12 @@ public class DriveHandler {
                                         final long timestamp = Long.parseLong(fileTitle[1]);
                                         final DriveFile file = m.getDriveId().asDriveFile();
                                         fileExists = true;
-                                        FILE_ID = m.getDriveId().getResourceId();
                                         Log.d(BeeApplication.TAG, "Found file with timestamp: " + timestamp);
                                         if (timestamp > lastUpload) { // remote database newer
                                             Log.d(BeeApplication.TAG, "File exists and newer");
                                             AlertDialog.Builder dialog = new AlertDialog.Builder(context, R.style.AlertDialogOrange);
-                                            dialog.setMessage("Die lokale Datenbank wird mit einer neueren aus der Cloud überschrieben");
-                                            dialog.setTitle("Synchronisation");
+                                            dialog.setMessage(context.getString(R.string.sync_dialog_message));
+                                            dialog.setTitle(context.getString(R.string.sync_dialog_title));
                                             dialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
@@ -262,9 +102,10 @@ public class DriveHandler {
                                             dialog.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
-                                                    dialog.cancel();
+                                                    dialog.dismiss();
                                                 }
                                             });
+                                            dialog.setCancelable(false);
                                             dialog.show();
                                         } else { // local database newer; upload local
                                             long newTimestamp = new Date().getTime();
@@ -430,10 +271,10 @@ public class DriveHandler {
         @Override
         protected void onPostExecute(Boolean result) {
             if (result == null || !result) {
-                Log.d(BeeApplication.TAG, "Error while fetching");
+                Log.d(BeeApplication.TAG, "Error while fetching database");
                 return;
             }
-            Log.d(BeeApplication.TAG, "Successfully fetched");
+            Log.d(BeeApplication.TAG, "Successfully fetched database");
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
             sp.edit().putLong("database_timestamp", timestamp).apply();
             HiveDB.forceUpgrade();
@@ -442,12 +283,11 @@ public class DriveHandler {
         }
     }
 
-    // Shared Preferences
-/*
-    public void addPreferencesChangeListener() {
+    public void syncPreferences() {
+        final long lastUpload = PreferenceManager.getDefaultSharedPreferences(context).getLong("preferences_timestamp", 0);
         Query query = new Query.Builder()
-                .addFilter(Filters.and(Filters.eq(
-                        SearchableField.TITLE, context.getPackageName() + "_preferences.xml"),
+                .addFilter(Filters.and(Filters.contains(
+                        SearchableField.TITLE, "Preferences"),
                         Filters.eq(SearchableField.TRASHED, false)))
                 .build();
         Drive.DriveApi.query(mApiClient, query)
@@ -455,106 +295,48 @@ public class DriveHandler {
                     @Override
                     public void onResult(@NonNull DriveApi.MetadataBufferResult result) {
                         if (!result.getStatus().isSuccess()) {
-                            Log.d(BeeApplication.TAG, "Cannot create file in the root.");
+                            Log.d(BeeApplication.TAG, "Cannot query directory");
                         } else {
+                            boolean fileExists = false;
                             for (Metadata m : result.getMetadataBuffer()) {
-                                if (m.getTitle().equals(context.getPackageName() + "_preferences.xml")) {
-                                    Log.d(BeeApplication.TAG, "File exists");
-                                    FILE_ID_PREFERENCES = m.getDriveId().getResourceId();
-                                    m.getDriveId().asDriveFile().addChangeSubscription(mApiClient);
-                                    break;
-                                }
-                            }
-                            result.release();
-                        }
-                    }
-                });
-    }
+                                if (m.getTitle().contains("Preferences")) {
+                                    String[] fileTitle = m.getTitle().split("_");
+                                    if (fileTitle.length > 1) {
+                                        final long timestamp = Long.parseLong(fileTitle[1]);
+                                        final DriveFile file = m.getDriveId().asDriveFile();
+                                        fileExists = true;
+                                        Log.d(BeeApplication.TAG, "Found file with timestamp: " + timestamp);
 
-    public void getPreferencesFromDrive() {
-        Query query = new Query.Builder()
-                .addFilter(Filters.and(Filters.eq(
-                        SearchableField.TITLE, context.getPackageName() + "_preferences.xml"),
-                        Filters.eq(SearchableField.TRASHED, false)))
-                .build();
-        Drive.DriveApi.query(mApiClient, query)
-                .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
-                    @Override
-                    public void onResult(@NonNull DriveApi.MetadataBufferResult result) {
-                        if (!result.getStatus().isSuccess()) {
-                            Log.d(BeeApplication.TAG, "Cannot create file in the root.");
-                        } else {
-                            DriveFile file = null;
-                            for (Metadata m : result.getMetadataBuffer()) {
-                                if (m.getTitle().equals(context.getPackageName() + "_preferences.xml")) {
-                                    Log.d(BeeApplication.TAG, "File exists");
-                                    file = m.getDriveId().asDriveFile();
+                                        if (timestamp > lastUpload) { // remote database newer
+                                            Log.d(BeeApplication.TAG, "File exists and newer");
+                                            new FetchPreferencesAsyncTask(timestamp).execute(file);
+                                        } else { // local database newer; upload local
+                                            long newTimestamp = new Date().getTime();
+                                            PreferenceManager.getDefaultSharedPreferences(context)
+                                                    .edit()
+                                                    .putLong("preferences_timestamp", newTimestamp)
+                                                    .apply();
+                                            Log.d(BeeApplication.TAG, "Updated local timestamp to " + newTimestamp);
+                                            MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                                                    .setTitle("Preferences_" + newTimestamp).build();
+                                            file.updateMetadata(mApiClient, changeSet).setResultCallback(metadataUpdatedCallbackPreferences);
+                                        }
+                                    }
                                     break;
                                 }
                             }
-                            if (file != null) {
-                                new FetchPreferencesAsyncTask().execute(file);
-                            }
-                            result.release();
-                        }
-                    }
-                });
-    }
-
-    public void createPreferencesFile() {
-        Query query = new Query.Builder()
-                .addFilter(Filters.and(Filters.eq(
-                        SearchableField.TITLE, context.getPackageName() + "_preferences.xml"),
-                        Filters.eq(SearchableField.TRASHED, false)))
-                .build();
-        Drive.DriveApi.query(mApiClient, query)
-                .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
-                    @Override
-                    public void onResult(@NonNull DriveApi.MetadataBufferResult result) {
-                        if (!result.getStatus().isSuccess()) {
-                            Log.d(BeeApplication.TAG, "Cannot create file in the root.");
-                        } else {
-                            boolean isFound = false;
-                            for (Metadata m : result.getMetadataBuffer()) {
-                                if (m.getTitle().equals(context.getPackageName() + "_preferences.xml")) {
-                                    Log.d(BeeApplication.TAG, "File exists");
-                                    FILE_ID_PREFERENCES = m.getDriveId().getResourceId();
-                                    isFound = true;
-                                    break;
-                                }
-                            }
-                            if (!isFound) {
+                            if (!fileExists) { // No database yet
                                 Log.d(BeeApplication.TAG, "File not found; creating it.");
                                 Drive.DriveApi.newDriveContents(mApiClient)
-                                        .setResultCallback(driveContentsCallbackPreferences);
-                            } else {
-                                copyPreferencesToDrive();
+                                        .setResultCallback(createRemoteDBCallbackPreferences);
                             }
+                            result.release();
                         }
-                        result.release();
                     }
                 });
     }
 
-    public void copyPreferencesToDrive() {
-        if (!isConnected()) return;
-
-        final ResultCallback<DriveApi.DriveIdResult> idCallback = new ResultCallback<DriveApi.DriveIdResult>() {
-            @Override
-            public void onResult(@NonNull DriveApi.DriveIdResult result) {
-                if (!result.getStatus().isSuccess()) {
-                    Log.d(BeeApplication.TAG, "Cannot find DriveId. Are you authorized to view this file?");
-                    return;
-                }
-                new UploadPreferencesAsyncTask().execute(result.getDriveId().asDriveFile());
-            }
-        };
-        if (FILE_ID_PREFERENCES != null)
-            Drive.DriveApi.fetchDriveId(mApiClient, FILE_ID_PREFERENCES)
-                    .setResultCallback(idCallback);
-    }
-
-    final private ResultCallback<DriveApi.DriveContentsResult> driveContentsCallbackPreferences =
+    final private ResultCallback<DriveApi.DriveContentsResult> createRemoteDBCallbackPreferences =
             new ResultCallback<DriveApi.DriveContentsResult>() {
                 @Override
                 public void onResult(@NonNull DriveApi.DriveContentsResult result) {
@@ -563,17 +345,24 @@ public class DriveHandler {
                         return;
                     }
 
+                    long newTimestamp = new Date().getTime();
+                    PreferenceManager.getDefaultSharedPreferences(context)
+                            .edit()
+                            .putLong("preferences_timestamp", newTimestamp)
+                            .apply();
+                    Log.d(BeeApplication.TAG, "Updated local timestamp to " + newTimestamp);
+
                     MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                            .setTitle(context.getPackageName() + "_preferences.xml")
+                            .setTitle("Preferences_" + newTimestamp)
                             .setMimeType("text/plain")
                             .build();
                     Drive.DriveApi.getAppFolder(mApiClient)
                             .createFile(mApiClient, changeSet, result.getDriveContents())
-                            .setResultCallback(fileCallbackPreferences);
+                            .setResultCallback(fileCreatedCallbackPreferences);
                 }
             };
 
-    final private ResultCallback<DriveFolder.DriveFileResult> fileCallbackPreferences = new
+    final private ResultCallback<DriveFolder.DriveFileResult> fileCreatedCallbackPreferences = new
             ResultCallback<DriveFolder.DriveFileResult>() {
                 @Override
                 public void onResult(@NonNull DriveFolder.DriveFileResult result) {
@@ -583,9 +372,20 @@ public class DriveHandler {
                     }
                     Log.d(BeeApplication.TAG, "Created a file in App Folder: "
                             + result.getDriveFile().getDriveId());
-                    FILE_ID_PREFERENCES = result.getDriveFile().getDriveId().getResourceId();
-                    if (FILE_ID_PREFERENCES != null)
-                        copyPreferencesToDrive();
+                    new UploadPreferencesAsyncTask().execute(result.getDriveFile());
+                }
+            };
+
+    final ResultCallback<DriveResource.MetadataResult> metadataUpdatedCallbackPreferences = new
+            ResultCallback<DriveResource.MetadataResult>() {
+                @Override
+                public void onResult(DriveResource.MetadataResult result) {
+                    if (!result.getStatus().isSuccess()) {
+                        Log.d(BeeApplication.TAG, "Error while updating file title");
+                        return;
+                    }
+                    Log.d(BeeApplication.TAG, "File title updated to " + result.getMetadata().getTitle());
+                    new UploadPreferencesAsyncTask().execute(result.getMetadata().getDriveId().asDriveFile());
                 }
             };
 
@@ -603,9 +403,11 @@ public class DriveHandler {
                 }
                 DriveContents driveContents = driveContentsResult.getDriveContents();
 
-                File preferenceFile = new File(context.getApplicationInfo().dataDir
-                        + "/shared_prefs/" + context.getPackageName() + "_preferences.xml");
+                File preferenceFile = new File(context.getApplicationInfo().dataDir + "/shared_prefs/"
+                        + context.getPackageName() + "_preferences.xml");
                 FileInputStream fis = new FileInputStream(preferenceFile);
+                Log.d(BeeApplication.TAG, context.getApplicationInfo().dataDir
+                        + "/shared_prefs/" + context.getPackageName() + "_preferences.xml");
 
                 OutputStream outputStream = driveContents.getOutputStream();
                 byte[] buffer = new byte[1024];
@@ -637,6 +439,13 @@ public class DriveHandler {
 
     public class FetchPreferencesAsyncTask extends AsyncTask<DriveFile, Void, Boolean> {
 
+
+        private long timestamp;
+
+        public FetchPreferencesAsyncTask(long timestamp) {
+            this.timestamp = timestamp;
+        }
+
         @Override
         protected Boolean doInBackground(DriveFile... args) {
             DriveFile file = args[0];
@@ -649,9 +458,8 @@ public class DriveHandler {
                 }
                 DriveContents driveContents = driveContentsResult.getDriveContents();
                 InputStream inputStream = driveContents.getInputStream();
-                OutputStream output = new FileOutputStream(context.getApplicationInfo().dataDir
-                        + "/shared_prefs/" + context.getPackageName() + "_preferences.xml");
-
+                /*OutputStream output = new FileOutputStream(context.getApplicationInfo().dataDir
+                        + "/shared_prefs/" + context.getPackageName() + "_preferences_backup.xml");
                 byte[] buffer = new byte[1024];
                 int length;
                 while ((length = inputStream.read(buffer)) > 0) {
@@ -659,11 +467,57 @@ public class DriveHandler {
                 }
                 inputStream.close();
                 output.flush();
-                output.close();
+                output.close();*/
 
+
+                SharedPreferences sharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(context);
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+                Document doc = docBuilder.parse(inputStream);
+                Element root = doc.getDocumentElement();
+
+                Node child = root.getFirstChild();
+                while (child != null) {
+                    if (child.getNodeType() == Node.ELEMENT_NODE) {
+
+                        Element element = (Element) child;
+
+                        String type = element.getNodeName();
+                        String name = element.getAttribute("name");
+
+                        switch (type) {
+                            case "string": {
+                                String value = element.getTextContent();
+                                editor.putString(name, value);
+                                break;
+                            }
+                            case "boolean": {
+                                String value = element.getAttribute("value");
+                                editor.putBoolean(name, value.equals("true"));
+                                break;
+                            }
+                            case "set":
+                                Set<String> set = new HashSet<>();
+                                NodeList strings = element.getElementsByTagName("string");
+                                for (int i = 0; i < strings.getLength(); i++) {
+                                    set.add(strings.item(i).getTextContent());
+                                }
+                                editor.putStringSet(name, set);
+                                break;
+                        }
+                    }
+                    child = child.getNextSibling();
+
+                }
+                editor.apply();
                 return true;
-            } catch (IOException e) {
-                Log.e(BeeApplication.TAG, "IOException while appending to the output stream", e);
+            } catch (IOException | ParserConfigurationException | SAXException e) {
+                Log.e(BeeApplication.TAG, "Exception while appending to the output stream", e);
             }
             return false;
         }
@@ -671,11 +525,13 @@ public class DriveHandler {
         @Override
         protected void onPostExecute(Boolean result) {
             if (result == null || !result) {
-                Log.d(BeeApplication.TAG, "Error while fetching");
+                Log.d(BeeApplication.TAG, "Error while fetching Preferences");
                 return;
             }
             Log.d(BeeApplication.TAG, "Successfully fetched Preferences");
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+            sp.edit().putLong("preferences_timestamp", timestamp).apply();
         }
-    }*/
+    }
 
 }
