@@ -70,8 +70,12 @@ public class StatisticsFoodFragment extends Fragment implements RadioGroup.OnChe
         setupBarChart(mFoodChart);
         setupRangeSelector();
 
-        ((RadioButton) getView().findViewById(StatisticsActivity.sp.getInt("stats_selectedfoodrange", R.id.statistics_range_all)))
-                .setChecked(true);
+        try {
+            ((RadioButton) getView().findViewById(StatisticsActivity.sp.getInt("stats_selectedfoodrange", R.id.statistics_range_all)))
+                    .setChecked(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (StatisticsActivity.sp.getInt("stats_selectedfoodrange", R.id.statistics_range_all) == R.id.statistics_range_all) {
             setRangeAll();
             MAGIC_FLAG = false;
