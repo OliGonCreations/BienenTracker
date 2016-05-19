@@ -178,5 +178,4 @@
     <string name="sync_dialog_message">Es wurden neue Daten in der Cloud gefunden. Daten auf diesem Gerät aktualisieren?</string>
     <string name="sync_dialog_title">Synchronisation</string>
     <string name="signin_dialog_message">Durch die Anmeldung mit Ihrem Google-Account findet eine laufende Synchronisation der App-Daten mit der Cloud statt. Um Datenverluste zu vermeiden, sollte beim Wechsel der Geräte eine Wartezeit von mindestens 5 Minuten eingehalten werden.</string>
-    <string name="signin_dialog_title"></string>
 </resources>
