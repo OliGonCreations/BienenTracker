@@ -17,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -66,6 +67,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         HiveListAdapter.LogClickListener, NavigationView.OnNavigationItemSelectedListener,
         GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     private static final int RC_SIGN_IN = 3494;
     private static final int ADD_GROUPS_ID = 5432;
@@ -221,7 +225,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                     @Override
-                    public void onResult(GoogleSignInResult googleSignInResult) {
+                    public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
                         handleSignInResult(googleSignInResult);
                     }
                 });
@@ -512,15 +516,19 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if (result != null && result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            mUserName.setText(acct.getDisplayName());
-            mUserMail.setText(acct.getEmail());
-            mUserMenu.setVisibility(View.VISIBLE);
-            syncData();
+            if (acct != null) {
+                sp.edit().putBoolean("is_logged_in", true).apply();
+                mUserName.setText(acct.getDisplayName());
+                mUserMail.setText(acct.getEmail());
+                mUserMenu.setVisibility(View.VISIBLE);
+                syncData();
+            }
         } else {
             // Signed out, show unauthenticated UI.
             mUserName.setText(getString(R.string.header_login_msg));
             mUserMail.setText("");
             mUserMenu.setVisibility(View.INVISIBLE);
+            sp.edit().putBoolean("is_logged_in", false).apply();
         }
     }
 
@@ -562,7 +570,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             Auth.GoogleSignInApi.signOut(BeeApplication.getApiClient(this)).setResultCallback(
                     new ResultCallback<Status>() {
                         @Override
-                        public void onResult(Status status) {
+                        public void onResult(@NonNull Status status) {
                             handleSignInResult(null);
                         }
                     });
@@ -583,6 +591,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             Log.d(BeeApplication.TAG, "Client not connected");
             return;
         }
+        if (!sp.getBoolean("is_logged_in", false))
+            return;
         long lastsync = sp.getLong("last_sync_request", 0);
         if (new Date().getTime() - lastsync > LIMIT_EXCEED_TIME) {
             Log.d(BeeApplication.TAG, "Last sync long ago, requesting sync");

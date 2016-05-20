@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/ic_header"
+    android:background="@drawable/drawable_header"
     android:gravity="bottom"
     android:orientation="vertical"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
@@ -28,7 +28,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        tools:text="jonas.menken@gm" />
+        tools:text="jonas.menken@gmail.com" />
 
     <ImageButton
         android:id="@+id/header_user_menu"

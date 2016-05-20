@@ -32,7 +32,8 @@
         android:layout_marginTop="16dp"
         android:text="@string/dialog_temp_temp"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:labelFor="@+id/et_temp" />
 
     <EditText
         android:id="@+id/et_temp"

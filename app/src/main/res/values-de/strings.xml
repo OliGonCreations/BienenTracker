@@ -180,4 +180,6 @@
     <string name="signin_dialog_message">Durch die Anmeldung mit Ihrem Google-Account findet eine laufende Synchronisation der App-Daten mit der Cloud statt. Um Datenverluste zu vermeiden, sollte beim Wechsel der Geräte eine Wartezeit von mindestens 5 Minuten eingehalten werden. </string>
     <string name="sync_dialog_error_title">Fehler</string>
     <string name="sync_dialog_error_message">Sie verwenden nicht die aktuellste Version von BienenTracker. Bitte aktualisieren Sie die App.</string>
+    <string name="statistics_range_all">Gesamt</string>
+    <string name="statistics_range_year">Nach Jahr</string>
 </resources>

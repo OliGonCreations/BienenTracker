@@ -180,4 +180,6 @@
     <string name="signin_dialog_message">With Google sign-in you enable a continuous cloud sync. To prevent data loss when switching devices, you should wait at least 5 minutes.</string>
     <string name="sync_dialog_error_title">Error</string>
     <string name="sync_dialog_error_message">There is a new app version available. Please update.</string>
+    <string name="statistics_range_all">Total</string>
+    <string name="statistics_range_year">Per year</string>
 </resources>

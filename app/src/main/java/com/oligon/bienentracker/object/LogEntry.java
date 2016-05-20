@@ -149,51 +149,51 @@ public class LogEntry implements Serializable {
         if (mCommonActivities.getDrones() != 0) {
             appendNumber(builder, mCommonActivities.getDrones());
             builder.append(context.getResources().getString(R.string.common_drone));
-            builder = appendEnding(builder, mCommonActivities.getDrones());
+            appendEnding(builder, mCommonActivities.getDrones());
         }
         if (mCommonActivities.getBrood() != 0) {
             appendNumber(builder, mCommonActivities.getBrood());
             builder.append(context.getResources().getString(R.string.common_brood));
-            builder = appendEnding(builder, mCommonActivities.getBrood());
+            appendEnding(builder, mCommonActivities.getBrood());
         }
         if (mCommonActivities.getEmpty() != 0) {
             appendNumber(builder, mCommonActivities.getEmpty());
             builder.append(context.getResources().getString(R.string.common_empty));
-            builder = appendEnding(builder, mCommonActivities.getEmpty());
+            appendEnding(builder, mCommonActivities.getEmpty());
         }
         if (mCommonActivities.getFood() != 0) {
             appendNumber(builder, mCommonActivities.getFood());
             builder.append(context.getResources().getString(R.string.common_food));
-            builder = appendEnding(builder, mCommonActivities.getFood());
+            appendEnding(builder, mCommonActivities.getFood());
         }
         if (mCommonActivities.getMiddle() != 0) {
             appendNumber(builder, mCommonActivities.getMiddle());
             builder.append(context.getResources().getString(R.string.common_middle));
-            builder = appendEnding(builder, mCommonActivities.getMiddle());
+            appendEnding(builder, mCommonActivities.getMiddle());
         }
         if (mCommonActivities.getHoneyRoom() != 0) {
             appendNumber(builder, mCommonActivities.getHoneyRoom());
             builder.append(context.getResources().getString(R.string.common_honey));
-            builder = appendEnding(builder, mCommonActivities.getHoneyRoom());
+            appendEnding(builder, mCommonActivities.getHoneyRoom());
         }
         if (mCommonActivities.getBox() != 0) {
             appendNumber(builder, mCommonActivities.getBox());
             builder.append(context.getResources().getString(R.string.common_stock));
             if (Math.abs(mCommonActivities.getBox()) > 1)
                 builder.append("n");
-            builder = appendEnding(builder, mCommonActivities.getBox());
+            appendEnding(builder, mCommonActivities.getBox());
         }
         if (mCommonActivities.getEscape() != 0) {
             builder.append(context.getResources().getString(R.string.common_escape));
-            builder = appendEnding(builder, mCommonActivities.getEscape());
+            appendEnding(builder, mCommonActivities.getEscape());
         }
         if (mCommonActivities.getFence() != 0) {
             builder.append(context.getResources().getString(R.string.common_fence));
-            builder = appendEnding(builder, mCommonActivities.getFence());
+            appendEnding(builder, mCommonActivities.getFence());
         }
         if (mCommonActivities.getDiaper() != 0) {
             builder.append(context.getResources().getString(R.string.common_diaper));
-            builder = appendEnding(builder, mCommonActivities.getDiaper());
+            appendEnding(builder, mCommonActivities.getDiaper());
         }
         if (!mCommonActivities.getOther().isEmpty()) {
             builder.append(mCommonActivities.getOther());
@@ -202,17 +202,15 @@ public class LogEntry implements Serializable {
         else return null;
     }
 
-    private StringBuilder appendEnding(StringBuilder builder, int value) {
+    private void appendEnding(StringBuilder builder, int value) {
         builder.append(" ");
         builder = value > 0 ? builder.append("hinzugefügt") : builder.append("entfernt");
         builder.append("\n");
-        return builder;
     }
 
-    private StringBuilder appendNumber(StringBuilder builder, int value) {
+    private void appendNumber(StringBuilder builder, int value) {
         builder.append(Math.abs(value));
         builder.append(" ");
-        return builder;
     }
 
     public String getInspectionText() {

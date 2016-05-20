@@ -12,6 +12,7 @@ import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatDelegate;
 
 import com.android.vending.billing.IInAppBillingService;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -30,6 +31,10 @@ import com.oligon.bienentracker.util.AnalyticsTracker;
 import java.util.ArrayList;
 
 public class BeeApplication extends Application implements GoogleApiClient.OnConnectionFailedListener {
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     public static final String TAG = BeeApplication.class.getSimpleName();
 
@@ -93,7 +98,7 @@ public class BeeApplication extends Application implements GoogleApiClient.OnCon
         return mInstance;
     }
 
-    public synchronized Tracker getGoogleAnalyticsTracker() {
+    private synchronized Tracker getGoogleAnalyticsTracker() {
         Tracker tracker = AnalyticsTracker.getInstance().get(AnalyticsTracker.Target.APP);
         tracker.enableAdvertisingIdCollection(true);
         return tracker;

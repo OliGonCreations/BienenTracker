@@ -207,7 +207,7 @@ public class DriveHandler {
     final ResultCallback<DriveResource.MetadataResult> metadataUpdatedCallback = new
             ResultCallback<DriveResource.MetadataResult>() {
                 @Override
-                public void onResult(DriveResource.MetadataResult result) {
+                public void onResult(@NonNull DriveResource.MetadataResult result) {
                     if (!result.getStatus().isSuccess()) {
                         Log.d(BeeApplication.TAG, "Error while updating file title");
                         return;
@@ -410,7 +410,7 @@ public class DriveHandler {
     final ResultCallback<DriveResource.MetadataResult> metadataUpdatedCallbackPreferences = new
             ResultCallback<DriveResource.MetadataResult>() {
                 @Override
-                public void onResult(DriveResource.MetadataResult result) {
+                public void onResult(@NonNull DriveResource.MetadataResult result) {
                     if (!result.getStatus().isSuccess()) {
                         Log.d(BeeApplication.TAG, "Error while updating file title");
                         return;

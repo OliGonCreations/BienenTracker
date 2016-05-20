@@ -18,6 +18,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
@@ -54,7 +55,6 @@ public class ReminderDialogFragment extends DialogFragment implements AdapterVie
     public static Calendar mCalendar;
     private static Context context;
     private static TextView mDate, mTime;
-    private Spinner mDatePicker;
     private Hive mHive;
     private InstantAutoCompleteTextView mDescription;
     private TextInputLayout mDescriptionLabel;
@@ -103,7 +103,7 @@ public class ReminderDialogFragment extends DialogFragment implements AdapterVie
         mDescription.addTextChangedListener(new DescriptionTextWatcher());
         mDescriptionLabel = (TextInputLayout) view.findViewById(R.id.label_reminder_description);
 
-        mDatePicker = (Spinner) view.findViewById(R.id.sp_reminder_date_picker);
+        Spinner mDatePicker = (Spinner) view.findViewById(R.id.sp_reminder_date_picker);
         ArrayAdapter dateAdapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.date_picker_range,
                 android.R.layout.simple_spinner_dropdown_item);
@@ -193,7 +193,7 @@ public class ReminderDialogFragment extends DialogFragment implements AdapterVie
         Intent intent = new Intent(getContext(), HomeActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(getContext(), (int) System.currentTimeMillis(), intent, 0);
 
-        Notification.Builder builder = new Notification.Builder(getActivity());
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity());
         builder.setContentTitle(title);
         builder.setContentText(content);
         builder.setSmallIcon(R.drawable.ic_notification);

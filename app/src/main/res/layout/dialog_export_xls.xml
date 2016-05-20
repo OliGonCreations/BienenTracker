@@ -45,15 +45,16 @@
         android:layout_marginTop="16dp"
         android:text="@string/export_filename"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:labelFor="@+id/etExportFilename" />
 
     <EditText
-        android:inputType="text"
         android:id="@+id/etExportFilename"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
+        android:inputType="text"
         android:text="@string/export_filename_default" />
 
     <CheckBox

@@ -280,7 +280,7 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
                         @Override
                         public void onClick(View view) {
                             ActivityCompat.requestPermissions(NewEntryActivity.this,
-                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                                     0);
                         }
                     }).show();

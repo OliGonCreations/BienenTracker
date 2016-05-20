@@ -40,7 +40,7 @@
                 android:layout_alignParentEnd="true"
                 android:contentDescription="@null"
                 android:padding="8dp"
-                android:src="@drawable/ic_stats"
+                app:srcCompat="@drawable/ic_stats"
                 android:tint="@color/colorGrey" />
 
             <com.github.mikephil.charting.charts.BarChart
@@ -61,7 +61,6 @@
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:id="@+id/statistics_sting_button_bar"
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:layout_below="@+id/statistics_sting_chart"

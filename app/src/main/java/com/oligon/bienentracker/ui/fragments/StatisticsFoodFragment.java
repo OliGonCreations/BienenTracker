@@ -41,7 +41,6 @@ public class StatisticsFoodFragment extends Fragment implements RadioGroup.OnChe
     private StatisticsFood mStats;
 
     private Typeface tf;
-    private ArrayAdapter<String> mRangeAdapter;
     private Spinner mYearSelector;
     private RadioGroup mRangeSelector;
     private BarChart mFoodChart;
@@ -100,7 +99,7 @@ public class StatisticsFoodFragment extends Fragment implements RadioGroup.OnChe
         for (int i = last; i >= first; i--) {
             years.add(String.valueOf(i));
         }
-        mRangeAdapter = new ArrayAdapter<>(getActivity(),
+        ArrayAdapter<String> mRangeAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_item, years);
         mRangeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mYearSelector.setAdapter(mRangeAdapter);

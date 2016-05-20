@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    buildToolsVersion "24.0.0rc4"
     dexOptions {
         maxProcessCount 2
         javaMaxHeapSize "3g"
@@ -15,6 +15,7 @@ android {
         versionCode 20
         versionName "2.0 RC2"
         resConfigs "en", "de"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         debug {

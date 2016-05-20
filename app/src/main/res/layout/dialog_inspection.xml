@@ -54,7 +54,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
-            android:text="@string/inspection_pins"/>
+            android:text="@string/inspection_pins" />
 
 
         <LinearLayout
@@ -67,6 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="20dp"
+                android:labelFor="@+id/inspection_varroa"
                 android:text="@string/inspection_varroa"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -76,8 +77,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:inputType="numberDecimal"
-                android:labelFor="@null" />
+                android:inputType="numberDecimal" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -99,6 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="20dp"
+                android:labelFor="@+id/inspection_weight"
                 android:text="@string/inspection_weight"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -125,6 +126,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="16dp"
+            android:labelFor="@+id/inspection_note"
             android:text="@string/inspection_note"
             android:textSize="16sp"
             android:textStyle="bold" />

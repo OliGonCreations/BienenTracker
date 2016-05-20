@@ -14,10 +14,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.oligon.bienentracker.ui.activities.NewEntryActivity;
 import com.oligon.bienentracker.R;
-import com.oligon.bienentracker.util.InstantAutoCompleteTextView;
 import com.oligon.bienentracker.object.Activities;
+import com.oligon.bienentracker.ui.activities.NewEntryActivity;
+import com.oligon.bienentracker.util.InstantAutoCompleteTextView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class CommonDialogFragment extends DialogFragment {
 
-    Activities act = new Activities();
+    private Activities act = new Activities();
 
     private final static int ACTIVITIES = 10;
 
