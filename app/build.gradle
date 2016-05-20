@@ -5,17 +5,16 @@ android {
     buildToolsVersion "23.0.3"
     dexOptions {
         maxProcessCount 2
-        javaMaxHeapSize "2g"
+        javaMaxHeapSize "3g"
     }
     defaultConfig {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         applicationId "com.oligon.bienentracker"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 19
-        versionName "2.0 RC1"
+        versionCode 20
+        versionName "2.0 RC2"
         resConfigs "en", "de"
-        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         debug {
@@ -56,9 +55,9 @@ dependencies {
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.github.clans:fab:1.6.2'
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
-    compile 'com.google.android.gms:play-services-analytics:8.4.0'
-    compile 'com.google.android.gms:play-services-drive:8.4.0'
-    compile 'com.google.android.gms:play-services-auth:8.4.0'
+    compile 'com.google.android.gms:play-services-analytics:9.0.0'
+    compile 'com.google.android.gms:play-services-drive:9.0.0'
+    compile 'com.google.android.gms:play-services-auth:9.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

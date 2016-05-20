@@ -52,6 +52,7 @@ public class DriveHandler {
     private Context context;
     private static DriveHandler instance;
     private static GoogleApiClient mApiClient;
+    private AlertDialog mUpgradeDialog;
 
     public static synchronized DriveHandler getInstance(FragmentActivity context) {
         if (instance == null) {
@@ -63,6 +64,7 @@ public class DriveHandler {
     public DriveHandler(FragmentActivity context) {
         this.context = context;
         mApiClient = BeeApplication.getApiClient(context);
+        mUpgradeDialog = null;
     }
 
     public void syncDatabase() {
@@ -83,13 +85,38 @@ public class DriveHandler {
                             for (Metadata m : result.getMetadataBuffer()) {
                                 if (m.getTitle().contains("Hive")) {
                                     String[] fileTitle = m.getTitle().split("_");
-                                    if (fileTitle.length > 1) {
+                                    if (fileTitle.length > 2) {
                                         final long timestamp = Long.parseLong(fileTitle[1]);
-                                        final DriveFile file = m.getDriveId().asDriveFile();
+                                        int dbVersion = HiveDB.getInstance(context).getVersion();
                                         fileExists = true;
+                                        final DriveFile file = m.getDriveId().asDriveFile();
+
+                                        if (Integer.parseInt(fileTitle[2]) > dbVersion) {
+                                            AlertDialog.Builder dialog = new AlertDialog.Builder(context, R.style.AlertDialogOrange);
+                                            dialog.setMessage(context.getString(R.string.sync_dialog_error_message));
+                                            dialog.setTitle(context.getString(R.string.sync_dialog_error_title));
+                                            dialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                            dialog.setCancelable(false);
+                                            dialog.show();
+                                            break;
+                                        }
+
                                         Log.d(BeeApplication.TAG, "Found file with timestamp: " + timestamp);
                                         if (timestamp > lastUpload) { // remote database newer
                                             Log.d(BeeApplication.TAG, "File exists and newer");
+                                            if (mUpgradeDialog != null) {
+                                                try {
+                                                    if (mUpgradeDialog.isShowing())
+                                                        mUpgradeDialog.dismiss();
+                                                } finally {
+                                                    mUpgradeDialog = null;
+                                                }
+                                            }
                                             AlertDialog.Builder dialog = new AlertDialog.Builder(context, R.style.AlertDialogOrange);
                                             dialog.setMessage(context.getString(R.string.sync_dialog_message));
                                             dialog.setTitle(context.getString(R.string.sync_dialog_title));
@@ -106,16 +133,18 @@ public class DriveHandler {
                                                 }
                                             });
                                             dialog.setCancelable(false);
-                                            dialog.show();
+                                            mUpgradeDialog = dialog.create();
+                                            mUpgradeDialog.show();
                                         } else { // local database newer; upload local
                                             long newTimestamp = new Date().getTime();
                                             PreferenceManager.getDefaultSharedPreferences(context)
                                                     .edit()
                                                     .putLong("database_timestamp", newTimestamp)
+                                                    .putInt("database_version", dbVersion)
                                                     .apply();
                                             Log.d(BeeApplication.TAG, "Updated local timestamp to " + newTimestamp);
                                             MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                                                    .setTitle("Hive_" + newTimestamp).build();
+                                                    .setTitle("Hive_" + newTimestamp + "_" + dbVersion).build();
                                             file.updateMetadata(mApiClient, changeSet).setResultCallback(metadataUpdatedCallback);
                                         }
                                     }
@@ -143,14 +172,16 @@ public class DriveHandler {
                     }
 
                     long newTimestamp = new Date().getTime();
+                    int dbVersion = HiveDB.getInstance(context).getVersion();
                     PreferenceManager.getDefaultSharedPreferences(context)
                             .edit()
                             .putLong("database_timestamp", newTimestamp)
+                            .putInt("database_version", dbVersion)
                             .apply();
                     Log.d(BeeApplication.TAG, "Updated local timestamp to " + newTimestamp);
 
                     MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                            .setTitle("Hive_" + newTimestamp)
+                            .setTitle("Hive_" + newTimestamp + "_" + dbVersion)
                             .setMimeType("text/plain")
                             .build();
                     Drive.DriveApi.getAppFolder(mApiClient)
@@ -458,17 +489,6 @@ public class DriveHandler {
                 }
                 DriveContents driveContents = driveContentsResult.getDriveContents();
                 InputStream inputStream = driveContents.getInputStream();
-                /*OutputStream output = new FileOutputStream(context.getApplicationInfo().dataDir
-                        + "/shared_prefs/" + context.getPackageName() + "_preferences_backup.xml");
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = inputStream.read(buffer)) > 0) {
-                    output.write(buffer, 0, length);
-                }
-                inputStream.close();
-                output.flush();
-                output.close();*/
-
 
                 SharedPreferences sharedPreferences = PreferenceManager
                         .getDefaultSharedPreferences(context);
@@ -490,6 +510,11 @@ public class DriveHandler {
                         String type = element.getNodeName();
                         String name = element.getAttribute("name");
 
+                        if (name.contains("database")) {
+                            child = child.getNextSibling();
+                            continue;
+                        }
+
                         switch (type) {
                             case "string": {
                                 String value = element.getTextContent();
@@ -501,7 +526,7 @@ public class DriveHandler {
                                 editor.putBoolean(name, value.equals("true"));
                                 break;
                             }
-                            case "set":
+                            case "set": {
                                 Set<String> set = new HashSet<>();
                                 NodeList strings = element.getElementsByTagName("string");
                                 for (int i = 0; i < strings.getLength(); i++) {
@@ -509,6 +534,12 @@ public class DriveHandler {
                                 }
                                 editor.putStringSet(name, set);
                                 break;
+                            }
+                            case "int": {
+                                String value = element.getAttribute("value");
+                                editor.putInt(name, Integer.valueOf(value));
+                                break;
+                            }
                         }
                     }
                     child = child.getNextSibling();

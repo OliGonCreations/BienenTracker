@@ -592,12 +592,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 public void onResult(@NonNull Status status) {
                     hidePendingDialg();
                     Log.d(BeeApplication.TAG, "Request Sync Message: " + status.getStatusMessage());
-                    sp.edit().putLong("last_sync_request", new Date().getTime()).apply();
                     if (status.isSuccess()) {
+                        sp.edit().putLong("last_sync_request", new Date().getTime()).apply();
                         Log.d(BeeApplication.TAG, "Request sync successfull");
                         syncDatabase();
                         syncPreferences();
                     } else if (status.getStatusCode() == DriveStatusCodes.DRIVE_RATE_LIMIT_EXCEEDED) {
+                        sp.edit().putLong("last_sync_request", new Date().getTime()).apply();
                         syncDatabase();
                         syncPreferences();
                     }

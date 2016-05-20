@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -89,6 +90,8 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
     private static boolean isTempSet = false, isWeatherEditing = false;
 
     private static SharedPreferences sp;
+    private LocationManager lm;
+    private LocationListener mLocationListener;
 
     private enum ActivityType {
         TREATMENT,
@@ -270,7 +273,7 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void requestWeather() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             Snackbar.make(coordinator, R.string.permission_location_rationale, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
@@ -282,33 +285,52 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
                         }
                     }).show();
         } else {
-            LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            List<String> providers = lm.getProviders(true);
+            lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Location l = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-            Location l = null;
-
-            for (int i = providers.size() - 1; i >= 0; i--) {
-                l = lm.getLastKnownLocation(providers.get(i));
-                if (l != null) break;
-            }
-
-            Double[] gps = new Double[2];
-            if (l != null) {
-                gps[0] = l.getLatitude();
-                gps[1] = l.getLongitude();
-
-                ConnectivityManager connMgr = (ConnectivityManager)
-                        getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-                if (networkInfo != null && networkInfo.isConnected()) {
-                    try {
-                        new WeatherTask().execute(gps);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+            if (l == null) {
+                mLocationListener = new LocationListener() {
+                    public void onLocationChanged(Location location) {
+                        //noinspection MissingPermission
+                        lm.removeUpdates(mLocationListener);
+                        getWeatherFromLocation(location);
+                        Log.d(BeeApplication.TAG, "Location changed");
                     }
-                } else {
-                    Log.d("BienenTracker", "No internet connection");
+
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+                    }
+
+                    public void onProviderEnabled(String provider) {
+                    }
+
+                    public void onProviderDisabled(String provider) {
+                    }
+                };
+                Log.d(BeeApplication.TAG, "Location request");
+                lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
+            } else {
+                getWeatherFromLocation(l);
+            }
+        }
+    }
+
+    private void getWeatherFromLocation(Location l) {
+        Double[] gps = new Double[2];
+        if (l != null) {
+            gps[0] = l.getLatitude();
+            gps[1] = l.getLongitude();
+
+            ConnectivityManager connMgr = (ConnectivityManager)
+                    getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
+                try {
+                    new WeatherTask().execute(gps);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+            } else {
+                Log.d("BienenTracker", "No internet connection");
             }
         }
     }

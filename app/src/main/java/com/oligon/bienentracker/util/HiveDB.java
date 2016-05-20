@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.oligon.bienentracker.BeeApplication;
 import com.oligon.bienentracker.R;
@@ -59,7 +61,7 @@ public class HiveDB extends SQLiteOpenHelper {
     private static Context mContext;
     public static HiveDB instance;
 
-    private final static int DB_VERSION = 7;
+    private final static int DB_VERSION = 8;
     public final static String DB_NAME = "Hive.db";
 
     private final static String LOG_ID = "id";
@@ -94,6 +96,7 @@ public class HiveDB extends SQLiteOpenHelper {
     private final static String HIVE_YEAR = "year";
     private final static String HIVE_MARKER = "marker";
     private final static String HIVE_OFFSPRING = "offspring";
+    private final static String HIVE_SWARM = "swarm";
     private final static String HIVE_INFO = "info";
     private final static String HIVE_SORTER = "sorter";
 
@@ -132,11 +135,21 @@ public class HiveDB extends SQLiteOpenHelper {
             + LOG_INSPECTION + " TEXT," + LOG_WEATHER + " INTEGER, " + LOG_WEATHER_TEMP + " REAL)";
 
     private final static String DB_CREATE_HIVE = "CREATE TABLE " + HIVE_TABLE_NAME + "("
-            + HIVE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + HIVE_NAME + " TEXT, " + HIVE_POSITION + " TEXT, "
-            + HIVE_YEAR + " INTEGER, " + HIVE_MARKER + " TEXT, " + HIVE_OFFSPRING + " INTEGER,"
-            + HIVE_INFO + " TEXT," + HIVE_SORTER + " INTEGER, " + HIVE_GENTLE + " REAL, "
-            + HIVE_ESCAPE + " REAL, " + HIVE_STRENGTH + " REAL," + HIVE_REMINDER_TIME + " TEXT, "
-            + HIVE_REMINDER_DESCRIPTION + " TEXT," + HIVE_GROUP + " TEXT)";
+            + HIVE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + HIVE_NAME + " TEXT, "
+            + HIVE_POSITION + " TEXT, "
+            + HIVE_YEAR + " INTEGER, "
+            + HIVE_MARKER + " TEXT, "
+            + HIVE_OFFSPRING + " INTEGER,"
+            + HIVE_SWARM + " INTEGER,"
+            + HIVE_INFO + " TEXT,"
+            + HIVE_SORTER + " INTEGER, "
+            + HIVE_GENTLE + " REAL, "
+            + HIVE_ESCAPE + " REAL, "
+            + HIVE_STRENGTH + " REAL,"
+            + HIVE_REMINDER_TIME + " TEXT, "
+            + HIVE_REMINDER_DESCRIPTION + " TEXT,"
+            + HIVE_GROUP + " TEXT)";
 
     private final static String DB_CREATE_STING = "CREATE TABLE " + STING_TABLE_NAME + "("
             + STING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STING_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP, "
@@ -181,6 +194,9 @@ public class HiveDB extends SQLiteOpenHelper {
             + LOG_DIAPER + " INTEGER";
     private final static String ALTER_ACT_OTHER = "ALTER TABLE " + LOG_TABLE_NAME + " ADD COLUMN "
             + LOG_OTHER_ACT + " TEXT";
+
+    private final static String ALTER_SWARM = "ALTER TABLE " + HIVE_TABLE_NAME + " ADD COLUMN "
+            + HIVE_SWARM + " INTEGER";
 
     public static synchronized HiveDB getInstance(Context context) {
         if (instance == null) {
@@ -235,6 +251,26 @@ public class HiveDB extends SQLiteOpenHelper {
         if (oldVersion < 7) {
             db.execSQL(DB_CREATE_STING);
         }
+        if (oldVersion < 8) { // Synchronisation Feature
+            try {
+                db.execSQL(ALTER_SWARM);
+            } catch (SQLiteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        super.onDowngrade(db, oldVersion, newVersion);
+        Log.d(BeeApplication.TAG, "Downgrading SQL");
+    }
+
+    public int getVersion() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int version = db.getVersion();
+        db.close();
+        return version;
     }
 
     private void transferActivities(SQLiteDatabase db) {
