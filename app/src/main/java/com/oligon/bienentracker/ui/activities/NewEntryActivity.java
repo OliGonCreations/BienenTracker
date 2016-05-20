@@ -286,6 +286,7 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
                     }).show();
         } else {
             lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
             Location l = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
             if (l == null) {
@@ -308,6 +309,11 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
                 };
                 Log.d(BeeApplication.TAG, "Location request");
                 lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
+                l = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                if (l != null) {
+                    getWeatherFromLocation(l);
+                    lm.removeUpdates(mLocationListener);
+                }
             } else {
                 getWeatherFromLocation(l);
             }
