@@ -1,5 +1,6 @@
 package com.oligon.bienentracker.ui.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -96,6 +97,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     private static SharedPreferences sp;
 
+    private ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -184,6 +187,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             toolbarTitle = savedInstanceState.getString("toolbar_title");
             isHome = savedInstanceState.getBoolean("is_home");
         } else goHome();
+
+        mProgressDialog = new ProgressDialog(this, R.style.AlertDialogOrange);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage(getString(R.string.sync_dialog_title));
     }
 
     @Override
@@ -578,9 +586,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         long lastsync = sp.getLong("last_sync_request", 0);
         if (new Date().getTime() - lastsync > LIMIT_EXCEED_TIME) {
             Log.d(BeeApplication.TAG, "Last sync long ago, requesting sync");
+            showPendingDialog();
             Drive.DriveApi.requestSync(BeeApplication.getApiClient(this)).setResultCallback(new ResultCallback<Status>() {
                 @Override
                 public void onResult(@NonNull Status status) {
+                    hidePendingDialg();
                     Log.d(BeeApplication.TAG, "Request Sync Message: " + status.getStatusMessage());
                     sp.edit().putLong("last_sync_request", new Date().getTime()).apply();
                     if (status.isSuccess()) {
@@ -598,5 +608,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             syncDatabase();
             syncPreferences();
         }
+    }
+
+    private void showPendingDialog() {
+        if (!mProgressDialog.isShowing()) {
+            mProgressDialog.show();
+        }
+    }
+
+    private void hidePendingDialg() {
+        mProgressDialog.dismiss();
     }
 }
