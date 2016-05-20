@@ -60,11 +60,6 @@
             android:key="pref_export_backup"
             android:summary="@string/prefs_export_backup_summary"
             android:title="@string/prefs_export_backup_title" />
-        <!--<Preference
-            android:key="pref_export_restore"
-            android:summary="@string/prefs_export_restore_summary"
-            android:title="@string/prefs_export_restore_title"
-            />-->
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefs_premium_title">
         <Preference

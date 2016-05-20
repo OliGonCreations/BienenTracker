@@ -5,4 +5,9 @@
         <item>Schwarmneigung</item>
         <item>Wabenfestigkeit</item>
     </string-array>
+    <string-array name="date_picker_range">
+        <item>Datum wählen</item>
+        <item>In 7 Tagen</item>
+        <item>In 9 Tagen</item>
+    </string-array>
 </resources>

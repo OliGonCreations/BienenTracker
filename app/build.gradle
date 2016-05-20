@@ -12,9 +12,10 @@ android {
         applicationId "com.oligon.bienentracker"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 18
-        versionName "2.0"
+        versionCode 19
+        versionName "2.0 RC1"
         resConfigs "en", "de"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         debug {

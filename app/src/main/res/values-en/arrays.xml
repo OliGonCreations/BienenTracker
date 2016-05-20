@@ -5,4 +5,9 @@
         <item>Inclination to swarm</item>
         <item>Comb-solidity</item>
     </string-array>
+    <string-array name="date_picker_range">
+        <item>Choose Date</item>
+        <item>In 7 days</item>
+        <item>In 9 days</item>
+    </string-array>
 </resources>

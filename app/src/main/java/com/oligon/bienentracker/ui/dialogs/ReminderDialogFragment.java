@@ -25,9 +25,11 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -46,12 +48,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
-public class ReminderDialogFragment extends DialogFragment {
+public class ReminderDialogFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
 
     private static Reminder mReminder = new Reminder();
     public static Calendar mCalendar;
     private static Context context;
     private static TextView mDate, mTime;
+    private Spinner mDatePicker;
     private Hive mHive;
     private InstantAutoCompleteTextView mDescription;
     private TextInputLayout mDescriptionLabel;
@@ -99,6 +102,13 @@ public class ReminderDialogFragment extends DialogFragment {
 
         mDescription.addTextChangedListener(new DescriptionTextWatcher());
         mDescriptionLabel = (TextInputLayout) view.findViewById(R.id.label_reminder_description);
+
+        mDatePicker = (Spinner) view.findViewById(R.id.sp_reminder_date_picker);
+        ArrayAdapter dateAdapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.date_picker_range,
+                android.R.layout.simple_spinner_dropdown_item);
+        mDatePicker.setAdapter(dateAdapter);
+        mDatePicker.setOnItemSelectedListener(this);
 
         mDate = (TextView) view.findViewById(R.id.tv_reminder_date);
         mTime = (TextView) view.findViewById(R.id.tv_reminder_time);
@@ -197,6 +207,35 @@ public class ReminderDialogFragment extends DialogFragment {
             builder.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         }
         return builder.build();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        int interval = 0;
+        switch (position) {
+            case 0:
+                mDate.setEnabled(true);
+                mDate.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+                return;
+            case 1:
+                interval = 7;
+                break;
+            case 2:
+                interval = 9;
+                break;
+        }
+        mDate.setTextColor(ContextCompat.getColor(context, R.color.colorGrey));
+        mDate.setEnabled(false);
+        mCalendar = Calendar.getInstance();
+        mCalendar.add(Calendar.DAY_OF_YEAR, interval);
+        mCalendar.set(Calendar.HOUR_OF_DAY, 8);
+        mCalendar.set(Calendar.MINUTE, 0);
+        updateDate();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     private class DescriptionTextWatcher implements TextWatcher {
