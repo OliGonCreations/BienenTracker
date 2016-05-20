@@ -60,12 +60,20 @@
                         android:text="@string/statistics_range_year" />
                 </RadioGroup>
 
+                <CheckBox
+                    android:id="@+id/statistics_earnings_orphans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/statistics_range_title"
+                    android:layout_marginBottom="4dp"
+                    android:layout_toEndOf="@+id/statistics_range_selector"
+                    android:text="@string/statistics_orphans" />
+
                 <Spinner
                     android:id="@+id/statistics_range_year_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/statistics_range_selector"
-                    android:layout_alignTop="@+id/statistics_range_selector"
+                    android:layout_below="@+id/statistics_earnings_orphans"
                     android:layout_marginEnd="@dimen/card_margin"
                     android:layout_marginStart="@dimen/card_margin"
                     android:layout_toEndOf="@+id/statistics_range_selector" />
@@ -186,14 +194,17 @@
         <android.support.v7.widget.CardView
             android:id="@+id/statistics_earnings_nodata"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="@dimen/chart_height"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="2dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/statistics_no_data"
-                android:visibility="invisible" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/statistics_no_data" />
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

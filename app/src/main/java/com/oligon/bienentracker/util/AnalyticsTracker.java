@@ -48,7 +48,7 @@ public final class AnalyticsTracker {
             switch (target) {
                 case APP:
                     // TODO: remove dryrun
-                    GoogleAnalytics.getInstance(mContext).setDryRun(true);
+                    GoogleAnalytics.getInstance(mContext).setDryRun(false);
                     tracker = GoogleAnalytics.getInstance(mContext).newTracker(R.xml.app_tracker);
                     break;
                 default:

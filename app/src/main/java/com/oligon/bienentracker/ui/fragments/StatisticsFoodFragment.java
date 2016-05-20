@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -34,7 +36,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-public class StatisticsFoodFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
+public class StatisticsFoodFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, CompoundButton.OnCheckedChangeListener {
 
     private static boolean MAGIC_FLAG = false;
 
@@ -42,6 +44,7 @@ public class StatisticsFoodFragment extends Fragment implements RadioGroup.OnChe
 
     private Typeface tf;
     private Spinner mYearSelector;
+    private CheckBox mOrphans;
     private RadioGroup mRangeSelector;
     private BarChart mFoodChart;
     private View mNoData;
@@ -57,6 +60,9 @@ public class StatisticsFoodFragment extends Fragment implements RadioGroup.OnChe
         super.onViewCreated(view, savedInstanceState);
 
         mYearSelector = (Spinner) view.findViewById(R.id.statistics_range_year_value);
+
+        mOrphans = (CheckBox) view.findViewById(R.id.statistics_food_orphans);
+        mOrphans.setOnCheckedChangeListener(this);
 
         mRangeSelector = (RadioGroup) view.findViewById(R.id.statistics_range_selector);
         mRangeSelector.setOnCheckedChangeListener(this);
@@ -108,7 +114,6 @@ public class StatisticsFoodFragment extends Fragment implements RadioGroup.OnChe
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (MAGIC_FLAG) {
                     setRangeYear();
-                    //setTrendYear();
                 }
                 MAGIC_FLAG = true;
             }
@@ -129,6 +134,15 @@ public class StatisticsFoodFragment extends Fragment implements RadioGroup.OnChe
             case R.id.statistics_range_year:
                 setRangeYear();
                 break;
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (mYearSelector.getVisibility() == View.VISIBLE) {
+            setRangeYear();
+        } else {
+            setRangeAll();
         }
     }
 
@@ -185,7 +199,7 @@ public class StatisticsFoodFragment extends Fragment implements RadioGroup.OnChe
         mYearSelector.setVisibility(View.INVISIBLE);
         Calendar first = StatisticsActivity.db.getFirstEntryDate();
         Calendar last = StatisticsActivity.db.getLastEntryDate();
-        mStats = StatisticsActivity.db.getStatisticsFood(first, last);
+        mStats = StatisticsActivity.db.getStatisticsFood(first, last, mOrphans.isChecked());
         updateBarCharts();
     }
 
@@ -194,7 +208,7 @@ public class StatisticsFoodFragment extends Fragment implements RadioGroup.OnChe
         Calendar last = StatisticsActivity.getZeroCalendar(Integer.parseInt(mYearSelector.getSelectedItem().toString()) + 1);
         Calendar first = StatisticsActivity.getZeroCalendar(Integer.parseInt(mYearSelector.getSelectedItem().toString()));
         last.add(Calendar.MINUTE, -1);
-        mStats = StatisticsActivity.db.getStatisticsFood(first, last);
+        mStats = StatisticsActivity.db.getStatisticsFood(first, last, mOrphans.isChecked());
         updateBarCharts();
     }
 

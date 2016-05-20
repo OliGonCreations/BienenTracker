@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -49,7 +51,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 
-public class StatisticsEarningsFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
+public class StatisticsEarningsFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, CompoundButton.OnCheckedChangeListener {
 
     private static boolean MAGIC_FLAG = false;
     private static String OTHERS;
@@ -64,6 +66,7 @@ public class StatisticsEarningsFragment extends Fragment implements RadioGroup.O
     private BarChart mTrendChart;
     private TextView mGroupSubTitle, mGroupValue;
     private Spinner mYearSelector;
+    private CheckBox mOrphans;
     private RadioGroup mRangeSelector;
     private View mTrendView, mGroupsView, mNoDataView;
 
@@ -79,9 +82,10 @@ public class StatisticsEarningsFragment extends Fragment implements RadioGroup.O
         super.onViewCreated(view, savedInstanceState);
         OTHERS = getString(R.string.others);
 
-        mTrend = StatisticsActivity.db.getTrend();
-
         mYearSelector = (Spinner) view.findViewById(R.id.statistics_range_year_value);
+
+        mOrphans = (CheckBox) view.findViewById(R.id.statistics_earnings_orphans);
+        mOrphans.setOnCheckedChangeListener(this);
 
         mRangeSelector = (RadioGroup) view.findViewById(R.id.statistics_range_selector);
         mRangeSelector.setOnCheckedChangeListener(this);
@@ -97,16 +101,18 @@ public class StatisticsEarningsFragment extends Fragment implements RadioGroup.O
         mGroupsView = view.findViewById(R.id.statistics_groups_card);
         mNoDataView = view.findViewById(R.id.statistics_earnings_nodata);
 
+        tf = Typeface.DEFAULT_BOLD;
+
         setupPieChart(mGroupChart);
         setupPieChart(mGroupDetailChart);
         setupBarChart(mTrendChart);
 
-        tf = Typeface.DEFAULT_BOLD;
+        mTrend = StatisticsActivity.db.getTrend(mOrphans.isChecked());
+        updateBarChart();
 
         StatisticsActivity.sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         setupRangeSelector();
         setRangeAll();
-        setTrendAll();
 
         try {
             ((RadioButton) getView().findViewById(StatisticsActivity.sp.getInt("stats_selectedrange", R.id.statistics_range_all)))
@@ -116,7 +122,6 @@ public class StatisticsEarningsFragment extends Fragment implements RadioGroup.O
         }
         if (StatisticsActivity.sp.getInt("stats_selectedrange", R.id.statistics_range_all) == R.id.statistics_range_all) {
             setRangeAll();
-            setTrendAll();
             MAGIC_FLAG = false;
         } else {
             mYearSelector.setSelection(StatisticsActivity.sp.getInt("stats_selectedyear", 0));
@@ -134,32 +139,30 @@ public class StatisticsEarningsFragment extends Fragment implements RadioGroup.O
 
     private void setRangeAll() {
         mYearSelector.setVisibility(View.INVISIBLE);
-        Calendar first = StatisticsActivity.db.getFirstEntryDate();
-        Calendar last = StatisticsActivity.db.getLastEntryDate();
-        mStats = StatisticsActivity.db.getStatisticsEarnings(first, last);
-        updatePieCharts();
+        mTrendView.setVisibility(View.VISIBLE);
+        mGroupsView.setVisibility(View.GONE);
+        mNoDataView.setVisibility(View.GONE);
     }
 
     private void setRangeYear() {
         mYearSelector.setVisibility(View.VISIBLE);
+        mTrendView.setVisibility(View.GONE);
+        mNoDataView.setVisibility(View.GONE);
+        mGroupsView.setVisibility(View.VISIBLE);
         Calendar last = StatisticsActivity.getZeroCalendar(Integer.parseInt(mYearSelector.getSelectedItem().toString()) + 1);
         Calendar first = StatisticsActivity.getZeroCalendar(Integer.parseInt(mYearSelector.getSelectedItem().toString()));
         last.add(Calendar.MINUTE, -1);
-        mStats = StatisticsActivity.db.getStatisticsEarnings(first, last);
+        mStats = StatisticsActivity.db.getStatisticsEarnings(first, last, mOrphans.isChecked());
         updatePieCharts();
     }
 
-    private void showTrend() {
-        mTrendView.setVisibility(View.VISIBLE);
+    private void setNoData() {
+        mNoDataView.setVisibility(View.VISIBLE);
+        mTrendView.setVisibility(View.GONE);
         mGroupsView.setVisibility(View.GONE);
     }
 
-    private void hideTrend() {
-        mTrendView.setVisibility(View.GONE);
-        mGroupsView.setVisibility(View.VISIBLE);
-    }
-
-    private void setTrendAll() {
+    private void updateBarChart() {
         ArrayList<BarEntry> yVals = new ArrayList<>();
         ArrayList<String> xVals = new ArrayList<>();
 
@@ -171,12 +174,8 @@ public class StatisticsEarningsFragment extends Fragment implements RadioGroup.O
         }
 
         if (i == 0) {
-            mNoDataView.setVisibility(View.VISIBLE);
-            mTrendView.setVisibility(View.GONE);
+            setNoData();
             return;
-        } else {
-            mNoDataView.setVisibility(View.INVISIBLE);
-            mTrendView.setVisibility(View.VISIBLE);
         }
 
         BarDataSet dataSet = new BarDataSet(yVals, "");
@@ -252,7 +251,6 @@ public class StatisticsEarningsFragment extends Fragment implements RadioGroup.O
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (MAGIC_FLAG) {
                     setRangeYear();
-                    //setTrendYear();
                 }
                 MAGIC_FLAG = true;
             }
@@ -300,6 +298,12 @@ public class StatisticsEarningsFragment extends Fragment implements RadioGroup.O
     }
 
     private void updatePieCharts() {
+
+        if (mStats.getHoneySum() == 0) {
+            setNoData();
+            return;
+        }
+
         TreeMap<String, Double> groupStats = mStats.getGroupStats();
 
         // Groupchart
@@ -387,14 +391,21 @@ public class StatisticsEarningsFragment extends Fragment implements RadioGroup.O
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
             case R.id.statistics_range_all:
-                showTrend();
-                setTrendAll();
+                setRangeAll();
                 break;
             case R.id.statistics_range_year:
-                hideTrend();
                 setRangeYear();
                 break;
         }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        mTrend = StatisticsActivity.db.getTrend(isChecked);
+        updateBarChart();
+        if (mYearSelector.getVisibility() == View.INVISIBLE)
+            setRangeAll();
+        else setRangeYear();
     }
 
     public class WeightFormatter implements ValueFormatter, YAxisValueFormatter {

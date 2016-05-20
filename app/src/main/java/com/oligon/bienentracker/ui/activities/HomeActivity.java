@@ -75,7 +75,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private static final int ADD_GROUPS_ID = 5432;
     private static final long LIMIT_EXCEED_TIME = 1000 * 60 * 3;
 
-    public static boolean dbChanged = false;
     private static boolean isHome = true;
     private static String selectedGroup, toolbarTitle;
     private static int selectedItem, selectedHive;
@@ -393,8 +392,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 switch (item.getItemId()) {
                     case R.id.menu_card_delete:
                         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogOrange);
-                        builder.setMessage(R.string.alert_delete_hive);
-                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        builder.setTitle(getString(R.string.alert_delete_hive));
+                        builder.setMessage(R.string.alert_delete_hive_message);
+                        builder.setPositiveButton(R.string.alert_delete_hive_positive, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 db.deleteHive(hive.getId());
                                 updateList();
@@ -411,6 +411,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
+                            }
+                        });
+                        builder.setNeutralButton(R.string.alert_delete_hive_neutral, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                db.deleteHive(hive.getId());
+                                db.deleteLogsFromHive(hive.getId());
+                                updateList();
+
                             }
                         });
                         builder.create().show();
@@ -539,6 +548,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void signIn() {
+        if (!BeeApplication.getApiClient(this).isConnected()) return;
         if (sp.getBoolean("is_first_signin", true)) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.AlertDialogOrange);
             dialog.setTitle(getString(R.string.signin_dialog_title));
@@ -622,8 +632,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void showPendingDialog() {
-        if (!mProgressDialog.isShowing()) {
-            mProgressDialog.show();
+        if (mProgressDialog != null && !mProgressDialog.isShowing()) {
+            try {
+                mProgressDialog.show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -17,7 +17,7 @@
     <string name="action_sort_hives">Sort beehives</string>
     <string name="action_treatment">Treatment</string>
     <string name="action_treatment_title">Medication</string>
-    <string name="alert_delete_hive">Remove beehive?</string>
+    <string name="alert_delete_hive">Remove beehive</string>
     <string name="alert_exit_message">Dismiss changes?</string>
     <string name="card_date">Entry from the</string>
     <string name="card_hive_add">Add entry</string>
@@ -165,7 +165,7 @@
     <string name="statistics_groups">Groups</string>
     <string name="statistics_food_title">Food</string>
     <string name="statistics_earnings">Total earnings: %1$skg</string>
-    <string name="prefs_premium_statistics_title">Statistiken</string>
+    <string name="prefs_premium_statistics_title">Statistics</string>
     <string name="prefs_premium_statistics_summary">Unlock with in-app purchase</string>
     <string name="dialog_premium_statistics_message">Unlock the statistics-package. You receive statistics for your earnings and investments in bee food.</string>
     <string name="others">Others</string>
@@ -182,4 +182,10 @@
     <string name="sync_dialog_error_message">There is a new app version available. Please update.</string>
     <string name="statistics_range_all">Total</string>
     <string name="statistics_range_year">Per year</string>
+    <string name="hive_swarm">Swarm</string>
+    <string name="statistics_orphans">Entfernte Völker anzeigen</string>
+    <string name="statistics_groups_deleted">Deleted</string>
+    <string name="alert_delete_hive_message">Archive entries? Data like honey earnings will be kept for statistics.</string>
+    <string name="alert_delete_hive_positive">Archive</string>
+    <string name="alert_delete_hive_neutral">Delete all</string>
 </resources>

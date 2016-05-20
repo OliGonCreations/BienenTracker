@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oligon.bienentracker.R;
-import com.oligon.bienentracker.ui.activities.HomeActivity;
 import com.oligon.bienentracker.ui.activities.SettingsActivity;
 import com.oligon.bienentracker.util.HiveDB;
 
@@ -112,7 +111,6 @@ public class RestoreListAdapter extends RecyclerView.Adapter<RestoreListAdapter.
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     SettingsActivity.restoreSQL(files.get(pos));
-                    HomeActivity.dbChanged = true;
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {

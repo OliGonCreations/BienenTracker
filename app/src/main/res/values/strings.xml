@@ -16,7 +16,7 @@
     <string name="action_sort_hives">Sort beehives</string>
     <string name="action_treatment">Treatment</string>
     <string name="action_treatment_title">Medication</string>
-    <string name="alert_delete_hive">Remove beehive?</string>
+    <string name="alert_delete_hive">Remove beehive</string>
     <string name="alert_exit_message">Dismiss changes?</string>
     <string name="card_date">Entry from the</string>
     <string name="card_hive_add">Add entry</string>
@@ -123,10 +123,10 @@
     <string name="dialog_title_rating">Rate hive</string>
     <string name="menu_rate">Rate</string>
     <string name="alert_discard_add_entry">Dismiss new entry?</string>
-    <string name="prefs_entry_added">Eintrag hinzugefügt</string>
+    <string name="prefs_entry_added">Entry added</string>
     <string name="action_add">Add</string>
-    <string name="prefs_export_backup_title">Sicherung</string>
-    <string name="prefs_export_backup_summary">Alle Daten sichern</string>
+    <string name="prefs_export_backup_title">Backup / Restore</string>
+    <string name="prefs_export_backup_summary">Backup / Restore all data</string>
     <string name="prefs_general_rating_view">Ratingsview</string>
     <string name="prefs_cat_general">General</string>
 
@@ -137,7 +137,7 @@
     <string name="rating_gentle">Gentleness</string>
     <string name="dialog_export_backup_title">Backup</string>
     <string name="inspection_pins">Pins</string>
-    <string name="dialog_export_warning">BienenTracker-Datenbanken müssen sich in dem Ordner \"Bienen Tracker\" befinden. Werden nicht kompatible Datenbanken wiederhergestellt, kann es zu Fehlern kommen.</string>
+    <string name="dialog_export_warning">BeeTracker-Databases have to be located under \"Bienen Tracker\". Restoring of not compatible databases can cause problems.</string>
     <string name="export_backup">backup</string>
     <string name="error_msg_backup_error">Backup failed</string>
     <string name="successfully_restored">Restore successful</string>
@@ -147,12 +147,12 @@
     <string name="alert_delete_db">Delete database?</string>
     <string name="action_send">Send</string>
     <string name="action_restore">Restore</string>
-    <string name="rating_strength">Wabenfestigkeit</string>
-    <string name="rating_swarm">Schwarmneigung</string>
+    <string name="rating_strength">Inclination to swarm</string>
+    <string name="rating_swarm">Comb-solidity</string>
     <string name="c" translatable="false">°C</string>
     <string name="common_honey">Honeyroom</string>
     <string name="common_brood">Brood frame</string>
-    <string name="dialog_title_reminder">Erinnerung</string>
+    <string name="dialog_title_reminder">Reminder</string>
     <string name="hint_reminder_description">Description</string>
     <string name="time_format" translatable="false">HH:mm</string>
     <string name="prefs_content_reminders">Reminders</string>
@@ -160,7 +160,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_statistics">Statistics</string>
-    <string name="nav_all">Alle Hives</string>
+    <string name="nav_all">All Hives</string>
     <string name="nav_groups">Groups</string>
     <string name="prefs_content_groups">Groups</string>
     <string name="no_group">No group</string>
@@ -172,20 +172,20 @@
     <string name="title_activity_stats">Statistics</string>
     <string name="statistics_groups">Groups</string>
     <string name="statistics_range">Period</string>
-    <string name="statistics_earnings">Gesamtertrag: %1$skg</string>
+    <string name="statistics_earnings">Total earnings: %1$skg</string>
     <string name="statistics_trend_title">Trend</string>
-    <string name="statistics_food_title">Foud</string>
+    <string name="statistics_food_title">Food</string>
     <string name="statistics_no_data">No data</string>
     <string name="prefs_premium_statistics_summary">Durch In-App-Kauf freischalten</string>
-    <string name="prefs_premium_statistics_title">Statistiken</string>
+    <string name="prefs_premium_statistics_title">Statistics</string>
     <string name="statistics_purchased">Buy statistics package</string>
     <string name="hive_group">Group</string>
     <string name="dialog_premium_statistics_message">Unlock the statistics-package. You receive statistics for your earnings and investments in bee food.</string>
     <string name="others">Others</string>
-    <string name="statistics_tab_earnings">Ertrag</string>
-    <string name="statistics_tab_food">Futter</string>
-    <string name="statistics_tab_sting">Stiche</string>
-    <string name="statistics_sting">Bienenstiche-Zähler</string>
+    <string name="statistics_tab_earnings">Earnings</string>
+    <string name="statistics_tab_food">Food</string>
+    <string name="statistics_tab_sting">Bee stings</string>
+    <string name="statistics_sting">Bee sting counter</string>
     <string name="dialog_sort_title">Sort</string>
     <string name="prefs_statistics_purchased">You are a statistician</string>
     <string name="sync_dialog_message">New data found in the cloud. Overwrite data on this device?</string>
@@ -196,6 +196,11 @@
     <string name="sync_dialog_error_title">Error</string>
     <string name="statistics_range_all">Total</string>
     <string name="statistics_range_year">Per year</string>
-    <string name="hive_swarm">Schwarm</string>
+    <string name="hive_swarm">Swarm</string>
+    <string name="statistics_orphans">Show deleted hives</string>
+    <string name="statistics_groups_deleted">Deleted</string>
+    <string name="alert_delete_hive_message">Archive entries? Data like honey earnings will be kept for statistics.</string>
+    <string name="alert_delete_hive_neutral">Delete all</string>
+    <string name="alert_delete_hive_positive">Archive</string>
 
 </resources>

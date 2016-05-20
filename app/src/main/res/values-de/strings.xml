@@ -17,7 +17,7 @@
     <string name="action_sort_hives">Bienenstöcke sortieren</string>
     <string name="action_treatment">Behandlung</string>
     <string name="action_treatment_title">Tierarzneimittel</string>
-    <string name="alert_delete_hive">Bienenstock wirklich entfernen?</string>
+    <string name="alert_delete_hive">Bienenstock entfernen</string>
     <string name="alert_exit_message">Diesen Eintrag verwerfen?</string>
     <string name="card_date">Eintrag vom</string>
     <string name="card_hive_add">Eintrag hinzufügen</string>
@@ -182,4 +182,10 @@
     <string name="sync_dialog_error_message">Sie verwenden nicht die aktuellste Version von BienenTracker. Bitte aktualisieren Sie die App.</string>
     <string name="statistics_range_all">Gesamt</string>
     <string name="statistics_range_year">Nach Jahr</string>
+    <string name="hive_swarm">Schwarm</string>
+    <string name="statistics_orphans">Entfernte Völker anzeigen</string>
+    <string name="statistics_groups_deleted">Entfernt</string>
+    <string name="alert_delete_hive_message">Einträge archivieren? Daten (z.B. Honigerträge) bleiben für die Statistiken erhalten.</string>
+    <string name="alert_delete_hive_neutral">Alles löschen</string>
+    <string name="alert_delete_hive_positive">Archivieren</string>
 </resources>

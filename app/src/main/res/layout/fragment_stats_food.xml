@@ -59,12 +59,20 @@
                         android:text="@string/statistics_range_year" />
                 </RadioGroup>
 
+                <CheckBox
+                    android:id="@+id/statistics_food_orphans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/statistics_range_title"
+                    android:layout_marginBottom="4dp"
+                    android:layout_toEndOf="@+id/statistics_range_selector"
+                    android:text="@string/statistics_orphans" />
+
                 <Spinner
                     android:id="@+id/statistics_range_year_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/statistics_range_selector"
-                    android:layout_alignTop="@+id/statistics_range_selector"
+                    android:layout_below="@+id/statistics_food_orphans"
                     android:layout_marginEnd="@dimen/card_margin"
                     android:layout_marginStart="@dimen/card_margin"
                     android:layout_toEndOf="@+id/statistics_range_selector" />

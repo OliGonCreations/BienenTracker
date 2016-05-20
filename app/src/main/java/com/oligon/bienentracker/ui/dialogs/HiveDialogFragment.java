@@ -129,6 +129,8 @@ public class HiveDialogFragment extends DialogFragment implements AdapterView.On
 
                     if (!etYear.getText().toString().isEmpty()) {
                         mHive.setYear(Integer.parseInt(etYear.getText().toString()));
+                    } else {
+                        mHive.setYear(0);
                     }
                     mHive.setMarker(etMarker.getText().toString());
                     mHive.setInfo(etInfo.getText().toString());
@@ -191,7 +193,6 @@ public class HiveDialogFragment extends DialogFragment implements AdapterView.On
                 labelYear.setError(null);
                 labelYear.setErrorEnabled(false);
             }
-
         }
         return true;
     }
