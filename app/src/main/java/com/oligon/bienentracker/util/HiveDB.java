@@ -307,6 +307,7 @@ public class HiveDB extends SQLiteOpenHelper {
         values.put(HIVE_YEAR, hive.getYear());
         values.put(HIVE_MARKER, hive.getMarker());
         values.put(HIVE_OFFSPRING, hive.isOffspring() ? 1 : 0);
+        values.put(HIVE_SWARM, hive.isSwarm() ? 1 : 0);
         values.put(HIVE_INFO, hive.getInfo());
         values.put(HIVE_GROUP, hive.getGroup());
 
@@ -378,7 +379,8 @@ public class HiveDB extends SQLiteOpenHelper {
             hive.setLocation(res.getString(res.getColumnIndex(HIVE_POSITION)));
             hive.setYear(res.getInt(res.getColumnIndex(HIVE_YEAR)));
             hive.setMarker(res.getString(res.getColumnIndex(HIVE_MARKER)));
-            hive.setType(res.getInt(res.getColumnIndex(HIVE_OFFSPRING)) == 1);
+            hive.setOffspring(res.getInt(res.getColumnIndex(HIVE_OFFSPRING)) == 1);
+            hive.setSwarm(res.getInt(res.getColumnIndex(HIVE_SWARM)) == 1);
             hive.setInfo(res.getString(res.getColumnIndex(HIVE_INFO)));
             hive.setGroup(res.getString(res.getColumnIndex(HIVE_GROUP)));
 
@@ -423,7 +425,8 @@ public class HiveDB extends SQLiteOpenHelper {
             hive.setLocation(res.getString(res.getColumnIndex(HIVE_POSITION)));
             hive.setYear(res.getInt(res.getColumnIndex(HIVE_YEAR)));
             hive.setMarker(res.getString(res.getColumnIndex(HIVE_MARKER)));
-            hive.setType(res.getInt(res.getColumnIndex(HIVE_OFFSPRING)) == 1);
+            hive.setOffspring(res.getInt(res.getColumnIndex(HIVE_OFFSPRING)) == 1);
+            hive.setSwarm(res.getInt(res.getColumnIndex(HIVE_SWARM)) == 1);
             hive.setInfo(res.getString(res.getColumnIndex(HIVE_INFO)));
             hive.setGroup(res.getString(res.getColumnIndex(HIVE_GROUP)));
 
@@ -458,7 +461,8 @@ public class HiveDB extends SQLiteOpenHelper {
             hive.setLocation(res.getString(res.getColumnIndex(HIVE_POSITION)));
             hive.setYear(res.getInt(res.getColumnIndex(HIVE_YEAR)));
             hive.setMarker(res.getString(res.getColumnIndex(HIVE_MARKER)));
-            hive.setType(res.getInt(res.getColumnIndex(HIVE_OFFSPRING)) == 1);
+            hive.setOffspring(res.getInt(res.getColumnIndex(HIVE_OFFSPRING)) == 1);
+            hive.setSwarm(res.getInt(res.getColumnIndex(HIVE_SWARM)) == 1);
             hive.setInfo(res.getString(res.getColumnIndex(HIVE_INFO)));
             hive.setGroup(res.getString(res.getColumnIndex(HIVE_GROUP)));
 
@@ -852,6 +856,12 @@ public class HiveDB extends SQLiteOpenHelper {
                     sheet.addCell(new Label(1, 4, hive.getYear() != 0 ? String.valueOf(hive.getYear()) : "", right));
                     sheet.addCell(new Label(1, 5, hive.getMarker(), right));
                     sheet.addCell(new Label(1, 6, hive.getInfo(), right));
+                    ArrayList<String> hiveType = new ArrayList<>();
+                    if (hive.isSwarm())
+                        hiveType.add(mContext.getString(R.string.hive_swarm));
+                    if (hive.isOffspring())
+                        hiveType.add(mContext.getString(R.string.hive_offspring));
+                    sheet.addCell(new Label(1, 7, TextUtils.join(", ", hiveType.toArray()), right));
 
                     sheet.setRowView(0, 36 * 20);
                     sheet.setRowView(1, 20 * 20);

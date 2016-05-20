@@ -196,5 +196,6 @@
     <string name="sync_dialog_error_title">Error</string>
     <string name="statistics_range_all">Total</string>
     <string name="statistics_range_year">Per year</string>
+    <string name="hive_swarm">Schwarm</string>
 
 </resources>

@@ -132,9 +132,17 @@
                 android:id="@+id/hive_offspring"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="4dp"
                 android:layout_marginStart="16dp"
                 android:text="@string/hive_offspring" />
+
+            <CheckBox
+                android:id="@+id/hive_swarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/hive_swarm" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"

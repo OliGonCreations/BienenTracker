@@ -41,7 +41,7 @@ public class HiveDialogFragment extends DialogFragment implements AdapterView.On
 
     private TextInputLayout labelName, labelYear;
     private EditText etName, etPosition, etYear, etMarker, etInfo;
-    private CheckBox cbOffspring;
+    private CheckBox cbOffspring, cbSwarm;
     private Spinner spGroup;
     private Hive mHive = new Hive(-1);
 
@@ -82,6 +82,7 @@ public class HiveDialogFragment extends DialogFragment implements AdapterView.On
         etMarker = (EditText) view.findViewById(R.id.et_hive_marker);
         etInfo = (EditText) view.findViewById(R.id.et_hive_info);
         cbOffspring = (CheckBox) view.findViewById(R.id.hive_offspring);
+        cbSwarm = (CheckBox) view.findViewById(R.id.hive_swarm);
         spGroup = (Spinner) view.findViewById(R.id.hive_group);
         labelName = (TextInputLayout) view.findViewById(R.id.label_hive_name);
         labelYear = (TextInputLayout) view.findViewById(R.id.label_hive_year);
@@ -131,7 +132,8 @@ public class HiveDialogFragment extends DialogFragment implements AdapterView.On
                     }
                     mHive.setMarker(etMarker.getText().toString());
                     mHive.setInfo(etInfo.getText().toString());
-                    mHive.setType(cbOffspring.isChecked());
+                    mHive.setOffspring(cbOffspring.isChecked());
+                    mHive.setSwarm(cbSwarm.isChecked());
                     if (spGroup.getSelectedItemPosition() != 0)
                         mHive.setGroup(String.valueOf(spGroup.getSelectedItem()));
                     else mHive.setGroup("");
@@ -161,6 +163,7 @@ public class HiveDialogFragment extends DialogFragment implements AdapterView.On
         etInfo.setText(mHive.getInfo(), TextView.BufferType.EDITABLE);
         etMarker.setText(mHive.getMarker(), TextView.BufferType.EDITABLE);
         cbOffspring.setChecked(mHive.isOffspring());
+        cbSwarm.setChecked(mHive.isSwarm());
         spGroup.setSelection(content.indexOf(mHive.getGroup()));
     }
 
