@@ -68,6 +68,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static com.oligon.bienentracker.ui.activities.SettingsActivity.SettingsFragment.updatePreferencesUI;
+
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
     private static Context context;
@@ -77,7 +79,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     private static SharedPreferences prefs;
 
-    private static boolean isPremiumUser, isStatisticsUser;
     private static boolean openFile;
     private static String filePath;
 
@@ -89,8 +90,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         setupActionBar();
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        isPremiumUser = prefs.getBoolean("premium_user", false);
-        isStatisticsUser = prefs.getBoolean("statistics_package", false);
 
         fm = getFragmentManager();
         getFragmentManager().beginTransaction()
@@ -103,7 +102,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         super.onResume();
         if (openFile)
             openFile(filePath);
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     @Override
@@ -207,34 +205,26 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindSummary(mId);
             bindSummary(mMail);
 
-            if (isPremiumUser) {
-                SettingsFragment.export.setEnabled(true);
-                SettingsFragment.backup.setEnabled(true);
-                SettingsFragment.premium.setEnabled(false);
-                SettingsFragment.premium.setTitle(R.string.prefs_premium_purchased);
-                SettingsFragment.premium.setSummary(R.string.prefs_premium_purchased_summary);
-            } else {
-                SettingsFragment.export.setEnabled(false);
-                SettingsFragment.backup.setEnabled(false);
-                SettingsFragment.premium.setEnabled(true);
-            }
+            updatePreferencesUI();
+        }
 
-            if (isStatisticsUser) {
-                SettingsFragment.statistics.setEnabled(false);
-                SettingsFragment.statistics.setTitle(R.string.prefs_statistics_purchased);
-                SettingsFragment.statistics.setSummary(R.string.prefs_premium_purchased_summary);
-            } else {
-                SettingsFragment.statistics.setEnabled(true);
-            }
-/*
-            if (context.getApplicationContext().getPackageName().endsWith(".debug")) {
-                SettingsFragment.export.setEnabled(true);
-                SettingsFragment.backup.setEnabled(true);
-            }*/
+        public static void updatePreferencesUI() {
+            boolean isPremiumUser = prefs.getBoolean("premium_user", false);
+            boolean isStatisticsUser = prefs.getBoolean("statistics_package", false);
 
+            SettingsFragment.export.setEnabled(isPremiumUser);
+            SettingsFragment.backup.setEnabled(isPremiumUser);
+            SettingsFragment.premium.setEnabled(!isPremiumUser);
+            SettingsFragment.premium.setTitle(isPremiumUser ?
+                    R.string.prefs_premium_purchased : R.string.prefs_premium_purchase_title);
+            SettingsFragment.premium.setSummary(isPremiumUser ?
+                    R.string.prefs_premium_purchased_summary : R.string.prefs_premium_purchase_summary);
 
-            export.setEnabled(isPremiumUser);
-            premium.setEnabled(!isPremiumUser);
+            SettingsFragment.statistics.setEnabled(!isStatisticsUser);
+            SettingsFragment.statistics.setTitle(isStatisticsUser ?
+                    R.string.prefs_statistics_purchased : R.string.prefs_premium_statistics_title);
+            SettingsFragment.statistics.setSummary(isStatisticsUser ?
+                    R.string.prefs_premium_purchased_summary : R.string.prefs_premium_statistics_summary);
         }
 
 
@@ -420,7 +410,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return builder.create();
         }
 
-        public static void updateUI() {
+        private void updateUI() {
             Map<String, File> elements = getAvailableDatabases();
             List<String> names = new ArrayList<>();
             List<File> files = new ArrayList<>();
@@ -472,12 +462,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         case "premium_user":
                             Toast.makeText(context, R.string.premium_purchased, Toast.LENGTH_LONG).show();
                             prefs.edit().putBoolean("premium_user", true).apply();
-                            SettingsActivity.this.recreate();
+                            BeeApplication.getInstance().trackInAppPurchase(sku, "Premium", 3.5f, 1.44f);
                             break;
                         case "statistics_package":
                             Toast.makeText(context, R.string.statistics_purchased, Toast.LENGTH_LONG).show();
                             prefs.edit().putBoolean("statistics_package", true).apply();
-                            SettingsActivity.this.recreate();
+                            BeeApplication.getInstance().trackInAppPurchase(sku, "Statisik-Paket", 2.99f, 1.25f);
                             break;
                         default:
                             BeeApplication.mService.consumePurchase(3, getPackageName(), jo.getString("purchaseToken"));
@@ -485,6 +475,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     }
                 } catch (JSONException | RemoteException e) {
                     e.printStackTrace();
+                } finally {
+                    updatePreferencesUI();
                 }
             }
         }

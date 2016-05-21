@@ -12,4 +12,6 @@
     <screenName name="com.oligon.bienentracker.ui.activities.LogActivity">Log Entry Screen</screenName>
     <screenName name="com.oligon.bienentracker.ui.activities.SettingsActivity">Settings Screen</screenName>
     <screenName name="com.oligon.bienentracker.ui.activities.AboutActivity">About Screen</screenName>
+    <screenName name="com.oligon.bienentracker.ui.activities.StatisticsActivity">Statistics Screen
+    </screenName>
 </resources>

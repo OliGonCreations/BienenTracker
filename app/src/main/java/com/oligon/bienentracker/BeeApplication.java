@@ -19,6 +19,8 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.analytics.ecommerce.Product;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
@@ -112,10 +114,7 @@ public class BeeApplication extends Application implements GoogleApiClient.OnCon
     public void trackScreenView(String screenName) {
         Tracker t = getGoogleAnalyticsTracker();
 
-        // Set screen name.
         t.setScreenName(screenName);
-
-        // Send a screen view.
         t.send(new HitBuilders.ScreenViewBuilder().build());
 
         GoogleAnalytics.getInstance(this).dispatchLocalHits();
@@ -152,6 +151,33 @@ public class BeeApplication extends Application implements GoogleApiClient.OnCon
 
         // Build and send an Event.
         t.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel(label).build());
+    }
+
+    /**
+     * Tracking In-App Purchase
+     *
+     * @param token Product Token
+     * @param name  Product Name
+     * @param price Pricing with tax
+     * @param tax   Tax to be subtracted
+     */
+    public void trackInAppPurchase(String token, String name, float price, float tax) {
+        Product product = new Product()
+                .setId(token)
+                .setName(name)
+                .setPrice(price)
+                .setQuantity(1);
+        ProductAction productAction = new ProductAction(ProductAction.ACTION_PURCHASE)
+                .setTransactionAffiliation("Google Store - Online")
+                .setTransactionRevenue(price)
+                .setTransactionTax(tax);
+        HitBuilders.ScreenViewBuilder builder = new HitBuilders.ScreenViewBuilder()
+                .addProduct(product)
+                .setProductAction(productAction);
+
+        Tracker t = getGoogleAnalyticsTracker();
+        t.setScreenName("transaction");
+        t.send(builder.build());
     }
 
     @Override

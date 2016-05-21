@@ -248,11 +248,11 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
             case R.id.menu_done:
                 db.addLog(mLogEntry);
                 this.finish();
-                BeeApplication.getInstance().trackEvent("Log", "Add", "Log Entry added");
+                String action = mLogEntry.getId() == -1 ? "Add" : "Edit";
+                BeeApplication.getInstance().trackEvent("Log", action, "Log Entry added");
                 return true;
             case android.R.id.home:
                 finish();
-                //NavUtils.navigateUpFromSameTask(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
