@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/drawable_header"
     android:gravity="bottom"
     android:orientation="vertical"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/drawable_header"
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/header_user_name"
@@ -38,7 +43,7 @@
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/header_user_mail"
         android:background="?android:attr/selectableItemBackground"
-        app:srcCompat="@drawable/ic_arrow_drop_down"
-        android:contentDescription="@null" />
+        android:contentDescription="@null"
+        app:srcCompat="@drawable/ic_arrow_drop_down" />
 
 </RelativeLayout>
