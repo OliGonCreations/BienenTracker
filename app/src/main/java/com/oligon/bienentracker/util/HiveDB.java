@@ -25,6 +25,7 @@ import com.oligon.bienentracker.object.StatisticsEarnings;
 import com.oligon.bienentracker.object.StatisticsFood;
 import com.oligon.bienentracker.object.Treatment;
 import com.oligon.bienentracker.object.Trend;
+import com.oligon.bienentracker.ui.activities.HomeActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -276,20 +277,22 @@ public class HiveDB extends SQLiteOpenHelper {
         Cursor cur = db.rawQuery("SELECT * FROM " + LOG_TABLE_NAME, null);
         cur.moveToFirst();
         ContentValues values = new ContentValues();
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add(LOG_DRONE);
+        columns.add(LOG_EMPTY_FRAME);
+        columns.add(LOG_FOOD_FRAME);
+        columns.add(LOG_MIDDLE);
+        columns.add(LOG_BOX);
+        columns.add(LOG_BEE_ESCAPE);
+        columns.add(LOG_FENCE);
+        columns.add(LOG_DIAPER);
+        columns.add(LOG_OTHER_ACT);
         while (!cur.isAfterLast()) {
             String acts = cur.getString(cur.getColumnIndex(LOG_ACTIVITIES));
             String[] array = acts.split(";");
-            values.put(LOG_DRONE, array[0]);
-            values.put(LOG_EMPTY_FRAME, array[1]);
-            values.put(LOG_FOOD_FRAME, array[2]);
-            values.put(LOG_MIDDLE, array[3]);
-            values.put(LOG_BOX, array[4]);
-            values.put(LOG_BEE_ESCAPE, array[5]);
-            values.put(LOG_FENCE, array[6]);
-            values.put(LOG_DIAPER, array[7]);
-            if (array.length > 8)
-                values.put(LOG_OTHER_ACT, array[8]);
-
+            for (int i = 0; i < array.length; i++) {
+                values.put(columns.get(i % 9), array[i]);
+            }
             db.update(LOG_TABLE_NAME, values, LOG_ID + " = ?",
                     new String[]{cur.getString(cur.getColumnIndex(LOG_ID))});
             values.clear();
@@ -319,6 +322,7 @@ public class HiveDB extends SQLiteOpenHelper {
         else
             db.insert(HIVE_TABLE_NAME, null, values);
         db.close();
+        HomeActivity.dbChanged = true;
     }
 
     public void updateHivePosition(int id, int position) {
@@ -327,6 +331,7 @@ public class HiveDB extends SQLiteOpenHelper {
         values.put(HIVE_SORTER, position);
         db.update(HIVE_TABLE_NAME, values, HIVE_ID + " = ?", new String[]{Integer.toString(id)});
         db.close();
+        HomeActivity.dbChanged = true;
     }
 
     public void deleteHive(int id) {
@@ -335,6 +340,7 @@ public class HiveDB extends SQLiteOpenHelper {
                 HIVE_ID + " = ? ",
                 new String[]{Integer.toString(id)});
         db.close();
+        HomeActivity.dbChanged = true;
     }
 
     public void deleteLogsFromHive(int id) {
@@ -343,6 +349,7 @@ public class HiveDB extends SQLiteOpenHelper {
                 LOG_HIVE_ID + " = ? ",
                 new String[]{Integer.toString(id)});
         db.close();
+        HomeActivity.dbChanged = true;
     }
 
     public void updateHiveReminder(int id, Reminder reminder) {
@@ -352,6 +359,7 @@ public class HiveDB extends SQLiteOpenHelper {
         values.put(HIVE_REMINDER_DESCRIPTION, reminder.getDescription());
         db.update(HIVE_TABLE_NAME, values, HIVE_ID + " = ?", new String[]{Integer.toString(id)});
         db.close();
+        HomeActivity.dbChanged = true;
     }
 
     public void removeHiveReminder(int id) {
@@ -361,6 +369,7 @@ public class HiveDB extends SQLiteOpenHelper {
         values.put(HIVE_REMINDER_DESCRIPTION, "");
         db.update(HIVE_TABLE_NAME, values, HIVE_ID + " = ?", new String[]{Integer.toString(id)});
         db.close();
+        HomeActivity.dbChanged = true;
     }
 
     public ArrayList<Hive> getAllHives() {
@@ -536,6 +545,7 @@ public class HiveDB extends SQLiteOpenHelper {
         } else
             db.insert(LOG_TABLE_NAME, null, values);
         db.close();
+        HomeActivity.dbChanged = true;
     }
 
     public ArrayList<LogEntry> getAllLogs(int id, boolean reverse, int l) {
@@ -617,6 +627,7 @@ public class HiveDB extends SQLiteOpenHelper {
                 LOG_ID + " = ? ",
                 new String[]{Integer.toString(id)});
         db.close();
+        HomeActivity.dbChanged = true;
     }
 
     private String parseTreatment(Treatment t) {

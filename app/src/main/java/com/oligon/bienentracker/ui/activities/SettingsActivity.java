@@ -410,7 +410,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return builder.create();
         }
 
-        private void updateUI() {
+        public static void updateUI() {
             Map<String, File> elements = getAvailableDatabases();
             List<String> names = new ArrayList<>();
             List<File> files = new ArrayList<>();

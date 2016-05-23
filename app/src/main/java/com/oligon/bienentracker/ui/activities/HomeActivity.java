@@ -1,6 +1,5 @@
 package com.oligon.bienentracker.ui.activities;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +13,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -65,7 +65,7 @@ import java.util.TreeSet;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener, OnDialogFinishedListener,
         HiveListAdapter.LogClickListener, NavigationView.OnNavigationItemSelectedListener,
-        GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+        GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, SwipeRefreshLayout.OnRefreshListener {
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -82,6 +82,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected static Context context;
     private static MenuItem mGroups;
     private static RecyclerView list;
+    private static SwipeRefreshLayout mRefreshLayout;
     private static LinearLayoutManager llm;
     private static HiveListAdapter mHiveListAdapter;
     private static View empty_message;
@@ -89,6 +90,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private static FragmentManager fm;
 
     public static HiveDB db;
+    public static boolean dbChanged;
 
     private DrawerLayout drawer;
     private static NavigationView navigationView;
@@ -99,8 +101,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private static ImageButton mUserMenu;
 
     private static SharedPreferences sp;
-
-    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +119,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        mRefreshLayout.setOnRefreshListener(this);
 
         View headerView = navigationView.getHeaderView(0);
         mUserName = (TextView) headerView.findViewById(R.id.header_user_name);
@@ -143,6 +146,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 popup.show();
             }
         });
+
+        BeeApplication.getApiClient(this).connect();
 
         navigationView.getHeaderView(0).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,11 +195,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             toolbarTitle = savedInstanceState.getString("toolbar_title");
             isHome = savedInstanceState.getBoolean("is_home");
         } else goHome();
-
-        mProgressDialog = new ProgressDialog(this, R.style.AlertDialogOrange);
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setMessage(getString(R.string.sync_dialog_title));
     }
 
     @Override
@@ -242,6 +242,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             mUserName.setText(getString(R.string.header_login));
             mUserMail.setText(getString(R.string.header_premium));
             mUserMenu.setVisibility(View.INVISIBLE);
+        }
+
+        if (dbChanged) {
+            syncData();
         }
     }
 
@@ -364,8 +368,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public void onDialogFinished() {
         updateGroups();
         updateList();
-        if (sp.getBoolean("premium_user", false))
-            syncData();
+        if (dbChanged) syncData();
     }
 
     private void loadDefaultValues() {
@@ -518,6 +521,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
+            syncData();
         }
     }
 
@@ -530,7 +534,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 mUserName.setText(acct.getDisplayName());
                 mUserMail.setText(acct.getEmail());
                 mUserMenu.setVisibility(View.VISIBLE);
-                syncData();
             }
         } else {
             // Signed out, show unauthenticated UI.
@@ -557,7 +560,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     sp.edit().putBoolean("is_first_signin", false).apply();
-                    Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(BeeApplication.getApiClient((HomeActivity) context));
+                    Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(BeeApplication.getApiClient(context));
                     startActivityForResult(signInIntent, RC_SIGN_IN);
                 }
             });
@@ -570,7 +573,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             dialog.setCancelable(false);
             dialog.show();
         } else {
-            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(BeeApplication.getApiClient((HomeActivity) context));
+            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(BeeApplication.getApiClient(context));
             startActivityForResult(signInIntent, RC_SIGN_IN);
         }
     }
@@ -588,7 +591,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        syncData();
     }
 
     @Override
@@ -597,20 +599,21 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private synchronized void syncData() {
+        dbChanged = false;
+        if (!sp.getBoolean("is_logged_in", false) || !sp.getBoolean("premium_user", false))
+            return;
         if (!BeeApplication.getApiClient(this).isConnected()) {
             Log.d(BeeApplication.TAG, "Client not connected");
             return;
         }
-        if (!sp.getBoolean("is_logged_in", false))
-            return;
         long lastsync = sp.getLong("last_sync_request", 0);
+        mRefreshLayout.setRefreshing(true);
         if (new Date().getTime() - lastsync > LIMIT_EXCEED_TIME) {
             Log.d(BeeApplication.TAG, "Last sync long ago, requesting sync");
-            showPendingDialog();
             Drive.DriveApi.requestSync(BeeApplication.getApiClient(this)).setResultCallback(new ResultCallback<Status>() {
                 @Override
                 public void onResult(@NonNull Status status) {
-                    hidePendingDialg();
+                    mRefreshLayout.setRefreshing(false);
                     Log.d(BeeApplication.TAG, "Request Sync Message: " + status.getStatusMessage());
                     if (status.isSuccess()) {
                         sp.edit().putLong("last_sync_request", new Date().getTime()).apply();
@@ -631,17 +634,18 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void showPendingDialog() {
-        if (mProgressDialog != null && !mProgressDialog.isShowing()) {
-            try {
-                mProgressDialog.show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    @Override
+    public void onRefresh() {
+        if (sp.getBoolean("premium_user", false)) {
+            syncData();
         }
     }
 
-    private void hidePendingDialg() {
-        mProgressDialog.dismiss();
+    public static void finishedRefreshing() {
+        try {
+            mRefreshLayout.setRefreshing(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

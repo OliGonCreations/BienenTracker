@@ -259,6 +259,7 @@ public class DriveHandler {
                 return;
             }
             Log.d(BeeApplication.TAG, "Successfully uploaded db");
+            HomeActivity.finishedRefreshing();
         }
     }
 
@@ -311,6 +312,7 @@ public class DriveHandler {
             HiveDB.forceUpgrade();
             HomeActivity.updateList();
             HomeActivity.updateGroups();
+            HomeActivity.finishedRefreshing();
         }
     }
 

@@ -14,14 +14,19 @@
     <!-- <include
          android:id="@+id/toolbar_view"
          layout="@layout/toolbar" />-->
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_log"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/card_hive" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_log"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:listitem="@layout/card_hive" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/home_empty_message"

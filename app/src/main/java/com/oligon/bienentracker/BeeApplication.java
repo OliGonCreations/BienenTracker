@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatDelegate;
 
@@ -32,7 +33,7 @@ import com.oligon.bienentracker.util.AnalyticsTracker;
 
 import java.util.ArrayList;
 
-public class BeeApplication extends Application implements GoogleApiClient.OnConnectionFailedListener {
+public class BeeApplication extends Application implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -73,6 +74,25 @@ public class BeeApplication extends Application implements GoogleApiClient.OnCon
 
     }
 
+    private void initializeGoogleApis(BeeApplication beeApplication) {
+        if (mGoogleApiClient == null) {
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestScopes(new Scope(Scopes.DRIVE_APPFOLDER))
+                    .requestEmail()
+                    .build();
+
+            mGoogleApiClient = new GoogleApiClient.Builder(beeApplication)
+                    //.enableAutoManage(ctx /* FragmentActivity */, (GoogleApiClient.OnConnectionFailedListener) ctx /* OnConnectionFailedListener */)
+                    .addConnectionCallbacks(this)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .addApi(Drive.API)
+                    .build();
+        }
+        if (!mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.connect();
+        }
+    }
+
     @Override
     public void onTerminate() {
         super.onTerminate();
@@ -81,6 +101,13 @@ public class BeeApplication extends Application implements GoogleApiClient.OnCon
                 unbindService(mServiceConn);
             } finally {
                 mService = null;
+            }
+        }
+        if (mGoogleApiClient != null) {
+            try {
+                mGoogleApiClient.disconnect();
+            } finally {
+                mGoogleApiClient = null;
             }
         }
     }
@@ -185,7 +212,7 @@ public class BeeApplication extends Application implements GoogleApiClient.OnCon
 
     }
 
-    public static synchronized GoogleApiClient getApiClient(FragmentActivity ctx) {
+    public static synchronized GoogleApiClient getApiClient(Context ctx) {
         if (mGoogleApiClient == null) {
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestScopes(new Scope(Scopes.DRIVE_APPFOLDER))
@@ -193,7 +220,7 @@ public class BeeApplication extends Application implements GoogleApiClient.OnCon
                     .build();
 
             mGoogleApiClient = new GoogleApiClient.Builder(ctx)
-                    .enableAutoManage(ctx /* FragmentActivity */, (GoogleApiClient.OnConnectionFailedListener) ctx /* OnConnectionFailedListener */)
+                    .enableAutoManage((FragmentActivity) ctx, (GoogleApiClient.OnConnectionFailedListener) ctx)
                     .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) ctx)
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .addApi(Drive.API)
@@ -239,5 +266,15 @@ public class BeeApplication extends Application implements GoogleApiClient.OnCon
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
     }
 }
