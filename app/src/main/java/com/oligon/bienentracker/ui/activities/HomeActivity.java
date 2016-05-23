@@ -191,10 +191,24 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         db = HiveDB.getInstance(this);
 
         if (savedInstanceState != null) {
-            selectedItem = savedInstanceState.getInt("nav_item");
-            toolbarTitle = savedInstanceState.getString("toolbar_title");
-            isHome = savedInstanceState.getBoolean("is_home");
+            selectedItem = savedInstanceState.getInt("nav_item", R.id.nav_all);
+            toolbarTitle = savedInstanceState.getString("toolbar_title", getString(R.string.nav_all));
+            isHome = savedInstanceState.getBoolean("is_home", true);
         } else goHome();
+
+        if (sp.getBoolean("premium_user", false) && sp.getBoolean("swipe_tutorial", true)) {
+            AlertDialog.Builder tutorialDialog = new AlertDialog.Builder(this, R.style.AlertDialogOrange);
+            tutorialDialog.setMessage(R.string.tutorial_swipe);
+            tutorialDialog.setTitle(R.string.tutorial_title);
+            tutorialDialog.setPositiveButton(R.string.tutorial_acknowledged, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    sp.edit().putBoolean("swipe_tutorial", false).apply();
+                    dialog.dismiss();
+                }
+            });
+            tutorialDialog.show();
+        }
     }
 
     @Override

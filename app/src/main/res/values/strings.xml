@@ -202,5 +202,8 @@
     <string name="alert_delete_hive_message">Archive entries? Data like honey earnings will be kept for statistics.</string>
     <string name="alert_delete_hive_neutral">Delete all</string>
     <string name="alert_delete_hive_positive">Archive</string>
+    <string name="tutorial_swipe">With every change the data will be synchronized to the cloud. When you wish to update on a specific device, just swipe the list down.</string>
+    <string name="tutorial_acknowledged">Got it</string>
+    <string name="tutorial_title">Tutorial</string>
 
 </resources>

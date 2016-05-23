@@ -188,4 +188,7 @@
     <string name="alert_delete_hive_message">Einträge archivieren? Daten (z.B. Honigerträge) bleiben für die Statistiken erhalten.</string>
     <string name="alert_delete_hive_neutral">Alles löschen</string>
     <string name="alert_delete_hive_positive">Archivieren</string>
+    <string name="tutorial_acknowledged">Verstanden</string>
+    <string name="tutorial_title">Anleitung</string>
+    <string name="tutorial_swipe">Mit jeder Änderung wird eine Synchronisation in die Cloud durchgeführt. Durch Wischen der Liste nach unten kann dieser Vorgang manuell durchgeführt werden.</string>
 </resources>
