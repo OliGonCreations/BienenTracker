@@ -123,9 +123,13 @@ public class HiveListAdapter extends RecyclerView.Adapter<HiveListAdapter.HiveVi
                 holder.card_hive_inspection.setVisibility(View.GONE);
         } else {
             holder.card_hive_more.setVisibility(View.GONE);
+            holder.card_hive_food.setVisibility(View.GONE);
+            holder.card_hive_harvest.setVisibility(View.GONE);
+            holder.card_hive_treatment.setVisibility(View.GONE);
+            holder.card_hive_activity.setVisibility(View.GONE);
+            holder.card_hive_inspection.setVisibility(View.GONE);
             holder.card_hive_title.setText(R.string.log_empty_message);
         }
-
         holder.expandedView.setVisibility(View.GONE);
     }
 
