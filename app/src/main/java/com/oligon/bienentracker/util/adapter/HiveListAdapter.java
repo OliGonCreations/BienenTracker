@@ -131,6 +131,10 @@ public class HiveListAdapter extends RecyclerView.Adapter<HiveListAdapter.HiveVi
             holder.card_hive_title.setText(R.string.log_empty_message);
         }
         holder.expandedView.setVisibility(View.GONE);
+        if (hive.isExpanded()) {
+            holder.card_expand.setRotation(0);
+            holder.toggleItem();
+        }
     }
 
     @Override
@@ -235,20 +239,22 @@ public class HiveListAdapter extends RecyclerView.Adapter<HiveListAdapter.HiveVi
 
         public void toggleItem() {
             int from, to;
-            if (rotationDirection) {
+            if (card_expand.getRotation() == 0) {
                 from = 0;
                 to = 180;
             } else {
                 from = 180;
                 to = 0;
             }
-            rotationDirection = !rotationDirection;
             rotation = ObjectAnimator.ofFloat(card_expand, "rotation", from, to);
             rotation.setDuration(300);
             rotation.start();
+            item.setExpanded(card_expand.getRotation() == 0);
             if (expandedView.getVisibility() == View.GONE) {
                 expandedView.setVisibility(View.VISIBLE);
+                card_expand.setRotation(180);
             } else {
+                card_expand.setRotation(0);
                 expandedView.setVisibility(View.GONE);
             }
         }

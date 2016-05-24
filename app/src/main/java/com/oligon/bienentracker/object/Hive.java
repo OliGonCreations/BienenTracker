@@ -17,7 +17,7 @@ public class Hive implements Serializable {
     private int mPosition = -1;
     private String mName = "", mLocation = "", mMarker = "", mInfo = "", mGroup = "";
     private int mYear = 0;
-    private boolean isOffspring = false, isSwarm = false;
+    private boolean isOffspring = false, isSwarm = false, isExpanded = false;
     private Map<Rating, Float> mRatings = new HashMap<>();
     private Reminder mReminder = null;
 
@@ -104,6 +104,15 @@ public class Hive implements Serializable {
     public void setSwarm(boolean isSwarm) {
         this.isSwarm = isSwarm;
     }
+
+    public boolean isExpanded() {
+        return isExpanded;
+    }
+
+    public void setExpanded(boolean isExpanded) {
+        this.isExpanded = isExpanded;
+    }
+
 
     public void setRating(Rating rating, float value) {
         mRatings.put(rating, value);

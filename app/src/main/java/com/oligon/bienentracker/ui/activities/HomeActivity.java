@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -77,7 +78,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     private static boolean isHome = true;
     private static String selectedGroup, toolbarTitle;
-    private static int selectedItem, selectedHive;
+    private static int selectedItem;
+    private static int selectedHive;
 
     protected static Context context;
     private static MenuItem mGroups;
@@ -101,6 +103,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private static ImageButton mUserMenu;
 
     private static SharedPreferences sp;
+
+    private static Parcelable listSavedInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,6 +184,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         mHiveListAdapter = new HiveListAdapter(this);
+        mHiveListAdapter.setHasStableIds(true);
 
         list = (RecyclerView) findViewById(R.id.list_log);
 
@@ -270,9 +275,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         outState.putString("toolbar_title", toolbar.getTitle().toString());
         outState.putBoolean("is_home", isHome);
 
-        outState.putInt("recycler_position", llm.findFirstVisibleItemPosition());
-        outState.putInt("recycler_offset", list.computeVerticalScrollOffset());
         outState.putInt("selected_item", selectedHive);
+
+        outState.putParcelable("recycler_view", list.getLayoutManager().onSaveInstanceState());
     }
 
     @Override
@@ -280,9 +285,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
             selectedHive = savedInstanceState.getInt("selected_item");
-            int position = savedInstanceState.getInt("recycler_position");
-            int offset = savedInstanceState.getInt("recycler_offset");
-            llm.scrollToPositionWithOffset(position, offset);
+            listSavedInstanceState = savedInstanceState.getParcelable("recycler_view");
+        }
+    }
+
+    private static void restoreLayoutManagerPosition() {
+        if (listSavedInstanceState != null) {
+            list.getLayoutManager().onRestoreInstanceState(listSavedInstanceState);
         }
     }
 
@@ -321,15 +330,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public static void updateList() {
         hives = isHome ? db.getAllHives() : db.getAllHivesByGroup(selectedGroup);
         List<LogEntry> logs = new ArrayList<>();
-        for (Hive hive : hives)
+        for (Hive hive : hives) {
             logs.add(db.getLog(hive.getId()));
+            if (hive.getId() == selectedHive)
+                hive.setExpanded(true);
+        }
         mHiveListAdapter.updateData(hives, logs);
 
-        //HiveListAdapter.HiveViewHolder viewHolder = (HiveListAdapter.HiveViewHolder) list.findViewHolderForAdapterPosition(4);
-        //if (viewHolder != null)
-        //    viewHolder.toggleItem();
         if (hives.size() == 0) empty_message.setVisibility(View.VISIBLE);
         else empty_message.setVisibility(View.GONE);
+
     }
 
     public static void updateGroups() {
@@ -464,6 +474,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onAddLogClick(final Hive hive) {
+        selectedHive = hive.getId();
         Intent intent = new Intent(context, NewEntryActivity.class);
         intent.putExtra("HiveId", hive.getId());
         context.startActivity(intent);
@@ -471,6 +482,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onMoreLogClick(Hive hive) {
+        selectedHive = hive.getId();
         Intent intent = new Intent(context, LogActivity.class);
         intent.putExtra("Hive", hive);
         context.startActivity(intent);

@@ -287,6 +287,8 @@ public class NewEntryActivity extends AppCompatActivity implements View.OnClickL
         } else {
             lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+            if (!lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) return;
+
             Location l = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
             if (l == null) {
