@@ -19,5 +19,18 @@
         android:paddingTop="@dimen/activity_vertical_margin_small"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/card_log" />
+
+
+    <TextView
+        android:id="@+id/log_empty_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:maxEms="10"
+        android:text="@string/log_empty_message"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:visibility="visible" />
 </LinearLayout>
 

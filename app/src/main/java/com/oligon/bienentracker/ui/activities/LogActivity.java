@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -15,8 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,6 +45,7 @@ public class LogActivity extends AppCompatActivity implements OnDialogFinishedLi
     private static CharSequence mFilter = "";
     private static CharSequence mStandardFilter = "";
     private static MenuItem mFilterCheck;
+    private static TextView mEmptyText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +71,8 @@ public class LogActivity extends AppCompatActivity implements OnDialogFinishedLi
         mList.setLayoutManager(llm);
 
         mDB = HiveDB.getInstance(this);
+
+        mEmptyText = (TextView) findViewById(R.id.log_empty_message);
     }
 
     @Override
@@ -84,13 +84,11 @@ public class LogActivity extends AppCompatActivity implements OnDialogFinishedLi
     public static void updateList() {
         List<LogEntry> entries = mDB.getAllLogs(mHive.getId(), true, 50);
         if (entries.size() == 0) {
-            TextView emptyText = new TextView(mContext);
-            emptyText.setText(R.string.log_empty_message);
-            emptyText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
-            emptyText.setGravity(Gravity.CENTER);
-            emptyText.setTypeface(null, Typeface.BOLD);
-            ((LogActivity) mContext).setContentView(emptyText);
+            mEmptyText.setVisibility(View.VISIBLE);
+            mList.setVisibility(View.GONE);
         } else {
+            mList.setVisibility(View.VISIBLE);
+            mEmptyText.setVisibility(View.GONE);
             mAdapter = new LogListAdapter(entries);
             mList.setAdapter(mAdapter);
             mStandardFilter = entries.get(entries.size() - 1).getDate().getTime() +
