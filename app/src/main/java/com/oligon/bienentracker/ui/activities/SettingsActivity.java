@@ -145,6 +145,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_settings);
 
+            prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
             export = findPreference("pref_export_excel");
             export.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
