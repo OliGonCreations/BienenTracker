@@ -205,5 +205,13 @@
     <string name="tutorial_swipe">With every change the data will be synchronized to the cloud. When you wish to update on a specific device, just swipe the list down.</string>
     <string name="tutorial_acknowledged">Got it</string>
     <string name="tutorial_title">Tutorial</string>
+    <string name="prefs_content_food_hint">New food</string>
+    <string name="prefs_content_drugs_hint">New medication</string>
+    <string name="prefs_content_others_hint">New entry</string>
+    <string name="nav_archive">Archive</string>
+    <string name="action_archive">Archive</string>
+    <string name="alert_archive_hive">Archive?</string>
+    <string name="alert_archive_hive_message">Data won\'t be lost.</string>
+    <string name="prefs_content_groups_hint">New group</string>
 
 </resources>

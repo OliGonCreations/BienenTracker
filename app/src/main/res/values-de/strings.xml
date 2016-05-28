@@ -191,4 +191,12 @@
     <string name="tutorial_acknowledged">Verstanden</string>
     <string name="tutorial_title">Anleitung</string>
     <string name="tutorial_swipe">Mit jeder Änderung wird eine Synchronisation in die Cloud durchgeführt. Durch Wischen der Liste nach unten kann dieser Vorgang manuell durchgeführt werden.</string>
+    <string name="action_archive">Archivieren</string>
+    <string name="alert_archive_hive">Archivieren?</string>
+    <string name="alert_archive_hive_message">Volk ins Archiv verschieben. Alle Daten bleiben erhalten.</string>
+    <string name="nav_archive">Archiv</string>
+    <string name="prefs_content_drugs_hint">Neue Medikation</string>
+    <string name="prefs_content_food_hint">Neues Futter</string>
+    <string name="prefs_content_groups_hint">Neue Gruppe</string>
+    <string name="prefs_content_others_hint">Neuer Eintrag</string>
 </resources>

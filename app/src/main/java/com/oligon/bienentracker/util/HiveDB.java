@@ -362,6 +362,15 @@ public class HiveDB extends SQLiteOpenHelper {
         HomeActivity.dbChanged = true;
     }
 
+    public void updateHiveGroup(int id, String group) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(HIVE_GROUP, group);
+        db.update(HIVE_TABLE_NAME, values, HIVE_ID + " = ?", new String[]{Integer.toString(id)});
+        db.close();
+        HomeActivity.dbChanged = true;
+    }
+
     public void removeHiveReminder(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -377,7 +386,9 @@ public class HiveDB extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res;
         try {
-            res = db.rawQuery("SELECT * FROM " + HIVE_TABLE_NAME + " ORDER BY " + HIVE_SORTER, null);
+            res = db.rawQuery("SELECT * FROM " + HIVE_TABLE_NAME
+                    + " WHERE " + HIVE_GROUP + " NOT LIKE '" + mContext.getString(R.string.nav_archive)
+                    + "' ORDER BY " + HIVE_SORTER, null);
         } catch (Exception e) {
             e.printStackTrace();
             return hives;

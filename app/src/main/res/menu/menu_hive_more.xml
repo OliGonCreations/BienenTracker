@@ -7,6 +7,9 @@
         android:id="@+id/menu_card_edit"
         android:title="@string/action_edit" />
     <item
+        android:id="@+id/menu_card_archive"
+        android:title="@string/action_archive" />
+    <item
         android:id="@+id/menu_card_delete"
         android:title="@string/action_delete" />
 </menu>

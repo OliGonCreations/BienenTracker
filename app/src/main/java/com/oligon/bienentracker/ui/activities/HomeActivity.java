@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -103,8 +102,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private static ImageButton mUserMenu;
 
     private static SharedPreferences sp;
-
-    private static Parcelable listSavedInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -276,8 +273,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         outState.putBoolean("is_home", isHome);
 
         outState.putInt("selected_item", selectedHive);
-
-        outState.putParcelable("recycler_view", list.getLayoutManager().onSaveInstanceState());
     }
 
     @Override
@@ -285,13 +280,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
             selectedHive = savedInstanceState.getInt("selected_item");
-            listSavedInstanceState = savedInstanceState.getParcelable("recycler_view");
-        }
-    }
-
-    private static void restoreLayoutManagerPosition() {
-        if (listSavedInstanceState != null) {
-            list.getLayoutManager().onRestoreInstanceState(listSavedInstanceState);
         }
     }
 
@@ -332,9 +320,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         List<LogEntry> logs = new ArrayList<>();
         for (Hive hive : hives) {
             logs.add(db.getLog(hive.getId()));
-            if (hive.getId() == selectedHive)
-                hive.setExpanded(true);
+            /*if (hive.getId() == selectedHive)
+                hive.setExpanded(true);*/
         }
+        mHiveListAdapter = new HiveListAdapter((HomeActivity) context);
+        list.setAdapter(mHiveListAdapter);
         mHiveListAdapter.updateData(hives, logs);
 
         if (hives.size() == 0) empty_message.setVisibility(View.VISIBLE);
@@ -413,6 +403,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View caller, final Hive hive) {
         PopupMenu popup = new PopupMenu(context, caller);
         popup.getMenuInflater().inflate(R.menu.menu_hive_more, popup.getMenu());
+        popup.getMenu().findItem(R.id.menu_card_archive).setVisible(selectedItem != R.id.nav_archive);
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
@@ -458,6 +449,23 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         dialog.setArguments(args);
                         dialog.show(fm, "AddHive");
                         break;
+                    case R.id.menu_card_archive:
+                        AlertDialog.Builder archive = new AlertDialog.Builder(context, R.style.AlertDialogOrange);
+                        archive.setTitle(getString(R.string.alert_archive_hive));
+                        archive.setMessage(R.string.alert_archive_hive_message);
+                        archive.setPositiveButton(R.string.action_archive, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                db.updateHiveGroup(hive.getId(), getString(R.string.nav_archive));
+                                updateList();
+                            }
+                        });
+                        archive.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                        archive.create().show();
+                        break;
                     case R.id.menu_card_rate:
                         RateHiveDialogFragment rate = new RateHiveDialogFragment();
                         Bundle bundle = new Bundle();
@@ -474,7 +482,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onAddLogClick(final Hive hive) {
-        selectedHive = hive.getId();
+        //selectedHive = hive.getId();
         Intent intent = new Intent(context, NewEntryActivity.class);
         intent.putExtra("HiveId", hive.getId());
         context.startActivity(intent);
@@ -482,7 +490,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onMoreLogClick(Hive hive) {
-        selectedHive = hive.getId();
+        //selectedHive = hive.getId();
         Intent intent = new Intent(context, LogActivity.class);
         intent.putExtra("Hive", hive);
         context.startActivity(intent);

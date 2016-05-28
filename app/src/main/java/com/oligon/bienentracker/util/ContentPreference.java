@@ -5,8 +5,12 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.DialogPreference;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -16,7 +20,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +35,9 @@ import java.util.TreeSet;
 
 public class ContentPreference extends DialogPreference implements View.OnClickListener, TextView.OnEditorActionListener, AdapterView.OnItemLongClickListener {
 
-    private EditText mField;
+    private static String mFieldHint = "";
+    private TextInputLayout mFieldLabel;
+    private TextInputEditText mField;
     private SharedPreferences sp;
     private static Set<String> set = new TreeSet<>(), defaultSet;
     private List<String> arrayList = new ArrayList<>();
@@ -60,13 +65,33 @@ public class ContentPreference extends DialogPreference implements View.OnClickL
     @Override
     protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
+        switch (getKey()) {
+            case "pref_list_food":
+                mFieldHint = getContext().getString(R.string.prefs_content_food_hint);
+                break;
+            case "pref_list_treatment":
+                mFieldHint = getContext().getString(R.string.prefs_content_drugs_hint);
+                break;
+            case "pref_list_groups":
+                mFieldHint = getContext().getString(R.string.prefs_content_groups_hint);
+                break;
+            default:
+                mFieldHint = getContext().getString(R.string.prefs_content_others_hint);
+                break;
+        }
+
+
         Button mConfirm = (Button) view.findViewById(R.id.content_preference_button);
-        mField = (EditText) view.findViewById(R.id.content_preference_field);
+        mField = (TextInputEditText) view.findViewById(R.id.content_preference_field);
+        mFieldLabel = (TextInputLayout) view.findViewById(R.id.content_preference_field_layout);
         ListView mList = (ListView) view.findViewById(R.id.content_preference_list);
 
         mConfirm.setOnClickListener(this);
         mField.setOnEditorActionListener(this);
+        mField.addTextChangedListener(new FieldTextWatcher());
         mList.setOnItemLongClickListener(this);
+
+        mFieldLabel.setHint(mFieldHint);
 
         set.clear();
         arrayList.clear();
@@ -94,14 +119,23 @@ public class ContentPreference extends DialogPreference implements View.OnClickL
 
     private void addToList() {
         String field = mField.getText().toString();
-        if (field.isEmpty()) {
-            mField.setError(getContext().getString(R.string.error_et));
-            return;
-        }
+        if (!validateField()) return;
         mField.setText("");
         set.add(field);
         arrayList.add(field);
         mAdapter.notifyDataSetChanged();
+    }
+
+    private boolean validateField() {
+        if (mField.getText().toString().isEmpty()) {
+            mFieldLabel.setError(getContext().getString(R.string.error_et));
+            mFieldLabel.setErrorEnabled(true);
+            return false;
+        } else {
+            mFieldLabel.setError("");
+            mFieldLabel.setErrorEnabled(false);
+            return true;
+        }
     }
 
     @Override
@@ -140,5 +174,26 @@ public class ContentPreference extends DialogPreference implements View.OnClickL
         });
         popup.show();
         return false;
+    }
+
+    private class FieldTextWatcher implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (!s.toString().isEmpty()) {
+                mFieldLabel.setError("");
+                mFieldLabel.setErrorEnabled(false);
+            }
+        }
     }
 }

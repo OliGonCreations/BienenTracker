@@ -155,6 +155,7 @@ public class HiveDialogFragment extends DialogFragment implements AdapterView.On
         List<String> content = new ArrayList<>(set);
         Collections.sort(content);
         content.add(0, getString(R.string.no_group));
+        content.add(1, getString(R.string.nav_archive));
         ArrayAdapter adapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, content);
         spGroup.setAdapter(adapter);

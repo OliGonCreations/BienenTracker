@@ -4,16 +4,23 @@
     android:layout_height="wrap_content"
     android:padding="8dp">
 
-    <EditText
-        android:id="@+id/content_preference_field"
-        android:layout_width="match_parent"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/content_preference_field_layout"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/content_preference_button"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:layout_toStartOf="@+id/content_preference_button"
-        android:imeOptions="actionDone"
-        android:inputType="textCapSentences" />
+        android:layout_toStartOf="@+id/content_preference_button">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/content_preference_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="textCapSentences" />
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/content_preference_button"
@@ -24,14 +31,14 @@
         android:layout_alignParentTop="true"
         android:layout_marginEnd="4dp"
         android:contentDescription="@string/content_list_add"
+        android:labelFor="@+id/content_preference_field"
         android:text="@string/action_add"
         android:textAllCaps="true"
-        android:textColor="@color/colorAccent"
-        android:labelFor="@+id/content_preference_field" />
+        android:textColor="@color/colorAccent" />
 
     <ListView
         android:id="@+id/content_preference_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/content_preference_button" />
+        android:layout_below="@+id/content_preference_field_layout" />
 </RelativeLayout>
